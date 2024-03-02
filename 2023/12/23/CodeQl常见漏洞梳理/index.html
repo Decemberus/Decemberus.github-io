@@ -16,19 +16,23 @@
   <meta name="author" content="Decemberus">
   <meta name="keywords" content="">
   
-    <meta name="description" content="CodeQl常见漏洞梳理XXE存在漏洞的代码 12345public void parse(Socket sock) throws Exception &amp;#123;  DocumentBuilderFactory factory &#x3D; DocumentBuilderFactory.newInstance();  DocumentBuilder builder &#x3D; factory.newDocumen">
+    <meta name="description" content="CodeQl常见漏洞梳理很多漏洞都有通用的解决方式，但是对如一个初学者来说可能理不清他们之间的关系，于是我通过阅读源码，查阅相关资料，就有了这么一篇文章 SQL Inject我们使用的是Spring Boot框架，那么source就是http参数入口的代码参数，在下面的代码中，source就是username： 1234@RequestMapping(value &#x3D; &quot;&#x2F;one&amp;quot">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CodeQl常见漏洞梳理">
-<meta property="og:url" content="https://decemberus.com/2023/11/03/CodeQl%E5%B8%B8%E8%A7%81%E6%BC%8F%E6%B4%9E%E6%A2%B3%E7%90%86/index.html">
+<meta property="og:url" content="https://decemberus.com/2023/12/23/CodeQl%E5%B8%B8%E8%A7%81%E6%BC%8F%E6%B4%9E%E6%A2%B3%E7%90%86/index.html">
 <meta property="og:site_name" content="欢迎回来">
-<meta property="og:description" content="CodeQl常见漏洞梳理XXE存在漏洞的代码 12345public void parse(Socket sock) throws Exception &amp;#123;  DocumentBuilderFactory factory &#x3D; DocumentBuilderFactory.newInstance();  DocumentBuilder builder &#x3D; factory.newDocumen">
+<meta property="og:description" content="CodeQl常见漏洞梳理很多漏洞都有通用的解决方式，但是对如一个初学者来说可能理不清他们之间的关系，于是我通过阅读源码，查阅相关资料，就有了这么一篇文章 SQL Inject我们使用的是Spring Boot框架，那么source就是http参数入口的代码参数，在下面的代码中，source就是username： 1234@RequestMapping(value &#x3D; &quot;&#x2F;one&amp;quot">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231111155317381.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231111155327944.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394471_610f53e70361d448d1bbe.jpg!small">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394505_610f5409ded2fb0984439.jpg!small">
 <meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394606_610f546eaa54d9e27ddaa.png">
-<meta property="article:published_time" content="2023-11-03T10:19:37.000Z">
-<meta property="article:modified_time" content="2024-03-02T05:18:30.223Z">
+<meta property="article:published_time" content="2023-12-23T10:19:37.000Z">
+<meta property="article:modified_time" content="2024-03-02T12:05:46.936Z">
 <meta property="article:author" content="Decemberus">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394606_610f546eaa54d9e27ddaa.png">
+<meta name="twitter:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231111155317381.png">
   
   
   <title>CodeQl常见漏洞梳理 - 欢迎回来</title>
@@ -199,8 +203,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-03 18:19" pubdate>
-          2023年11月3日 晚上
+        <time datetime="2023-12-23 18:19" pubdate>
+          2023年12月23日 晚上
         </time>
       </span>
     
@@ -211,7 +215,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          23k 字
+          34k 字
         
       </span>
     
@@ -222,7 +226,7 @@
         
         
         
-          196 分钟
+          282 分钟
         
       </span>
     
@@ -264,7 +268,123 @@
             
             <div class="markdown-body">
               
-              <h1 id="CodeQl常见漏洞梳理"><a href="#CodeQl常见漏洞梳理" class="headerlink" title="CodeQl常见漏洞梳理"></a>CodeQl常见漏洞梳理</h1><h2 id="XXE"><a href="#XXE" class="headerlink" title="XXE"></a>XXE</h2><p>存在漏洞的代码</p>
+              <h1 id="CodeQl常见漏洞梳理"><a href="#CodeQl常见漏洞梳理" class="headerlink" title="CodeQl常见漏洞梳理"></a>CodeQl常见漏洞梳理</h1><p>很多漏洞都有通用的解决方式，但是对如一个初学者来说可能理不清他们之间的关系，于是我通过阅读源码，查阅相关资料，就有了这么一篇文章</p>
+<h2 id="SQL-Inject"><a href="#SQL-Inject" class="headerlink" title="SQL Inject"></a>SQL Inject</h2><p>我们使用的是<code>Spring Boot</code>框架，那么source就是http参数入口的代码参数，在下面的代码中，source就是username：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@RequestMapping</span>(value = <span class="hljs-string">&quot;/one&quot;</span>)<br>public List&lt;Student&gt; one(<span class="hljs-variable">@RequestParam</span>(value = <span class="hljs-string">&quot;username&quot;</span>) String username) &#123;<br>    <span class="hljs-selector-tag">return</span> <span class="hljs-selector-tag">indexLogic</span><span class="hljs-selector-class">.getStudent</span>(username);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在下面的代码中，source就是<code>Student user</code>(user为Student类型，这个不受影响)。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@PostMapping</span>(value = <span class="hljs-string">&quot;/object&quot;</span>)<br>public List&lt;Student&gt; objectParam(<span class="hljs-variable">@RequestBody</span> Student user) &#123;<br>    <span class="hljs-selector-tag">return</span> <span class="hljs-selector-tag">indexLogic</span><span class="hljs-selector-class">.getStudent</span>(user.getUsername());<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>本例中我们设置Source的代码为：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">override</span> predicate <span class="hljs-title function_">isSource</span>(<span class="hljs-params">DataFlow::Node src</span>) &#123; src <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">RemoteFlowSource</span> &#125;<br></code></pre></td></tr></table></figure>
+
+<p>这是<code>SDK</code>自带的规则，里面包含了大多常用的Source入口。在后面的XXE，XSS，SSRF中都有过相类似的应用</p>
+<p>我们使用的SpringBoot也包含在其中, 我们可以直接使用。</p>
+<h3 id="设置Sink"><a href="#设置Sink" class="headerlink" title="设置Sink"></a>设置Sink</h3><p>在CodeQL中我们通过</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">override predicate isSink(DataFlow::<span class="hljs-keyword">Node</span> <span class="hljs-title">sink</span>) &#123;<br><br>  &#125;<br></code></pre></td></tr></table></figure>
+
+<p>方法设置Sink。</p>
+<p>在本案例中，我们的sink应该为<code>query</code>方法(Method)的调用(MethodAccess)，所以我们设置Sink为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java">override predicate <span class="hljs-title function_">isSink</span><span class="hljs-params">(DataFlow::Node sink)</span> &#123;<br>exists(Method method, MethodAccess call | <span class="hljs-comment">//这里是定义</span><br>  method.hasName(<span class="hljs-string">&quot;query&quot;</span>)<br>  and<br>  call.getMethod() = method and<br>  sink.asExpr() = call.getArgument(<span class="hljs-number">0</span>)<br>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li><p>存在一个方法 method 和一个方法调用 call ，满足以下条件：</p>
+<ul>
+<li>method 的名字是 “query” ，表示它是一个执行 SQL 查询的方法。</li>
+</ul>
+<p>之所以叫query，是因为我们sql查询语句中最终查询的语句就叫</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-function"><span class="hljs-keyword">return</span> jdbcTemplate.<span class="hljs-title">query</span><span class="hljs-params">(sql, ROW_MAPPER)</span></span>;<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>call 是对 method 的调用，表示它是一个 SQL 查询的语句。</li>
+<li>sink 是一个数据流节点，表示它是一个数据流的终点。</li>
+<li>sink 的表达式等于 call 的第一个参数，表示它是 SQL 查询的输入。</li>
+</ul>
+</li>
+</ul>
+<p>这意味着，如果一个数据流的终点是一个 SQL 查询的输入，那么它就是一个相关的数据流汇点，可能存在 SQL 注入的风险。</p>
+</blockquote>
+<p>注：以上代码使用了exists子查询语法，格式为exists(Obj obj| somthing), 上面查询的意思为：查找一个query()方法的调用点，并把它的第一个参数设置为sink。<br>在靶场系统(<code>micro-service-seclab</code>)中，sink就是：</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs erlang">jdbcTemplate.<span class="hljs-keyword">query</span>(sql, ROW_MAPPER);<br></code></pre></td></tr></table></figure>
+
+<p>因为我们测试的注入漏洞，当source变量流入这个方法的时候，才会发生注入漏洞！</p>
+<h3 id="Flow数据流"><a href="#Flow数据流" class="headerlink" title="Flow数据流"></a>Flow数据流</h3><p>设置好Source和Sink，就相当于搞定了首尾，但是首尾是否能够连通才能决定是否存在漏洞！</p>
+<p>一个受污染的变量，能够毫无阻拦的流转到危险函数，就表示存在漏洞！</p>
+<p>这个连通工作就是CodeQL引擎本身来完成的。我们通过使用<code>config.hasFlowPath(source, sink)</code>方法来判断是否连通。</p>
+<p>比如如下代码：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">from</span> VulConfig config, DataFlow::PathNode <span class="hljs-keyword">source</span>, DataFlow::PathNode sink<br>where config.hasFlowPath(<span class="hljs-keyword">source</span>, sink)<br>select <span class="hljs-keyword">source</span>.getNode(), <span class="hljs-keyword">source</span>, sink, <span class="hljs-string">&quot;source&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>我们传递给<code>config.hasFlowPath(source, sink)</code>我们定义好的source和sink，系统就会自动帮我们判断是否存在漏洞了。</p>
+<p>在CodeQL中，我们使用官方提供的TaintTracking::Configuration方法定义source和sink，至于中间是否是通的，这个后面使用CodeQL提供的<code>config.hasFlowPath(source, sink)</code>来帮我们处理。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">VulConfig</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">TaintTracking</span></span>::<span class="hljs-type">Configuration</span> &#123;<br>  <span class="hljs-type">VulConfig</span>() &#123; <span class="hljs-keyword">this</span> = <span class="hljs-string">&quot;SqlInjectionConfig&quot;</span> &#125;<br><br>  <span class="hljs-keyword">override</span> predicate isSource(<span class="hljs-type">DataFlow</span>::<span class="hljs-type">Node</span> src) &#123; src instanceof <span class="hljs-type">RemoteFlowSource</span> &#125;<br><br>  <span class="hljs-keyword">override</span> predicate isSink(<span class="hljs-type">DataFlow</span>::<span class="hljs-type">Node</span> sink) &#123;<br>    exists(<span class="hljs-type">Method</span> method, <span class="hljs-type">MethodAccess</span> call |<br>      method.hasName(<span class="hljs-string">&quot;query&quot;</span>)<br>      and<br>      call.getMethod() = method and<br>      sink.asExpr() = call.getArgument(<span class="hljs-number">0</span>)<br>    )<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>CodeQL语法和Java类似，extends代表集成父类TaintTracking::Configuration。</p>
+<p>这个类是官方提供用来做数据流分析的通用类，提供很多数据流分析相关的方法，比如isSource(定义source)，isSink(定义sink)</p>
+<p>src instanceof RemoteFlowSource 表示src 必须是 RemoteFlowSource类型。在RemoteFlowSource里，官方提供很非常全的source定义，我们本次用到的Springboot的Source就已经涵盖了。</p>
+</blockquote>
+<blockquote>
+<p>除此以外再来解释这里<code>sink.asExpr() = call.getArgument(0)</code></p>
+<p>用来判断数据流节点sink是否是一个方法调用call的第一个参数的表达式。也就是说，如果sink对应的表达式和call的第一个参数的表达式相同，那么sink就是一个目的节点。例如，如果call是一个system函数调用，那么sink.asExpr() &#x3D; call.getArgument(0)就是用来检查sink是否是system的第一个参数，也就是要执行的命令。</p>
+</blockquote>
+<p>我们最终第一版写的demo.ql如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@id</span> java/examples/vuldemo</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@name</span> Sql-Injection</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@description</span> Sql-Injection</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@kind</span> path-problem</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@problem</span>.severity warning</span><br><span class="hljs-comment"> */</span><br><br><span class="hljs-keyword">import</span> java<br><span class="hljs-keyword">import</span> semmle.code.java.dataflow.FlowSources<br><span class="hljs-keyword">import</span> semmle.code.java.security.QueryInjection<br><span class="hljs-keyword">import</span> DataFlow::PathGraph<br><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">VulConfig</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">TaintTracking</span>::Configuration &#123;<br>  VulConfig() &#123; <span class="hljs-built_in">this</span> = <span class="hljs-string">&quot;SqlInjectionConfig&quot;</span> &#125;<br><br>  override predicate <span class="hljs-title function_">isSource</span><span class="hljs-params">(DataFlow::Node src)</span> &#123; src <span class="hljs-keyword">instanceof</span> RemoteFlowSource &#125;<br><br>  override predicate <span class="hljs-title function_">isSink</span><span class="hljs-params">(DataFlow::Node sink)</span> &#123;<br>    exists(Method method, MethodAccess call |<br>      method.hasName(<span class="hljs-string">&quot;query&quot;</span>)<br>      and<br>      call.getMethod() = method and<br>      sink.asExpr() = call.getArgument(<span class="hljs-number">0</span>)<br>    )<br>  &#125;<br>&#125;<br><br><span class="hljs-comment">//DataFlow::PathNode表示数据流节点在一个从源到目的的过程路径上的实例。</span><br>from VulConfig config, DataFlow::PathNode source, DataFlow::PathNode sink<br>where config.hasFlowPath(source, sink)<br>select source.getNode(), source, sink, <span class="hljs-string">&quot;source&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>注：上面的注释和其它语言是不一样的，不能够删除，它是程序的一部分，因为在我们生成测试报告的时候，上面注释当中的name，description等信息会写入到审计报告中。</p>
+<p>这样我们最终拿到注入漏洞。</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231111155317381.png" srcset="/img/loading.gif" lazyload alt="image-20231111155317381"> </p>
+<h3 id="误报解决"><a href="#误报解决" class="headerlink" title="误报解决"></a>误报解决</h3><p>我们在上面自动审计出来的SQL注入漏洞当中，发现了一个误报问题。</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231111155327944.png" srcset="/img/loading.gif" lazyload alt="image-20231111155327944"> </p>
+<p>这个方法的参数类型是<code>List&lt;Long&gt;</code>，不可能存在注入漏洞。</p>
+<p>这说明我们的规则里，对于<code>List&lt;Long&gt;</code>，甚至<code>List&lt;Integer&gt;</code>类型都会产生误报，<code>source</code>误把这种类型的参数涵盖了。</p>
+<p>我们需要采取手段消除这种误报。</p>
+<p>这个手段就是<code>isSanitizer</code>。</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394471_610f53e70361d448d1bbe.jpg!small" srcset="/img/loading.gif" lazyload alt="image"></p>
+<blockquote>
+<p>isSanitizer是CodeQL的类<code>TaintTracking::Configuration</code>提供的净化方法。它的函数原型是：</p>
+<p>override predicate isSanitizer(DataFlow::Node node) {}</p>
+<p>在CodeQL自带的默认规则里，对当前节点是否为基础类型做了判断。</p>
+<p>override predicate isSanitizer(DataFlow::Node node) {<br>node.getType() instanceof PrimitiveType or<br>node.getType() instanceof BoxedType or<br>node.getType() instanceof NumberType<br>}</p>
+<p>表示如果当前节点是上面提到的基础类型，那么此污染链将被净化阻断，漏洞将不存在。</p>
+</blockquote>
+<p>由于CodeQL检测SQL注入里的<code>isSanitizer</code>方法，只对基础类型做了判断，并没有对这种复合类型做判断，才引起了这次误报问题。</p>
+<p>那我们只需要将这种复合类型加入到isSanitizer方法，即可消除这种误报。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">override predicate is<span class="hljs-constructor">Sanitizer(DataFlow::Node <span class="hljs-params">node</span>)</span> &#123;<br>    node.get<span class="hljs-constructor">Type()</span> instanceof PrimitiveType <span class="hljs-keyword">or</span><br>    node.get<span class="hljs-constructor">Type()</span> instanceof BoxedType <span class="hljs-keyword">or</span><br>    node.get<span class="hljs-constructor">Type()</span> instanceof NumberType <span class="hljs-keyword">or</span><br>    exists(ParameterizedType pt<span class="hljs-pattern-match">| node.get<span class="hljs-constructor">Type()</span> = pt <span class="hljs-keyword">and</span> pt.get<span class="hljs-constructor">TypeArgument(0)</span> instanceof <span class="hljs-constructor">NumberType</span> )</span><br><span class="hljs-pattern-match">  &#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>以上代码的意思为：如果当前node节点的类型为基础类型，数字类型和泛型数字类型(比如List)时，就切断数据流，认为数据流断掉了，不会继续往下检测。<br>重新执行query，我们发现，刚才那条误报已经被成功消除啦。</p>
+<h3 id="漏报解决"><a href="#漏报解决" class="headerlink" title="漏报解决"></a>漏报解决</h3><p>我们发现，如下的SQL注入并没有被CodeQL捕捉到。</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">public List&lt;Student&gt; getStudentWithOptional(Optional&lt;String&gt; username) &#123;<br>        String sqlWithOptional = &quot;<span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> students <span class="hljs-keyword">where</span> username <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;%&quot; + username.get() + &quot;%&#x27;</span><span class="hljs-string">&quot;;</span><br><span class="hljs-string">        //String sql = &quot;</span><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> students <span class="hljs-keyword">where</span> username <span class="hljs-keyword">like</span> ?<span class="hljs-string">&quot;;</span><br><span class="hljs-string">        return jdbcTemplate.query(sqlWithOptional, ROW_MAPPER);</span><br><span class="hljs-string">    &#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>漏报理论上讲是不能接受的。如果出现误报我们还可以通过人工筛选来解决，但是漏报会导致很多漏洞流经下一个环节到线上，从而产生损失。</p>
+<p>那我们如果通过CodeQL来解决漏报问题呢？答案就是通过<code>isAdditionalTaintStep</code>方法。</p>
+<p>实现原理就一句话：</p>
+<p><strong>断了就强制给它接上。</strong></p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394505_610f5409ded2fb0984439.jpg!small" srcset="/img/loading.gif" lazyload alt="image"></p>
+<blockquote>
+<p>isAdditionalTaintStep方法是CodeQL的类<code>TaintTracking::Configuration</code>提供的的方法，它的原型是：</p>
+<p>override predicate isAdditionalTaintStep(DataFlow::Node node1, DataFlow::Node node2) {}</p>
+<p>它的作用是将一个可控节点<br>A强制传递给另外一个节点B，那么节点B也就成了可控节点。</p>
+</blockquote>
+<p>多次测试之后，我认定是因为username.get()这一步断掉了。大概是因为Optional这种类型的使用没有在CodeQL的语法库里。</p>
+<p>那么这里我们强制让username流转到username.get()，这样username.get()就变得可控了。这样应该就能识别出这个注入漏洞了。</p>
+<p>我们试一下。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @id java/examples/vuldemo</span><br><span class="hljs-comment"> * @name Sql-Injection</span><br><span class="hljs-comment"> * @description Sql-Injection</span><br><span class="hljs-comment"> * @kind path-problem</span><br><span class="hljs-comment"> * @problem.severity warning</span><br><span class="hljs-comment"> */</span><br><br>import java<br>import semmle.code.java.dataflow.FlowSources<br>import semmle.code.java.security.QueryInjection<br>import DataFlow::PathGraph<br><br>predicate is<span class="hljs-constructor">TaintedString(Expr <span class="hljs-params">expSrc</span>, Expr <span class="hljs-params">expDest</span>)</span> &#123;<br>    exists(Method <span class="hljs-keyword">method</span>, MethodAccess call, MethodAccess call1 <span class="hljs-pattern-match">| exp<span class="hljs-constructor">Src</span> = call1.get<span class="hljs-constructor">Argument(0)</span> <span class="hljs-keyword">and</span> exp<span class="hljs-constructor">Dest</span>=call <span class="hljs-keyword">and</span> call.get<span class="hljs-constructor">Method()</span> = <span class="hljs-keyword">method</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">method</span>.has<span class="hljs-constructor">Name(<span class="hljs-string">&quot;get&quot;</span>)</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">method</span>.get<span class="hljs-constructor">DeclaringType()</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span> = &quot;<span class="hljs-constructor">Optional</span>&lt;<span class="hljs-constructor">String</span>&gt;&quot; <span class="hljs-keyword">and</span> call1.get<span class="hljs-constructor">Argument(0)</span>.get<span class="hljs-constructor">Type()</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span> = &quot;<span class="hljs-constructor">Optional</span>&lt;<span class="hljs-constructor">String</span>&gt;&quot;  )</span><br><span class="hljs-pattern-match">&#125;</span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match"><span class="hljs-keyword">class</span> <span class="hljs-constructor">VulConfig</span> extends <span class="hljs-constructor">TaintTracking</span>::<span class="hljs-constructor">Configuration</span> &#123;</span><br><span class="hljs-pattern-match">  <span class="hljs-constructor">VulConfig()</span> &#123; this = &quot;<span class="hljs-constructor">SqlInjectionConfig</span>&quot; &#125;</span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match">  override predicate is<span class="hljs-constructor">Source(DataFlow::Node <span class="hljs-params">src</span>)</span> &#123; src instanceof <span class="hljs-constructor">RemoteFlowSource</span> &#125;</span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match">  override predicate is<span class="hljs-constructor">Sanitizer(DataFlow::Node <span class="hljs-params">node</span>)</span> &#123;</span><br><span class="hljs-pattern-match">    node.get<span class="hljs-constructor">Type()</span> instanceof <span class="hljs-constructor">PrimitiveType</span> <span class="hljs-keyword">or</span></span><br><span class="hljs-pattern-match">    node.get<span class="hljs-constructor">Type()</span> instanceof <span class="hljs-constructor">BoxedType</span> <span class="hljs-keyword">or</span></span><br><span class="hljs-pattern-match">    node.get<span class="hljs-constructor">Type()</span> instanceof <span class="hljs-constructor">NumberType</span> <span class="hljs-keyword">or</span></span><br><span class="hljs-pattern-match">    exists(<span class="hljs-constructor">ParameterizedType</span> pt| node.get<span class="hljs-constructor">Type()</span> = pt <span class="hljs-keyword">and</span> pt.get<span class="hljs-constructor">TypeArgument(0)</span> instanceof <span class="hljs-constructor">NumberType</span> )</span><br><span class="hljs-pattern-match">  &#125;</span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match">  override predicate is<span class="hljs-constructor">Sink(DataFlow::Node <span class="hljs-params">sink</span>)</span> &#123;</span><br><span class="hljs-pattern-match">    exists(<span class="hljs-constructor">Method</span> <span class="hljs-keyword">method</span>, <span class="hljs-constructor">MethodAccess</span> call |</span><br><span class="hljs-pattern-match">      <span class="hljs-keyword">method</span>.has<span class="hljs-constructor">Name(<span class="hljs-string">&quot;query&quot;</span>)</span></span><br><span class="hljs-pattern-match">      <span class="hljs-keyword">and</span></span><br><span class="hljs-pattern-match">      call.get<span class="hljs-constructor">Method()</span> = <span class="hljs-keyword">method</span> <span class="hljs-keyword">and</span></span><br><span class="hljs-pattern-match">      sink.<span class="hljs-keyword">as</span><span class="hljs-constructor">Expr()</span> = call.get<span class="hljs-constructor">Argument(0)</span></span><br><span class="hljs-pattern-match">    )</span><br><span class="hljs-pattern-match">  &#125;override predicate is<span class="hljs-constructor">AdditionalTaintStep(DataFlow::Node <span class="hljs-params">node1</span>, DataFlow::Node <span class="hljs-params">node2</span>)</span> &#123;</span><br><span class="hljs-pattern-match">    is<span class="hljs-constructor">TaintedString(<span class="hljs-params">node1</span>.<span class="hljs-params">asExpr</span>()</span>, node2.<span class="hljs-keyword">as</span><span class="hljs-constructor">Expr()</span>)</span><br><span class="hljs-pattern-match">  &#125;</span><br><span class="hljs-pattern-match">&#125;</span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match">from <span class="hljs-constructor">VulConfig</span> config, <span class="hljs-constructor">DataFlow</span>::<span class="hljs-constructor">PathNode</span> source, <span class="hljs-constructor">DataFlow</span>::<span class="hljs-constructor">PathNode</span> sink</span><br><span class="hljs-pattern-match">where config.has<span class="hljs-constructor">FlowPath(<span class="hljs-params">source</span>, <span class="hljs-params">sink</span>)</span></span><br><span class="hljs-pattern-match">select source.get<span class="hljs-constructor">Node()</span>, source, sink, &quot;source&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>注：以上我们实现了一个<code>isTaintedString</code>谓词，并使用exists子查询的方式实现了强制把<code>Optional&lt;String&gt; username</code>关联<code>Optional&lt;String&gt; username.get()</code>。<br>最终，我们的这个注入被跑了出来。</p>
+<h3 id="解决Lombok"><a href="#解决Lombok" class="headerlink" title="解决Lombok"></a>解决Lombok</h3><p>由于lombok的实现机制，导致CodeQL无法获取到lombok自动生成的代码，所以就导致使用了lombok的代码即使存在漏洞，也无法被识别的问题。</p>
+<p>还好CodeQL官方的issue里面，有人给出了这个问题的解决办法。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># get a copy of lombok.jar</span><br>wget https://projectlombok.org/downloads/lombok.jar -O <span class="hljs-string">&quot;lombok.jar&quot;</span><br><span class="hljs-comment"># run &quot;delombok&quot; on the source files and write the generated files to a folder named &quot;delombok&quot;</span><br>java -jar <span class="hljs-string">&quot;lombok.jar&quot;</span> delombok -n --onlyChanged . -d <span class="hljs-string">&quot;delombok&quot;</span><br><span class="hljs-comment"># remove &quot;generated by&quot; comments</span><br>find <span class="hljs-string">&quot;delombok&quot;</span> -name <span class="hljs-string">&#x27;*.java&#x27;</span> -<span class="hljs-built_in">exec</span> sed <span class="hljs-string">&#x27;/Generated by delombok/d&#x27;</span> -i <span class="hljs-string">&#x27;&#123;&#125;&#x27;</span> <span class="hljs-string">&#x27;;&#x27;</span><br><span class="hljs-comment"># remove any left-over import statements</span><br>find <span class="hljs-string">&quot;delombok&quot;</span> -name <span class="hljs-string">&#x27;*.java&#x27;</span> -<span class="hljs-built_in">exec</span> sed <span class="hljs-string">&#x27;/import lombok/d&#x27;</span> -i <span class="hljs-string">&#x27;&#123;&#125;&#x27;</span> <span class="hljs-string">&#x27;;&#x27;</span><br><span class="hljs-comment"># copy delombok&#x27;d files over the original ones</span><br><span class="hljs-built_in">cp</span> -r <span class="hljs-string">&quot;delombok/.&quot;</span> <span class="hljs-string">&quot;./&quot;</span><br><span class="hljs-comment"># remove the &quot;delombok&quot; folder</span><br><span class="hljs-built_in">rm</span> -rf <span class="hljs-string">&quot;delombok&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>上面的代码，实现的功能是：去掉代码里的lombok注解，并还原setter和getter方法的java代码，从而使CodeQL的Flow流能够顺利走下去，<br>从而检索到安全漏洞。</p>
+<h3 id="最终答案"><a href="#最终答案" class="headerlink" title="最终答案"></a>最终答案</h3><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">经过以上的调优，我们得到了最终的注入漏洞检测规则。<br>最终demo.ql代码为：<br><br>```<span class="hljs-operator"></span><br><span class="hljs-operator">* </span>@id java/examples/vuldemo<span class="hljs-operator"></span><br><span class="hljs-operator"> * </span>@name Sql-Injection<span class="hljs-operator"></span><br><span class="hljs-operator"> * </span>@description Sql-Injection<span class="hljs-operator"></span><br><span class="hljs-operator"> * </span>@kind path-problem<span class="hljs-operator"></span><br><span class="hljs-operator"> * </span>@problem.severity warning<br> */<br><br>import java<br>import semmle.code.java.dataflow.FlowSources<br>import semmle.code.java.security.QueryInjection<br>import DataFlow::PathGraph<br><br>predicate is<span class="hljs-constructor">TaintedString(Expr <span class="hljs-params">expSrc</span>, Expr <span class="hljs-params">expDest</span>)</span> &#123;<br>    exists(Method <span class="hljs-keyword">method</span>, MethodAccess call, MethodAccess call1 <span class="hljs-pattern-match">| exp<span class="hljs-constructor">Src</span> = call1.get<span class="hljs-constructor">Argument(0)</span> <span class="hljs-keyword">and</span> exp<span class="hljs-constructor">Dest</span>=call <span class="hljs-keyword">and</span> call.get<span class="hljs-constructor">Method()</span> = <span class="hljs-keyword">method</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">method</span>.has<span class="hljs-constructor">Name(<span class="hljs-string">&quot;get&quot;</span>)</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">method</span>.get<span class="hljs-constructor">DeclaringType()</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span> = &quot;<span class="hljs-constructor">Optional</span>&lt;<span class="hljs-constructor">String</span>&gt;&quot; <span class="hljs-keyword">and</span> call1.get<span class="hljs-constructor">Argument(0)</span>.get<span class="hljs-constructor">Type()</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span> = &quot;<span class="hljs-constructor">Optional</span>&lt;<span class="hljs-constructor">String</span>&gt;&quot;  )</span><br><span class="hljs-pattern-match">&#125;</span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match"><span class="hljs-keyword">class</span> <span class="hljs-constructor">VulConfig</span> extends <span class="hljs-constructor">TaintTracking</span>::<span class="hljs-constructor">Configuration</span> &#123;</span><br><span class="hljs-pattern-match">  <span class="hljs-constructor">VulConfig()</span> &#123; this = &quot;<span class="hljs-constructor">SqlInjectionConfig</span>&quot; &#125;</span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match">  override predicate is<span class="hljs-constructor">Source(DataFlow::Node <span class="hljs-params">src</span>)</span> &#123; src instanceof <span class="hljs-constructor">RemoteFlowSource</span> &#125;</span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match">  override predicate is<span class="hljs-constructor">Sanitizer(DataFlow::Node <span class="hljs-params">node</span>)</span> &#123;</span><br><span class="hljs-pattern-match">    node.get<span class="hljs-constructor">Type()</span> instanceof <span class="hljs-constructor">PrimitiveType</span> <span class="hljs-keyword">or</span></span><br><span class="hljs-pattern-match">    node.get<span class="hljs-constructor">Type()</span> instanceof <span class="hljs-constructor">BoxedType</span> <span class="hljs-keyword">or</span></span><br><span class="hljs-pattern-match">    node.get<span class="hljs-constructor">Type()</span> instanceof <span class="hljs-constructor">NumberType</span> <span class="hljs-keyword">or</span></span><br><span class="hljs-pattern-match">    exists(<span class="hljs-constructor">ParameterizedType</span> pt| node.get<span class="hljs-constructor">Type()</span> = pt <span class="hljs-keyword">and</span> pt.get<span class="hljs-constructor">TypeArgument(0)</span> instanceof <span class="hljs-constructor">NumberType</span> )</span><br><span class="hljs-pattern-match">  &#125;</span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match">  override predicate is<span class="hljs-constructor">Sink(DataFlow::Node <span class="hljs-params">sink</span>)</span> &#123;</span><br><span class="hljs-pattern-match">    exists(<span class="hljs-constructor">Method</span> <span class="hljs-keyword">method</span>, <span class="hljs-constructor">MethodAccess</span> call |</span><br><span class="hljs-pattern-match">      <span class="hljs-keyword">method</span>.has<span class="hljs-constructor">Name(<span class="hljs-string">&quot;query&quot;</span>)</span></span><br><span class="hljs-pattern-match">      <span class="hljs-keyword">and</span></span><br><span class="hljs-pattern-match">      call.get<span class="hljs-constructor">Method()</span> = <span class="hljs-keyword">method</span> <span class="hljs-keyword">and</span></span><br><span class="hljs-pattern-match">      sink.<span class="hljs-keyword">as</span><span class="hljs-constructor">Expr()</span> = call.get<span class="hljs-constructor">Argument(0)</span></span><br><span class="hljs-pattern-match">    )</span><br><span class="hljs-pattern-match">  &#125;</span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match">  override predicate is<span class="hljs-constructor">AdditionalTaintStep(DataFlow::Node <span class="hljs-params">node1</span>, DataFlow::Node <span class="hljs-params">node2</span>)</span> &#123;</span><br><span class="hljs-pattern-match">    is<span class="hljs-constructor">TaintedString(<span class="hljs-params">node1</span>.<span class="hljs-params">asExpr</span>()</span>, node2.<span class="hljs-keyword">as</span><span class="hljs-constructor">Expr()</span>)</span><br><span class="hljs-pattern-match">  &#125;</span><br><span class="hljs-pattern-match">&#125;</span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match">from <span class="hljs-constructor">VulConfig</span> config, <span class="hljs-constructor">DataFlow</span>::<span class="hljs-constructor">PathNode</span> source, <span class="hljs-constructor">DataFlow</span>::<span class="hljs-constructor">PathNode</span> sink</span><br><span class="hljs-pattern-match">where config.has<span class="hljs-constructor">FlowPath(<span class="hljs-params">source</span>, <span class="hljs-params">sink</span>)</span></span><br><span class="hljs-pattern-match">select source.get<span class="hljs-constructor">Node()</span>, source, sink, &quot;source&quot;</span><br><span class="hljs-pattern-match">```</span><br><span class="hljs-pattern-match"></span><br><span class="hljs-pattern-match">## </span><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="XXE"><a href="#XXE" class="headerlink" title="XXE"></a>XXE</h2><p>SQL注入中有详细介绍，这里就不详细介绍了，直接拿官方的检测方法直接用</p>
+<p>存在漏洞的代码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">parse</span><span class="hljs-params">(Socket sock)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>  <span class="hljs-type">DocumentBuilderFactory</span> <span class="hljs-variable">factory</span> <span class="hljs-operator">=</span> DocumentBuilderFactory.newInstance();<br>  <span class="hljs-type">DocumentBuilder</span> <span class="hljs-variable">builder</span> <span class="hljs-operator">=</span> factory.newDocumentBuilder();<br>  builder.parse(sock.getInputStream()); <span class="hljs-comment">//unsafe</span><br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>而没有漏洞的代码是这样的</p>
@@ -470,7 +590,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>CodeQl常见漏洞梳理</div>
-      <div>https://decemberus.com/2023/11/03/CodeQl常见漏洞梳理/</div>
+      <div>https://decemberus.com/2023/12/23/CodeQl常见漏洞梳理/</div>
     </div>
     <div class="license-meta">
       
@@ -482,7 +602,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月3日</div>
+          <div>2023年12月23日</div>
         </div>
       
       
@@ -512,9 +632,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/16/Github%20ctf4%20training/" title="Github CodeQL training 思路">
+                      <a href="/2024/01/01/CodeQL%20log4j%E5%AE%9E%E6%88%98/" title="CodeQL log4j实战">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Github CodeQL training 思路</span>
+                        <span class="hidden-mobile">CodeQL log4j实战</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -522,8 +642,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/09/29/SQLMap%E5%8E%9F%E7%90%86%E5%8F%8A%E5%85%B6%E6%B7%B1%E5%85%A5/" title="SQLMap原理及其深入">
-                        <span class="hidden-mobile">SQLMap原理及其深入</span>
+                      <a href="/2023/12/17/OpenRASP%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/" title="OpenRASP源码阅读">
+                        <span class="hidden-mobile">OpenRASP源码阅读</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
