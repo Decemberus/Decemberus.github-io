@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Decemberus.github-io/img/fluid.png">
-  <link rel="icon" href="/Decemberus.github-io/img/fluid.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="内存马深入Tomcat内存马Listener类型根据上面的分析我们首先需要拿StandardContext，我们看到standard类中拿context的方法就是这样，我们直接照抄 1StandardContext context &#x3D; (StandardContext) req.getContext();  所以我们现在需要拿到req对象了，这里因为jsp内置了request对象，我们通过反射拿取">
 <meta property="og:type" content="article">
 <meta property="og:title" content="内存马深入">
-<meta property="og:url" content="https://decemberus.github.io/Decemberus.github-io/2023/05/21/%E5%86%85%E5%AD%98%E9%A9%AC%E6%B7%B1%E5%85%A5/index.html">
+<meta property="og:url" content="https://blog.decemberus.com/2023/05/21/%E5%86%85%E5%AD%98%E9%A9%AC%E6%B7%B1%E5%85%A5/index.html">
 <meta property="og:site_name" content="欢迎回来">
 <meta property="og:description" content="内存马深入Tomcat内存马Listener类型根据上面的分析我们首先需要拿StandardContext，我们看到standard类中拿context的方法就是这样，我们直接照抄 1StandardContext context &#x3D; (StandardContext) req.getContext();  所以我们现在需要拿到req对象了，这里因为jsp内置了request对象，我们通过反射拿取">
 <meta property="og:locale" content="zh_CN">
@@ -95,12 +95,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Decemberus.github-io/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Decemberus.github-io/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Decemberus.github-io/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -108,10 +108,10 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"decemberus.github.io","root":"/Decemberus.github-io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Decemberus.github-io/local-search.xml"};
+    var CONFIG = {"hostname":"blog.decemberus.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
-  <script  src="/Decemberus.github-io/js/utils.js" ></script>
-  <script  src="/Decemberus.github-io/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
 
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -126,7 +126,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Decemberus.github-io/">
+    <a class="navbar-brand" href="/">
       <strong>enjoy的blog</strong>
     </a>
 
@@ -145,7 +145,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -157,7 +157,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -169,7 +169,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -181,7 +181,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -193,7 +193,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -222,7 +222,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Decemberus.github-io/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -316,45 +316,45 @@
 
 
 <h3 id="Filter类型"><a href="#Filter类型" class="headerlink" title="Filter类型"></a>Filter类型</h3><p>将断点达到dofilter，我们向上分析</p>
-<p> <img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023181442066.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023181442066"> </p>
+<p> <img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023181442066.png" srcset="/img/loading.gif" lazyload alt="image-20231023181442066"> </p>
 <p>此处调用了filter，二filter是通过ApplicationFilterConfig来创建的，所以去分析这个类</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023181559608.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023181559608"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023181559608.png" srcset="/img/loading.gif" lazyload alt="image-20231023181559608"> </p>
 <p>这里实际上是对传进来的filterDef和context进行了一个封装，外部只需要提供context和filterDef就可以拿到applicationfilterconfig类，而不需要关注他是如何初始化的，并使用<code>context.getInstanceManager().newInstance(this.filter)</code>来创建一个新的过滤器实例。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023182623688.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023182623688"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023182623688.png" srcset="/img/loading.gif" lazyload alt="image-20231023182623688"> </p>
 <p>顺着调用链往下看，我们跟进到这个方法</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023182657955.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023182657955"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023182657955.png" srcset="/img/loading.gif" lazyload alt="image-20231023182657955"> </p>
 <p>这里调用了<code>filterchain</code>的一个方法，我们向上寻找<code>filterchain</code>是如何定义的</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023182728230.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023182728230"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023182728230.png" srcset="/img/loading.gif" lazyload alt="image-20231023182728230"> </p>
 <p>能够找到<code>filterchain</code>是有<code>ApplicationFilterFactory.createFilterChain(request, wrapper, servlet)</code>创建出来的，我们跟进这个方法寻找<code>filterchain</code>是如何被调用的</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023183217387.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023183217387"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023183217387.png" srcset="/img/loading.gif" lazyload alt="image-20231023183217387"> </p>
 <ol>
 <li>首先通过<code>filterChain = new ApplicationFilterChain()</code>创建一个空的<code>filterChain</code>对象</li>
 <li>然后通过<code>wrapper.getParent()</code>函数来获取<code>StandardContext</code>对象</li>
 </ol>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023183735527.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023183735527"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023183735527.png" srcset="/img/loading.gif" lazyload alt="image-20231023183735527"> </p>
 <p>紧接着获取<code>StandardContext</code>中的<code>FilterMaps</code>对象，<code>FilterMaps</code>对象中存储的是各Filter的名称路径等信息</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023183310519.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023183310519"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023183310519.png" srcset="/img/loading.gif" lazyload alt="image-20231023183310519"> </p>
 <p>根据最后根据Filter的名称，在<code>StandardContext</code>中获取<code>FilterConfig</code>，然后调用了<code>addfilter</code>将<code>filterconfig</code>添加进<code>filterchain</code>里面，而<code>filterconfig</code>则是从<code>context</code>中寻找得到的，所以接着跟进<code>addfilter</code></p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023184055440.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023184055440"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023184055440.png" srcset="/img/loading.gif" lazyload alt="image-20231023184055440"> </p>
 <p>可以看到就是把<code>filterConfig</code>添加进<code>filter</code>中</p>
 <p>所以关键就是将恶意Filter的信息添加进<code>FilterConfig</code>数组中，这样Tomcat在启动时就会自动初始化我们的恶意<code>Filter</code>。</p>
 <h4 id="FilterConfig、FilterDef和FilterMaps"><a href="#FilterConfig、FilterDef和FilterMaps" class="headerlink" title="FilterConfig、FilterDef和FilterMaps"></a>FilterConfig、FilterDef和FilterMaps</h4><p>回到<code>creatFilterChain</code>中，我们看到<code>context</code>这个上下文对象中实际上有这么三个属性</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023184732911.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023184732911">  </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023184732911.png" srcset="/img/loading.gif" lazyload alt="image-20231023184732911">  </p>
 <h5 id="filterConfigs"><a href="#filterConfigs" class="headerlink" title="filterConfigs"></a>filterConfigs</h5><p>其中filterConfigs包含了当前的上下文信息<code>StandardContext</code>、以及<code>filterDef</code>等信息</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023184841839.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023184841839"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023184841839.png" srcset="/img/loading.gif" lazyload alt="image-20231023184841839"> </p>
 <p>这里面的filterDef存放了filter的定义</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023184914017.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023184914017"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023184914017.png" srcset="/img/loading.gif" lazyload alt="image-20231023184914017"> </p>
 <p>可以发现它正好对应着我们重写dofilter那个方法和类</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023185017476.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023185017476"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023185017476.png" srcset="/img/loading.gif" lazyload alt="image-20231023185017476"> </p>
 <p>如果在web.xml中写的化，是这个格式</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">filter</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">filter-name</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">filter-name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">filter-class</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">filter-class</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">filter</span>&gt;</span><br></code></pre></td></tr></table></figure>
 
 <p>可以看到，filterDef必要的属性为<code>filter</code>、<code>filterClass</code>以及<code>filterName</code>。</p>
 <h5 id="filterDefs"><a href="#filterDefs" class="headerlink" title="filterDefs"></a>filterDefs</h5><p><code>filterDefs</code>是一个HashMap，以键值对的形式存储<code>filterDef</code></p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023185249480.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023185249480"> </p>
-<h5 id="filterMaps"><a href="#filterMaps" class="headerlink" title="filterMaps"></a>filterMaps</h5><p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023185312821.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023185312821"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023185249480.png" srcset="/img/loading.gif" lazyload alt="image-20231023185249480"> </p>
+<h5 id="filterMaps"><a href="#filterMaps" class="headerlink" title="filterMaps"></a>filterMaps</h5><p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023185312821.png" srcset="/img/loading.gif" lazyload alt="image-20231023185312821"> </p>
 <p><code>filterMaps</code>中以array的形式存放各filter的路径映射信息，其对应的是web.xml中的<code>&lt;filter-mapping&gt;</code>标签,同时也对应着我们这里的<code>Webfilter</code>注解</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023185437858.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231023185437858"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231023185437858.png" srcset="/img/loading.gif" lazyload alt="image-20231023185437858"> </p>
 <p>filterMaps必要的属性为<code>dispatcherMapping</code>、<code>filterName</code>、<code>urlPatterns</code></p>
 <p>于是下面的工作就是构造含有恶意filter的FilterMaps和FilterConfig对象，并将FilterConfig添加到filter链中了。</p>
 <h4 id="构造Filter"><a href="#构造Filter" class="headerlink" title="构造Filter"></a>构造Filter</h4><p>经过上面的分析，我们可以总结出动态添加恶意Filter的思路</p>
@@ -384,14 +384,14 @@
 
 <p>同样能够执行命令</p>
 <h2 id="JavaAgent内存马"><a href="#JavaAgent内存马" class="headerlink" title="JavaAgent内存马"></a>JavaAgent内存马</h2><p>注意，编写javaagent的时候必须要有一个premain，不然一定会报错</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231024182537523.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231024182537523"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231024182537523.png" srcset="/img/loading.gif" lazyload alt="image-20231024182537523"> </p>
 <p>在这里构建，构建的时候主类不需要选择，并勾选包含在项目构建中</p>
 <h3 id="什么是Java-Agent？"><a href="#什么是Java-Agent？" class="headerlink" title="什么是Java Agent？"></a>什么是Java Agent？</h3><p>我们知道Java是一种静态强类型语言，在运行之前必须将其编译成<code>.class</code>字节码，然后再交给JVM处理运行。Java Agent就是一种能在不影响正常编译的前提下，修改Java字节码，进而动态地修改已加载或未加载的类、属性和方法的技术。</p>
 <p>实际上，平时较为常见的技术如热部署、一些诊断工具等都是基于Java Agent技术来实现的。那么Java Agent技术具体是怎样实现的呢？</p>
 <p>对于Agent（代理）来讲，其大致可以分为两种，一种是在JVM启动前加载的<code>premain-Agent</code>，另一种是JVM启动之后加载的<code>agentmain-Agent</code>。这里我们可以将其理解成一种特殊的Interceptor（拦截器），如下图</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/premainAgent.jpg" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/premainAgent.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>premain-Agent</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/agentmain.jpg" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/agentmain.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>agentmain-Agent</p>
 <h3 id="Java-Agent示例"><a href="#Java-Agent示例" class="headerlink" title="Java Agent示例"></a>Java Agent示例</h3><h4 id="premain-Agent"><a href="#premain-Agent" class="headerlink" title="premain-Agent"></a>premain-Agent</h4><p>我们首先来实现一个简单的<code>premain-Agent</code>，创建一个Maven项目，编写一个简单的premain-Agent</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.java.premain.agent;<br> <br><span class="hljs-keyword">import</span> java.lang.instrument.Instrumentation;<br> <br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Java_Agent_premain</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">premain</span><span class="hljs-params">(String args, Instrumentation inst)</span> &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span><span class="hljs-number">0</span> ; i&lt;<span class="hljs-number">10</span> ; i++)&#123;<br>            System.out.println(<span class="hljs-string">&quot;调用了premain-Agent！&quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -400,8 +400,8 @@
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stylus">Manifest-Version: <span class="hljs-number">1.0</span><br>Premain-Class: com<span class="hljs-selector-class">.java</span><span class="hljs-selector-class">.premain</span><span class="hljs-selector-class">.agent</span><span class="hljs-selector-class">.Java_Agent_premain</span><br> <br></code></pre></td></tr></table></figure>
 
 <p>将其打包成jar文件</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/%25E5%259B%25BE%25E7%2589%2587-73.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="img"></p>
-<p><img src="https://goodapple.top/wp-content/uploads/2022/05/%E5%9B%BE%E7%89%87-74.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/%25E5%259B%25BE%25E7%2589%2587-73.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://goodapple.top/wp-content/uploads/2022/05/%E5%9B%BE%E7%89%87-74.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>创建一个目标类</p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Hello</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"><span class="hljs-built_in">String</span>[] args</span>) &#123;<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;Hello World!&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -409,7 +409,7 @@
 <figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs 1c">-javaagent:<span class="hljs-string">&quot;out/artifacts/Java_Agent_jar/Java_Agent.jar&quot;</span><br><br> <br> <br> <br></code></pre></td></tr></table></figure>
 
 <p>运行结果如下</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302135924345.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20240302135924345"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302135924345.png" srcset="/img/loading.gif" lazyload alt="image-20240302135924345"> </p>
 <h4 id="agentmain-Agent"><a href="#agentmain-Agent" class="headerlink" title="agentmain-Agent"></a>agentmain-Agent</h4><p>相较于premain-Agent只能在JVM启动前加载，agentmain-Agent能够在JVM启动之后加载并实现相应的修改字节码功能。下面我们来了解一下和JVM有关的两个类。</p>
 <h5 id="VirtualMachine类"><a href="#VirtualMachine类" class="headerlink" title="VirtualMachine类"></a>VirtualMachine类</h5><p><code>com.sun.tools.attach.VirtualMachine</code>类可以实现获取JVM信息，内存dump、现成dump、类信息统计（例如JVM加载的类）等功能。</p>
 <p>该类允许我们通过给attach方法传入一个JVM的PID，来远程连接到该JVM上 ，之后我们就可以对连接的JVM进行各种操作，如注入Agent。下面是该类的主要方法</p>
@@ -432,11 +432,11 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.java.inject;<br> <br><span class="hljs-keyword">import</span> com.sun.tools.attach.*;<br> <br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.util.List;<br> <br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Inject_Agent</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException, AttachNotSupportedException, AgentLoadException, AgentInitializationException &#123;<br>        <span class="hljs-comment">//调用VirtualMachine.list()获取正在运行的JVM列表</span><br>        List&lt;VirtualMachineDescriptor&gt; list = VirtualMachine.list();<br>        <span class="hljs-keyword">for</span>(VirtualMachineDescriptor vmd : list)&#123;<br> <br>            <span class="hljs-comment">//遍历每一个正在运行的JVM，如果JVM名称为Sleep_Hello则连接该JVM并加载特定Agent</span><br>            <span class="hljs-keyword">if</span>(vmd.displayName().equals(<span class="hljs-string">&quot;Sleep_Hello&quot;</span>))&#123;<br> <br>                <span class="hljs-comment">//连接指定JVM</span><br>                <span class="hljs-type">VirtualMachine</span> <span class="hljs-variable">virtualMachine</span> <span class="hljs-operator">=</span> VirtualMachine.attach(vmd.id());<br>                <span class="hljs-comment">//加载Agent</span><br>                virtualMachine.loadAgent(<span class="hljs-string">&quot;out/artifacts/Java_Agent_jar/Java_Agent.jar&quot;</span>);<br>                <span class="hljs-comment">//断开JVM连接</span><br>                virtualMachine.detach();<br>            &#125;<br> <br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>首先启动<code>Sleep_Hello</code>目标JVM</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302135943249.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20240302135943249"></p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302135943249.png" srcset="/img/loading.gif" lazyload alt="image-20240302135943249"></p>
 <p>然后运行<code>Inject_Agent</code>类，注入Agent</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302135950371.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20240302135950371"></p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302135950371.png" srcset="/img/loading.gif" lazyload alt="image-20240302135950371"></p>
 <h4 id="Instrumentation"><a href="#Instrumentation" class="headerlink" title="Instrumentation"></a>Instrumentation</h4><p>Instrumentation是 JVMTIAgent（JVM Tool Interface Agent）的一部分，Java agent通过这个类和目标 JVM 进行交互，从而达到修改数据的效果。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302140004215.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20240302140004215"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302140004215.png" srcset="/img/loading.gif" lazyload alt="image-20240302140004215"> </p>
 <p>其在Java中是一个接口，常用方法如下</p>
 <figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Instrumentation</span> </span>&#123;<br>    <br>    <span class="hljs-comment">//增加一个Class 文件的转换器，转换器用于改变 Class 二进制流的数据，参数 canRetransform 设置是否允许重新转换。</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">addTransformer</span><span class="hljs-params">(ClassFileTransformer transformer, <span class="hljs-keyword">boolean</span> canRetransform)</span></span>;<br> <br>    <span class="hljs-comment">//在类加载之前，重新定义 Class 文件，ClassDefinition 表示对一个类新的定义，如果在类加载之后，需要使用 retransformClasses 方法重新定义。addTransformer方法配置之后，后续的类加载都会被Transformer拦截。对于已经加载过的类，可以执行retransformClasses来重新触发这个Transformer的拦截。类加载的字节码被修改后，除非再次被retransform，否则不会恢复。</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">addTransformer</span><span class="hljs-params">(ClassFileTransformer transformer)</span></span>;<br> <br>    <span class="hljs-comment">//删除一个类转换器</span><br>    <span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">removeTransformer</span><span class="hljs-params">(ClassFileTransformer transformer)</span></span>;<br> <br> <br>    <span class="hljs-comment">//在类加载之后，重新定义 Class。这个很重要，该方法是1.6 之后加入的，事实上，该方法是 update 了一个类。</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">retransformClasses</span><span class="hljs-params">(Class&lt;?&gt;... classes)</span> <span class="hljs-keyword">throws</span> UnmodifiableClassException</span>;<br> <br> <br> <br>    <span class="hljs-comment">//判断一个类是否被修改</span><br>    <span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">isModifiableClass</span><span class="hljs-params">(Class&lt;?&gt; theClass)</span></span>;<br> <br>    <span class="hljs-comment">// 获取目标已经加载的类。</span><br>    <span class="hljs-meta">@SuppressWarnings</span>(<span class="hljs-string">&quot;rawtypes&quot;</span>)<br>    Class[] getAllLoadedClasses();<br> <br>    <span class="hljs-comment">//获取一个对象的大小</span><br>    <span class="hljs-function"><span class="hljs-keyword">long</span> <span class="hljs-title">getObjectSize</span><span class="hljs-params">(Object objectToSize)</span></span>;<br> <br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -477,9 +477,9 @@
 <p>注意这里使用到了<code>tools.jar</code>工具包，IDEA默认不会导入为lib，我们手动导入即可</p>
 <p>然后将agentmain-Agent打为jar包，注意这里将tools和javassist依赖一并打包</p>
 <p><code>Java_Agent.jar</code>目录结构如下</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302140039152.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20240302140039152"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302140039152.png" srcset="/img/loading.gif" lazyload alt="image-20240302140039152"> </p>
 <p>首先运行目标类，然后运行<code>Inject_Agent</code>类，注入Agent</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302140029402.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20240302140029402"></p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302140029402.png" srcset="/img/loading.gif" lazyload alt="image-20240302140029402"></p>
 <h3 id="Instrumentation的局限性"><a href="#Instrumentation的局限性" class="headerlink" title="Instrumentation的局限性"></a>Instrumentation的局限性</h3><p>大多数情况下，我们使用Instrumentation都是使用其字节码插桩的功能，简单来说就是类重定义功能（Class Redefine），但是有以下局限性：</p>
 <p>premain和agentmain两种方式<strong>修改字节码</strong>的时机都是类文件加载之后，也就是说必须要带有Class类型的参数，不能通过字节码文件和自定义的类名重新定义一个本来不存在的类。</p>
 <p>类的字节码修改称为类转换(Class Transform)，类转换其实最终都回归到类重定义I<code>nstrumentation#redefineClasses</code>方法，此方法有以下限制：</p>
@@ -509,34 +509,34 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.java.inject;<br> <br><span class="hljs-keyword">import</span> com.sun.tools.attach.*;<br> <br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.util.List;<br> <br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Inject_Agent_Spring</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException, AttachNotSupportedException, AgentLoadException, AgentInitializationException &#123;<br>        <span class="hljs-comment">//调用VirtualMachine.list()获取正在运行的JVM列表</span><br>        List&lt;VirtualMachineDescriptor&gt; list = VirtualMachine.list();<br>        <span class="hljs-keyword">for</span>(VirtualMachineDescriptor vmd : list)&#123;<br> <br>            <span class="hljs-comment">//遍历每一个正在运行的JVM，如果JVM名称为Sleep_Hello则连接该JVM并加载特定Agent</span><br>            <span class="hljs-keyword">if</span>(vmd.displayName().equals(<span class="hljs-string">&quot;com.example.java_agent_springboot.JavaAgentSpringBootApplication&quot;</span>))&#123;<br> <br>                <span class="hljs-comment">//连接指定JVM</span><br>                <span class="hljs-type">VirtualMachine</span> <span class="hljs-variable">virtualMachine</span> <span class="hljs-operator">=</span> VirtualMachine.attach(vmd.id());<br>                <span class="hljs-comment">//加载Agent</span><br>                virtualMachine.loadAgent(<span class="hljs-string">&quot;out/artifacts/Java_Agent_jar/Java_Agent.jar&quot;</span>);<br>                <span class="hljs-comment">//断开JVM连接</span><br>                virtualMachine.detach();<br>            &#125;<br><span class="hljs-comment">//            System.out.println(vmd.displayName());</span><br> <br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>启动一个简单的Spring Boot项目</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302140102824.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20240302140102824"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302140102824.png" srcset="/img/loading.gif" lazyload alt="image-20240302140102824"> </p>
 <p>运行<code>Inject_Agent_Spring</code>类，在doFilter方法中注入恶意代码，成功执行</p>
 <h2 id="Spring内存马"><a href="#Spring内存马" class="headerlink" title="Spring内存马"></a>Spring内存马</h2><p>首先我们要分析controller是如何进行注册的</p>
 <h3 id="Controller的注册"><a href="#Controller的注册" class="headerlink" title="Controller的注册"></a>Controller的注册</h3><p>我们直接跟进DispatcherServlet里面查看</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231026185754515.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231026185754515"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231026185754515.png" srcset="/img/loading.gif" lazyload alt="image-20231026185754515"> </p>
 <p>发现mappedHandler是来自于getHandler的</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231026185823088.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231026185823088"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231026185823088.png" srcset="/img/loading.gif" lazyload alt="image-20231026185823088"> </p>
 <p>进入getHandler方法</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231026185941173.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231026185941173"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231026185941173.png" srcset="/img/loading.gif" lazyload alt="image-20231026185941173"> </p>
 <p>我们发现他是将这些页面进行一个遍历并获取其中的handler，可以看到这些mappings就是我们想要的页面，我们跟进gethandler方法</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231026194234267.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231026194234267"> </p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231026194521931.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231026194521931"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231026194234267.png" srcset="/img/loading.gif" lazyload alt="image-20231026194234267"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231026194521931.png" srcset="/img/loading.gif" lazyload alt="image-20231026194521931"> </p>
 <p>接着往下深入，这里有一个lookupHandlerMethod</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231028095511491.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231028095511491"> </p>
-<p><img src="D:\mdimage\image-20231028095611066.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231028095611066"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231028095511491.png" srcset="/img/loading.gif" lazyload alt="image-20231028095511491"> </p>
+<p><img src="D:\mdimage\image-20231028095611066.png" srcset="/img/loading.gif" lazyload alt="image-20231028095611066"> </p>
 <p>跟到这里我们发现了这里找到了我们路径映射的地方，而且再往下看我们可以看到有一个关于mapping的抽象类</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231028100424945.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231028100424945"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231028100424945.png" srcset="/img/loading.gif" lazyload alt="image-20231028100424945"> </p>
 <p>在这个抽象类的registerMapping方法中，我们找到了具体进行注册的地方</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231028100546441.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231028100546441"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231028100546441.png" srcset="/img/loading.gif" lazyload alt="image-20231028100546441"> </p>
 <p>也就是说模拟注册向mappingRegistry中添加内存马路由，就能注入内存马。</p>
 <p>在AbstractHandlerMethodMapping中就提供了registerMapping添加路由。但是该类为抽象类。它的子类RequestMappingHandlerMapping能进行实例化</p>
 <h3 id="RequestMappingHandlerMapping分析"><a href="#RequestMappingHandlerMapping分析" class="headerlink" title="RequestMappingHandlerMapping分析"></a>RequestMappingHandlerMapping分析</h3><p>接下来我们对刚才进入的这个类进行分析，我们看到了两个熟悉的小伙伴，这里的beanName也就是我们的controller，这里对每一个bean进行了判断</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231028101154487.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231028101154487">  </p>
-<p><img src="D:\mdimage\image-20231028101219042.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231028101219042"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231028101154487.png" srcset="/img/loading.gif" lazyload alt="image-20231028101154487">  </p>
+<p><img src="D:\mdimage\image-20231028101219042.png" srcset="/img/loading.gif" lazyload alt="image-20231028101219042"> </p>
 <p>当他是controller的时候，就会进入我们的detectHandler方法</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231115201925574.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231115201925574"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231115201925574.png" srcset="/img/loading.gif" lazyload alt="image-20231115201925574"> </p>
 <p>在detectHandlerMethods中，用getMappingForMethod创建RequestMappingInfo，处理完后用registryHandlerMethod建立方法到RequestyMappingInfo的映射。也就是注册路由</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231115202143338.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231115202143338"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231115202143338.png" srcset="/img/loading.gif" lazyload alt="image-20231115202143338"> </p>
 <h3 id="获取context"><a href="#获取context" class="headerlink" title="获取context"></a>获取context</h3><p>spring中获取context的方式一般有以下几种</p>
 <p>①直接通过ContextLoader获取，不用再经过servletContext。不过ContextLoader一般会被ban</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">WebApplicationContext</span> <span class="hljs-variable">context</span> <span class="hljs-operator">=</span> ContextLoader.getCurrentWebApplicationContext();<br></code></pre></td></tr></table></figure>
@@ -577,7 +577,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>内存马深入</div>
-      <div>https://decemberus.github.io/Decemberus.github-io/2023/05/21/内存马深入/</div>
+      <div>https://blog.decemberus.com/2023/05/21/内存马深入/</div>
     </div>
     <div class="license-meta">
       
@@ -619,7 +619,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Decemberus.github-io/2023/07/09/impacket%E4%B8%ADexec%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E7%94%A8%E6%B3%95/" title="impacket中各种exec的区别与用法">
+                      <a href="/2023/07/09/impacket%E4%B8%ADexec%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E7%94%A8%E6%B3%95/" title="impacket中各种exec的区别与用法">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">impacket中各种exec的区别与用法</span>
                         <span class="visible-mobile">上一篇</span>
@@ -629,7 +629,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Decemberus.github-io/2023/04/07/TemplatesImpl%E5%9C%A8Shiro%E4%B8%AD%E7%9A%84%E5%88%A9%E7%94%A8%E8%A1%A5%E5%85%85/" title="TemplatesImpl在Shiro中的利用">
+                      <a href="/2023/04/07/TemplatesImpl%E5%9C%A8Shiro%E4%B8%AD%E7%9A%84%E5%88%A9%E7%94%A8%E8%A1%A5%E5%85%85/" title="TemplatesImpl在Shiro中的利用">
                         <span class="hidden-mobile">TemplatesImpl在Shiro中的利用</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -755,8 +755,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Decemberus.github-io/js/events.js" ></script>
-<script  src="/Decemberus.github-io/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -780,7 +780,7 @@
 
 
   
-    <script  src="/Decemberus.github-io/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -917,7 +917,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Decemberus.github-io/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -925,7 +925,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Decemberus.github-io/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   

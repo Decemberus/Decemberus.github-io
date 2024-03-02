@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Decemberus.github-io/img/fluid.png">
-  <link rel="icon" href="/Decemberus.github-io/img/fluid.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="impacket中*exec的区别与用法PSExec用户可以使用PSExec连接到远程机器并通过命名管道执行命令。命名管道是通过一个随机命名的二进制文件建立的，这个文件被写入远程机器上的ADMIN$共享，并供SVCManager用来创建新服务。 这一步相当于运行下列命令： 1sc create [serviceName] binPath&#x3D; &quot;C:\Windows\[uploaded-bi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="impacket中各种exec的区别与用法">
-<meta property="og:url" content="https://decemberus.github.io/Decemberus.github-io/2023/07/09/impacket%E4%B8%ADexec%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E7%94%A8%E6%B3%95/index.html">
+<meta property="og:url" content="https://blog.decemberus.com/2023/07/09/impacket%E4%B8%ADexec%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E7%94%A8%E6%B3%95/index.html">
 <meta property="og:site_name" content="欢迎回来">
 <meta property="og:description" content="impacket中*exec的区别与用法PSExec用户可以使用PSExec连接到远程机器并通过命名管道执行命令。命名管道是通过一个随机命名的二进制文件建立的，这个文件被写入远程机器上的ADMIN$共享，并供SVCManager用来创建新服务。 这一步相当于运行下列命令： 1sc create [serviceName] binPath&#x3D; &quot;C:\Windows\[uploaded-bi">
 <meta property="og:locale" content="zh_CN">
@@ -58,12 +58,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Decemberus.github-io/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Decemberus.github-io/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Decemberus.github-io/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -71,10 +71,10 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"decemberus.github.io","root":"/Decemberus.github-io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Decemberus.github-io/local-search.xml"};
+    var CONFIG = {"hostname":"blog.decemberus.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
-  <script  src="/Decemberus.github-io/js/utils.js" ></script>
-  <script  src="/Decemberus.github-io/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
 
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -89,7 +89,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Decemberus.github-io/">
+    <a class="navbar-brand" href="/">
       <strong>enjoy的blog</strong>
     </a>
 
@@ -108,7 +108,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -120,7 +120,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -132,7 +132,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -144,7 +144,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -156,7 +156,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -185,7 +185,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Decemberus.github-io/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -273,15 +273,15 @@
 
 <p>一旦建立了命名管道，我们与远程机器之间的所有命令的输入和输出都将通过SMB协议（445&#x2F;TCP）进行通信。</p>
 <h2 id="SMBExec"><a href="#SMBExec" class="headerlink" title="SMBExec"></a><strong>SMBExec</strong></h2><p>SMBExec与PSExec非常相似，然而，SMBExec并不会将二进制文件保存到磁盘上。相反，SMBExec会利用一个批处理文件，以及一个临时文件，来执行和转发消息。就像PSExec一样，SMBExec也是通过SMB协议（445&#x2F;TCP）来发送输入信息并接收输出结果的。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231230223835868.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231230223835868"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231230223835868.png" srcset="/img/loading.gif" lazyload alt="image-20231230223835868"> </p>
 <p>如上图所示，我们已经成功建立了与目标机器的连接。为了完成相关分析，让我们执行一个命令来请求运行Notepad.exe的实例。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231230223851520.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231230223851520"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231230223851520.png" srcset="/img/loading.gif" lazyload alt="image-20231230223851520"> </p>
 <p>我们很快就会看到，我们失去了进一步向远程机器发送输入的能力。这是因为我们仍在等待远程机器的命令输出，而我们永远不会收到该输出。这种情况非常适合在远程机器上进行分析。</p>
 <p>Notepad.exe进程是CMD.exe的子进程。如果我们将鼠标悬停在CMD.exe上，可以看到它正在处理存储在C:\Windows\TEMP\execute.bat中数据。那好，下面就让我们快速读取这个文件中存储的数据。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231230223937842.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231230223937842"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231230223937842.png" srcset="/img/loading.gif" lazyload alt="image-20231230223937842"> </p>
 <p>在读取execute.bat文件中的数据后，我们就会发现，原来发送给远程机器的输入被追加到了文件的开头处。</p>
 <p>这个批处理文件本质作用就是把我们的输入发送到远程机器上，执行它们，并把输出重定向到一个名为__output的临时文件中，该文件位于\127.0.0.1\C$路径中。 </p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231230224003081.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231230224003081"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231230224003081.png" srcset="/img/loading.gif" lazyload alt="image-20231230224003081"> </p>
 <h2 id="WMIExec"><a href="#WMIExec" class="headerlink" title="WMIExec"></a>WMIExec</h2><p>WMIExec（Windows Management Instrumentation）允许通过TCP 135端口与远程过程调用(RPC)建立初始通信来远程访问机器。初始通信建立后，它会使用一个大于1024的随机端口进行协商</p>
 <p>该连接用于向远程机器发送输入。并且，输入的内容将在CMD.EXE进程中执行，输出的内容将保存在远程机器上ADMIN$共享的临时文件中。通过查找以“__”开头的文件名，我们可以很容易地在ADMIN$共享中找到这个临时文件。两个下划线后面的数值看似随机，但实际上是当前日期和时间转换而成的时间戳。</p>
 
@@ -301,7 +301,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>impacket中各种exec的区别与用法</div>
-      <div>https://decemberus.github.io/Decemberus.github-io/2023/07/09/impacket中exec的区别与用法/</div>
+      <div>https://blog.decemberus.com/2023/07/09/impacket中exec的区别与用法/</div>
     </div>
     <div class="license-meta">
       
@@ -343,7 +343,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Decemberus.github-io/2023/08/02/%E5%9F%9F%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="域渗透基础知识">
+                      <a href="/2023/08/02/%E5%9F%9F%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="域渗透基础知识">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">域渗透基础知识</span>
                         <span class="visible-mobile">上一篇</span>
@@ -353,7 +353,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Decemberus.github-io/2023/05/21/%E5%86%85%E5%AD%98%E9%A9%AC%E6%B7%B1%E5%85%A5/" title="内存马深入">
+                      <a href="/2023/05/21/%E5%86%85%E5%AD%98%E9%A9%AC%E6%B7%B1%E5%85%A5/" title="内存马深入">
                         <span class="hidden-mobile">内存马深入</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -479,8 +479,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Decemberus.github-io/js/events.js" ></script>
-<script  src="/Decemberus.github-io/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -504,7 +504,7 @@
 
 
   
-    <script  src="/Decemberus.github-io/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -641,7 +641,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Decemberus.github-io/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -649,7 +649,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Decemberus.github-io/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   

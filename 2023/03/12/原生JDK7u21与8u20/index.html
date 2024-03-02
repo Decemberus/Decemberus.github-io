@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Decemberus.github-io/img/fluid.png">
-  <link rel="icon" href="/Decemberus.github-io/img/fluid.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="原生JDK7u21参考P神的讲解进行了一定的注释与修改 核心原理相信学习了CommonsCollections的这些利用链后，大家心里对反序列化有自己的认识。如果问，什么是某条反序列化利用链的核心点，有的同学可能会说是readObject或TemplatesImpl。不过我的理解是，核心在于触发“动态方法执行”的地方，而不是TemplatesImpl或某个类的readObject方法。 一个例子">
 <meta property="og:type" content="article">
 <meta property="og:title" content="7U21与8U20">
-<meta property="og:url" content="https://decemberus.github.io/Decemberus.github-io/2023/03/12/%E5%8E%9F%E7%94%9FJDK7u21%E4%B8%8E8u20/index.html">
+<meta property="og:url" content="https://blog.decemberus.com/2023/03/12/%E5%8E%9F%E7%94%9FJDK7u21%E4%B8%8E8u20/index.html">
 <meta property="og:site_name" content="欢迎回来">
 <meta property="og:description" content="原生JDK7u21参考P神的讲解进行了一定的注释与修改 核心原理相信学习了CommonsCollections的这些利用链后，大家心里对反序列化有自己的认识。如果问，什么是某条反序列化利用链的核心点，有的同学可能会说是readObject或TemplatesImpl。不过我的理解是，核心在于触发“动态方法执行”的地方，而不是TemplatesImpl或某个类的readObject方法。 一个例子">
 <meta property="og:locale" content="zh_CN">
@@ -72,12 +72,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Decemberus.github-io/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Decemberus.github-io/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Decemberus.github-io/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -85,10 +85,10 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"decemberus.github.io","root":"/Decemberus.github-io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Decemberus.github-io/local-search.xml"};
+    var CONFIG = {"hostname":"blog.decemberus.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
-  <script  src="/Decemberus.github-io/js/utils.js" ></script>
-  <script  src="/Decemberus.github-io/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
 
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -103,7 +103,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Decemberus.github-io/">
+    <a class="navbar-brand" href="/">
       <strong>enjoy的blog</strong>
     </a>
 
@@ -122,7 +122,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -134,7 +134,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -146,7 +146,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -158,7 +158,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -170,7 +170,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Decemberus.github-io/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -199,7 +199,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Decemberus.github-io/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -319,7 +319,7 @@
 
 <p>可见，这里使用了一个HashMap，将对象保存在HashMap的key处来做去重。</p>
 <p>HashMap，就是数据结构里的哈希表，相信上过数据结构课程的同学应该还记得，哈希表是由数组+链表实现的——哈希表底层保存在一个数组中，数组的索引由哈希表的 key.hashCode() 经过计算得到，数组的值是一个链表，所有哈希碰撞到相同索引的key-value，都会被链接到这个链表后面。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230410212825179.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230410212825179"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230410212825179.png" srcset="/img/loading.gif" lazyload alt="image-20230410212825179"> </p>
 <p>所以，为了触发比较操作，我们需要让比较与被比较的两个对象的哈希相同，这样才能被连接到同一条链表上，才会进行比较。</p>
 <p>跟进HashMap的put方法（很奇怪，这里我找到的get方法是这样的）</p>
 <blockquote>
@@ -328,7 +328,7 @@
 <p>解决办法如下</p>
 <p>我们可以看到，虽然在项目结构中是java1.7</p>
 <p>但是在外部库中确实java8u65</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230410215242230.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230410215242230"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230410215242230.png" srcset="/img/loading.gif" lazyload alt="image-20230410215242230"> </p>
 <ol>
 <li>运行 <code>mvn dependency:purge-local-repository</code> 命令。这将清除本地仓库中的所有依赖项。</li>
 <li>运行 <code>mvn clean install</code> 命令。这将重新构建你的项目并下载所有必要的依赖项。</li>
@@ -405,7 +405,7 @@
 
 
 <h2 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h2><p>官方在JDK7u25中是这样修复问题的</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230410225833994.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230410225833994"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230410225833994.png" srcset="/img/loading.gif" lazyload alt="image-20230410225833994"> </p>
 <p>原本判断了是不是annotation类型以后什么也没有做，只是将函数返回</p>
 <p>现在抛出了一个异常，即如果不是annotation类型以后会导致整个过程终止</p>
 <p>但这样又导致了JDK8u20，下面来介绍8u20的原因</p>
@@ -458,14 +458,14 @@
 <figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gcode"><span class="hljs-comment">//输出</span><br>r<span class="hljs-meta">O0</span>ABX<span class="hljs-symbol">NyABd5</span>c<span class="hljs-number">29</span>zZXJpYWwucHJhY<span class="hljs-number">3</span>RpY<span class="hljs-number">2</span>UuVX<span class="hljs-symbol">NlcpHNaOa2</span><span class="hljs-symbol">n6</span><span class="hljs-name">m0</span>AgACTAAEbmFtZXQAEkxqYXZhL<span class="hljs-number">2</span>xhbmcvU<span class="hljs-number">3</span>RyaW<span class="hljs-number">5</span><span class="hljs-symbol">nO0</span>wAB<span class="hljs-symbol">nBhcmVudHQAGUx5</span>c<span class="hljs-number">29</span>zZXJpYWw<span class="hljs-attr">vcHJhY3</span>RpY<span class="hljs-number">2</span>UvVX<span class="hljs-symbol">Nlcjt4</span>cHQAA<span class="hljs-number">2</span>JvY<span class="hljs-symbol">nNxAH4</span>AAHQABEp<span class="hljs-attr">vc2</span>Fw<br></code></pre></td></tr></table></figure>
 
 <p>将得到的Base64的数据流用zkar进行分析，这里还是用p神那张图</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230223224253392.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230223224253392"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230223224253392.png" srcset="/img/loading.gif" lazyload alt="image-20230223224253392"> </p>
 <p>可见，这里 contents 只包含一个 newObject ，其第一部分是 ClassDesc ，包含了User这个类的信息，比如类名、SerialVersionUID、父类、属性列表等。</p>
 <p>这个 classDesc 的ID，也就是handler为8257536，而在 []classData 数组中，包含两个属性， name 和 parent ，parent 也是一个 newObject ，它实际上在源码中是一个User类对象，所以 classDesc 也是User类的信息，因为前面已经定义过了，所以这个类是一个Reference，ID也是8257536，表示指向前面User类的ClassDesc。</p>
 <p>通过这个简单的案例，我们可以理解Java是怎么序列化一个类的。当然，实际情况会比这个例子要复杂很多，但我们只需要按照Grammer中的语法进行分析，再结合zkar的执行结果，即可很好地理解序列化协议了</p>
 <h3 id="例二"><a href="#例二" class="headerlink" title="例二"></a>例二</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">AuthClass</span> <span class="hljs-variable">authClass</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AuthClass</span>(<span class="hljs-string">&quot;123456&quot;</span>);<br>  <span class="hljs-type">ObjectOutputStream</span> <span class="hljs-variable">oos</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectOutputStream</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FileOutputStream</span>(<span class="hljs-string">&quot;./authClass.bin&quot;</span>));<br>  oos.writeObject(authClass);<br>  oos.writeObject(authClass);<br>  oos.close();<br></code></pre></td></tr></table></figure>
 
 <p>将同一个对象执行两次writeObject，序列化数据经过SerializationDumper处理如下，其中new_handle的值是SerializationDumper标注出的，实际并不存在。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414183955883.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230414183955883"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414183955883.png" srcset="/img/loading.gif" lazyload alt="image-20230414183955883"> </p>
 <p>序列化的内容如下：</p>
 <ul>
 <li><p>STREAM_MAGIC 数据头 0xaced</p>
@@ -515,7 +515,7 @@
 <p>0x007e0001 char[]对象，标识成员属性（password）的类型</p>
 <p>0x007e0002 ysoserial.payloads.weblogic_high.test$1AuthClass.class对象</p>
 <p>0x007e0003 ysoserial.payloads.weblogic_high.test$1AuthClass.passsword的值</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414221257829.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230414221257829"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414221257829.png" srcset="/img/loading.gif" lazyload alt="image-20230414221257829"> </p>
 <p>通过reference，可以实现在readObject时，反序列化任意已经序列化过的对象，以及它们的一些字段。</p>
 <h2 id="构造包含垃圾的序列化流"><a href="#构造包含垃圾的序列化流" class="headerlink" title="构造包含垃圾的序列化流"></a>构造包含垃圾的序列化流</h2><h3 id="C0ny"><a href="#C0ny" class="headerlink" title="C0ny"></a>C0ny</h3><p>先来看看c0ny师傅的大体思路</p>
 <p>思路是需要找到一个class可以序列化，它可以把我们的脏数据对象和ysoserial gadget对象一起包裹起来。</p>
@@ -531,7 +531,7 @@
 </li>
 </ol>
 <p>…..</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230223230550344.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230223230550344"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230223230550344.png" srcset="/img/loading.gif" lazyload alt="image-20230223230550344"> </p>
 <p>所以我们可以改造ysoserial</p>
 <p>大致的流程调用是，构造函数传入gadget对象以及垃圾数据长度，然后调用doWrap方法随机创建一个集合类型把随机生成的脏数据和gadget对象存储起来，最终序列化该对象即可拿到bypass WAF的序列化数据。具体实现参考<a target="_blank" rel="noopener" href="https://github.com/woodpecker-framework/ysoserial-for-woodpecker">代码和注释</a></p>
 <p>完整的项目看这个</p>
@@ -554,19 +554,19 @@
 <p>找到我们的CC6利用链，加入下列代码使得其成功写出序列化文件cc6.ser</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">FileOutputStream</span> <span class="hljs-variable">fileOutputStream</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">FileOutputStream</span>(<span class="hljs-string">&quot;cc6.ser&quot;</span>);<br><span class="hljs-type">ObjectOutputStream</span> <span class="hljs-variable">objectOutputStream</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectOutputStream</span>(fileOutputStream);<br>objectOutputStream.writeObject(expMap);<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414093749138.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230414093749138"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414093749138.png" srcset="/img/loading.gif" lazyload alt="image-20230414093749138"> </p>
 <p>我们编写一个简单的Go程序，并调用zkar库中的结构和方法，来构造这个填充了垃圾字符的CommonsCollections6的Payload：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;github.com/phith0n/zkar/serz&quot;</span><br>	<span class="hljs-string">&quot;io/ioutil&quot;</span><br>	<span class="hljs-string">&quot;log&quot;</span><br>	<span class="hljs-string">&quot;strings&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	<span class="hljs-comment">// 从文件中读取字节数据</span><br>	data, _ := ioutil.ReadFile(<span class="hljs-string">&quot;D:\\Code_Project\\Java\\ysoserial-master\\cc6.ser&quot;</span>)<br>	<span class="hljs-comment">// 将字节数据转换为序列化对象</span><br>	serialization, err := serz.FromBytes(data)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		log.Fatal(<span class="hljs-string">&quot;parse error&quot;</span>)<br>	&#125;<br>	<span class="hljs-comment">// 创建一个新的序列化内容，包含一个长数据块</span><br>	<span class="hljs-keyword">var</span> blockData = &amp;serz.TCContent&#123;<br>		Flag: serz.JAVA_TC_BLOCKDATALONG, <span class="hljs-comment">//</span><br>		BlockData: &amp;serz.TCBlockData&#123;<br>			Data: []<span class="hljs-type">byte</span>(strings.Repeat(<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-number">40000</span>)),<br>		&#125;,<br>	&#125;<br>	<span class="hljs-comment">// 将新的内容追加到序列化对象中</span><br>	serialization.Contents = <span class="hljs-built_in">append</span>(serialization.Contents, blockData)<br>	<span class="hljs-comment">// 将序列化对象转换为字节数据并写入文件</span><br>	ioutil.WriteFile(<span class="hljs-string">&quot;cc6-padding.ser&quot;</span>, serialization.ToBytes(), <span class="hljs-number">0</span>o755)<br>&#125;<br><br></code></pre></td></tr></table></figure>
 
 <p>填充了一个payload，内容如下</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414093914002.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230414093914002"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414093914002.png" srcset="/img/loading.gif" lazyload alt="image-20230414093914002"> </p>
 <p>使用Java代码加载我们的修改后的ser文件</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.io.FileInputStream;<br><span class="hljs-keyword">import</span> java.io.FileNotFoundException;<br><span class="hljs-keyword">import</span> java.io.ObjectInputStream;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SimpleRead</span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-type">FileInputStream</span> <span class="hljs-variable">fileInputStream</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">FileInputStream</span>(<span class="hljs-string">&quot;D:\\Code_Project\\Go\\zkar-master\\cc6-padding.ser&quot;</span>);<br>        <span class="hljs-type">ObjectInputStream</span> <span class="hljs-variable">objectInputStream</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectInputStream</span>(fileInputStream);<br>        <span class="hljs-type">Object</span> <span class="hljs-variable">o</span> <span class="hljs-operator">=</span> objectInputStream.readObject();<br>        System.out.println(o);<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
 <p>能够成功弹出计算器</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414093847402.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230414093847402"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414093847402.png" srcset="/img/loading.gif" lazyload alt="image-20230414093847402"> </p>
 <p>但如此的填充很有缺陷，填充的数据在Payload后面，WAF一旦检查数据包的前N个字符，仍无法绕过，所以我们思考将垃圾字符放在Payload前面</p>
 <p>我们原来的顺序是这样的，<code>content</code>在前，<code>blockdata</code>在后</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">serialization.Contents = <span class="hljs-built_in">append</span>(serialization.Contents, blockData)<br></code></pre></td></tr></table></figure>
@@ -574,7 +574,7 @@
 <p>我们改为这样</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">serialization.Contents = append([]*serz.TCContent&#123;blockData&#125;,<br>serialization.Contents...)<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414101213128.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230414101213128"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414101213128.png" srcset="/img/loading.gif" lazyload alt="image-20230414101213128"> </p>
 <p>发现也能够成功的弹出我们的计算器，可是P神说存在问题，可是我这里尝试不到任何的问题，挖个坑</p>
 <h2 id="序列化中的handler"><a href="#序列化中的handler" class="headerlink" title="序列化中的handler"></a>序列化中的handler</h2><p><strong>引用机制</strong></p>
 <p>在序列化流程中，对象所属类、对象成员属性等数据都会被使用固定的语法写入到序列化数据，并且会被特定的方法读取；在序列化数据中，存在的对象有null、new objects、classes、arrays、strings、back references等，这些对象在序列化结构中都有对应的描述信息，并且每一个写入字节流的对象都会被赋予引用<code>Handle</code>，并且这个引用<code>Handle</code>可以反向引用该对象（使用<code>TC_REFERENCE</code>结构，引用前面handle的值），引用<code>Handle</code>会从<code>0x7E0000</code>开始进行顺序赋值并且自动自增，一旦字节流发生了重置则该引用Handle会重新从<code>0x7E0000</code>开始。</p>
@@ -603,9 +603,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> ysoserial.jdk8u20;<br><br><span class="hljs-keyword">import</span> java.io.FileInputStream;<br><span class="hljs-keyword">import</span> java.io.FileOutputStream;<br><span class="hljs-keyword">import</span> java.io.ObjectInputStream;<br><span class="hljs-keyword">import</span> java.io.ObjectOutputStream;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Main</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        payload();<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">payload</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception&#123;<br>        AnnotationInvocationHandler handler=<span class="hljs-keyword">new</span> <span class="hljs-title class_">AnnotationInvocationHandler</span>(<span class="hljs-number">0</span>);<br>        <span class="hljs-type">ObjectOutputStream</span> <span class="hljs-variable">out</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectOutputStream</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FileOutputStream</span>(<span class="hljs-string">&quot;payload1.ser&quot;</span>));<br>        out.writeObject(handler);<br>        out.close();<br>        <span class="hljs-type">ObjectInputStream</span> <span class="hljs-variable">in</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectInputStream</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FileInputStream</span>(<span class="hljs-string">&quot;payload1.ser&quot;</span>));<br>        AnnotationInvocationHandler str=(AnnotationInvocationHandler)in.readObject();<br>        str.exec(<span class="hljs-string">&quot;calc.exe&quot;</span>);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
 
 <p>因为分母为零所以抛出了异常</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414230044740.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230414230044740"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414230044740.png" srcset="/img/loading.gif" lazyload alt="image-20230414230044740"> </p>
 <p>使用zkar分析产生的payload1</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230415153240075.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230415153240075"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230415153240075.png" srcset="/img/loading.gif" lazyload alt="image-20230415153240075"> </p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs java">PS D:\Code_Project\Go\zkar-master&gt; go run main.go dump -f <span class="hljs-string">&quot;D:\Code_Project\Java\ysoserial-master\payload1&quot;</span><br><span class="hljs-meta">@Magic</span> - <span class="hljs-number">0xac</span> ed<br><span class="hljs-meta">@Version</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">05</span><br><span class="hljs-meta">@Contents</span><br>  TC_OBJECT - <span class="hljs-number">0x73</span><br>    TC_CLASSDESC - <span class="hljs-number">0x72</span><br>      <span class="hljs-meta">@ClassName</span><br>        <span class="hljs-meta">@Length</span> - <span class="hljs-number">45</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">2d</span><br>        <span class="hljs-meta">@Value</span> - ysoserial.jdk8u20.AnnotationInvocationHandler - <span class="hljs-number">0x79</span> <span class="hljs-number">73</span> <span class="hljs-number">6f</span> <span class="hljs-number">73</span> <span class="hljs-number">65</span> <span class="hljs-number">72</span> <span class="hljs-number">69</span> <span class="hljs-number">61</span> 6c 2e 6a <span class="hljs-number">64</span> 6b <span class="hljs-number">38</span> <span class="hljs-number">75</span> <span class="hljs-number">32</span> <span class="hljs-number">30</span> 2e <span class="hljs-number">41</span> 6e 6e <span class="hljs-number">6f</span> <span class="hljs-number">74</span> <span class="hljs-number">61</span> <span class="hljs-number">74</span> <span class="hljs-number">69</span> <span class="hljs-number">6f</span> 6e <span class="hljs-number">49</span> 6e <span class="hljs-number">76</span> <span class="hljs-number">6f</span> <span class="hljs-number">63</span> <span class="hljs-number">61</span> <span class="hljs-number">74</span> <span class="hljs-number">69</span> <span class="hljs-number">6f</span> 6e <span class="hljs-number">48</span> <span class="hljs-number">61</span> 6e <span class="hljs-number">64</span> 6c <span class="hljs-number">65</span> <span class="hljs-number">72</span><br>      <span class="hljs-meta">@SerialVersionUID</span> - <span class="hljs-number">10</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> 0a<br>      <span class="hljs-meta">@Handler</span> - <span class="hljs-number">8257536</span><br>      <span class="hljs-meta">@ClassDescFlags</span> - SC_SERIALIZABLE - <span class="hljs-number">0x02</span><br>      <span class="hljs-meta">@FieldCount</span> - <span class="hljs-number">1</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">01</span><br>      []Fields<br>        Index <span class="hljs-number">0</span>:<br>          Integer - I - <span class="hljs-number">0x49</span><br>          <span class="hljs-meta">@FieldName</span><br>            <span class="hljs-meta">@Length</span> - <span class="hljs-number">4</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">04</span><br>            <span class="hljs-meta">@Value</span> - zero - <span class="hljs-number">0x7a</span> <span class="hljs-number">65</span> <span class="hljs-number">72</span> <span class="hljs-number">6f</span><br>      []ClassAnnotations<br>        TC_ENDBLOCKDATA - <span class="hljs-number">0x78</span><br>      <span class="hljs-meta">@SuperClassDesc</span><br>        TC_NULL - <span class="hljs-number">0x70</span><br>    <span class="hljs-meta">@Handler</span> - <span class="hljs-number">8257537</span><br>    []ClassData<br>      <span class="hljs-meta">@ClassName</span> - ysoserial.jdk8u20.AnnotationInvocationHandler<br>        &#123;&#125;Attributes<br>          <span class="hljs-title function_">zero</span><br>            <span class="hljs-params">(integer)</span><span class="hljs-number">0</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span><br><br>PS D:\Code_Project\Go\zkar-master&gt; go run main.go dump -f <span class="hljs-string">&quot;D:\Code_Project\Java\ysoserial-master\payload1.ser&quot;</span><br><span class="hljs-meta">@Magic</span> - <span class="hljs-number">0xac</span> ed<br><span class="hljs-meta">@Version</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">05</span><br><span class="hljs-meta">@Contents</span><br>  TC_OBJECT - <span class="hljs-number">0x73</span><br>    TC_CLASSDESC - <span class="hljs-number">0x72</span><br><span class="hljs-meta">@Version</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">05</span><br><span class="hljs-meta">@Contents</span><br>  TC_OBJECT - <span class="hljs-number">0x73</span><br>    TC_CLASSDESC - <span class="hljs-number">0x72</span><br>    <span class="hljs-meta">@Handler</span> - <span class="hljs-number">8257537</span><br>    []ClassData<br>      <span class="hljs-meta">@ClassName</span> - ysoserial.jdk8u20.AnnotationInvocationHandler<br>        &#123;&#125;Attributes<br>          <span class="hljs-title function_">zero</span><br>            <span class="hljs-params">(integer)</span><span class="hljs-number">0</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span><br><br></code></pre></td></tr></table></figure>
 
 <p>利用上面我们学到的知识，可以逐一分析反序列化协议构造流</p>
@@ -675,12 +675,12 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs java">PS D:\Code_Project\Go\zkar-master&gt; go run main.go dump -f <span class="hljs-string">&quot;D:\Code_Project\Java\ysoserial-master\double3.ser&quot;</span><br><span class="hljs-meta">@Magic</span> - <span class="hljs-number">0xac</span> ed<br><span class="hljs-meta">@Version</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">05</span><br><span class="hljs-meta">@Contents</span><br>  TC_OBJECT - <span class="hljs-number">0x73</span><br>    TC_CLASSDESC - <span class="hljs-number">0x72</span><br>      <span class="hljs-meta">@ClassName</span><br>        <span class="hljs-meta">@Length</span> - <span class="hljs-number">33</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">21</span><br>        <span class="hljs-meta">@Value</span> - ysoserial.jdk8u20.DoubleSerialize - <span class="hljs-number">0x79</span> <span class="hljs-number">73</span> <span class="hljs-number">6f</span> <span class="hljs-number">73</span> <span class="hljs-number">65</span> <span class="hljs-number">72</span> <span class="hljs-number">69</span> <span class="hljs-number">61</span> 6c 2e 6a <span class="hljs-number">64</span> 6b <span class="hljs-number">38</span> <span class="hljs-number">75</span> <span class="hljs-number">32</span> <span class="hljs-number">30</span> 2e <span class="hljs-number">44</span> <span class="hljs-number">6f</span> <span class="hljs-number">75</span> <span class="hljs-number">62</span> 6c <span class="hljs-number">65</span> <span class="hljs-number">53</span> <span class="hljs-number">65</span> <span class="hljs-number">72</span> <span class="hljs-number">69</span> <span class="hljs-number">61</span> 6c <span class="hljs-number">69</span> 7a <span class="hljs-number">65</span><br>      <span class="hljs-meta">@SerialVersionUID</span> - <span class="hljs-number">100</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">64</span><br>      <span class="hljs-meta">@Handler</span> - <span class="hljs-number">8257536</span><br>      <span class="hljs-meta">@ClassDescFlags</span> - SC_SERIALIZABLE|SC_WRITE_METHOD - <span class="hljs-number">0x03</span><br>      <span class="hljs-meta">@FieldCount</span> - <span class="hljs-number">0</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">00</span><br>      []Fields<br>      []ClassAnnotations<br>        TC_ENDBLOCKDATA - <span class="hljs-number">0x78</span><br>      <span class="hljs-meta">@SuperClassDesc</span><br>        TC_NULL - <span class="hljs-number">0x70</span><br>    <span class="hljs-meta">@Handler</span> - <span class="hljs-number">8257537</span><br>    []ClassData<br>      <span class="hljs-meta">@ClassName</span> - ysoserial.jdk8u20.DoubleSerialize<br>        &#123;&#125;Attributes<br>        <span class="hljs-meta">@ObjectAnnotation</span><br>          TC_STRING - <span class="hljs-number">0x74</span><br>            <span class="hljs-meta">@Handler</span> - <span class="hljs-number">8257538</span><br>            <span class="hljs-meta">@Length</span> - <span class="hljs-number">5</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">05</span><br>            <span class="hljs-meta">@Value</span> - Panda - <span class="hljs-number">0x50</span> <span class="hljs-number">61</span> 6e <span class="hljs-number">64</span> <span class="hljs-number">61</span><br>          TC_BLOCKDATA - <span class="hljs-number">0x77</span><br>            <span class="hljs-meta">@Blockdata</span> - <span class="hljs-number">0x00</span> <span class="hljs-number">13</span> <span class="hljs-number">74</span> <span class="hljs-number">68</span> <span class="hljs-number">69</span> <span class="hljs-number">73</span> <span class="hljs-number">20</span> <span class="hljs-number">69</span> <span class="hljs-number">73</span> <span class="hljs-number">20</span> <span class="hljs-number">61</span> <span class="hljs-number">20</span> <span class="hljs-number">74</span> <span class="hljs-number">65</span> <span class="hljs-number">73</span> <span class="hljs-number">74</span> <span class="hljs-number">20</span> <span class="hljs-number">64</span> <span class="hljs-number">61</span> <span class="hljs-number">74</span> <span class="hljs-number">61</span><br>          TC_ENDBLOCKDATA - <span class="hljs-number">0x78</span><br>  TC_REFERENCE - <span class="hljs-number">0x71</span><br>    <span class="hljs-meta">@Handler</span> - <span class="hljs-number">8257537</span> - <span class="hljs-number">0x00</span> 7e <span class="hljs-number">00</span> <span class="hljs-number">01</span><br><br><br></code></pre></td></tr></table></figure>
 
 <p>使用beyondCompare比较他们之间的区别</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230415192151850.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230415192151850"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230415192151850.png" srcset="/img/loading.gif" lazyload alt="image-20230415192151850"> </p>
 <p>可以看到原先表示类描述信息标记由<code>0x02 - SC_SERIALIZABLE</code>变成了<code>0x03 - SC_WRITE_METHOD | SC_SERIALIZABLE</code>，并且在原有序列化数据结构的最下方还多了由<code>objectAnnotation</code>标识的内容段，这里的内容段会在反序列化的时候被还原</p>
 <p><strong>为什么会有这种变化？</strong></p>
 <p><strong>知识点1：</strong>如果一个可序列化的类重写了<code>writeObject</code>方法，而且向字节流写入了一些额外的数据，那么会设置<code>SC_WRITE_METHOD</code>标识，这种情况下，一般使用结束符<code>TC_ENDBLOCKDATA</code>来标记这个对象的数据结束；</p>
 <p>所以图中出现了这样的变化</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230415192533851.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230415192533851"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230415192533851.png" srcset="/img/loading.gif" lazyload alt="image-20230415192533851"> </p>
 <p><strong>知识点2：</strong>如果一个可序列化的类重写了<code>writeObject</code>方法，在该序列化数据的<code>classdata</code>部分，还会多出个<code>objectAnnotation</code>部分，并且如果重写的<code>writeObject()</code>方法内除了调用<code>defaultWriteObject()</code>方法写对象字段数据，还向字节流中写入了自定义数据，那么在<code>objectAnnotation</code>部分会有写入自定义数据对应的结构和值；</p>
 <p>正常情况下，我们没有办法修改可序列化类本身的内容，也就没办法重写这个类中的<code>writeObject</code>方法，也就没法让序列化数据中多出来<code>objectAnnotation</code>内容段</p>
 <p>序列化数据只是一块二进制的数据而已，只要按照序列化预定的规则来修改其hex数据，那么实际上就是相当于在重写的<code>writeObject</code>方法中添加数据</p>
@@ -720,7 +720,7 @@
 <p>可以看到，在该方法的第7行，对传入进来的<code>ObjectInputStream</code>对象调用了<code>readObject</code>方法进行反序列化处理，并且当在反序列化过程中如果出现异常，采用的是<code>continue</code>处理。完美的符合我们的要求。</p>
 <p>我们在上文中提到<code>ObjectAnnotation</code>这个概念，并且其实可以发现，如果存在<code>ObjectAnnotation</code>结构，那么一般是由<code>TC_ENDBLOCKDATA - 0x78</code>去标记结尾的，但是这里其实存在一个问题，我们知道在jdk7u21修复中是因为<code>IllegalArgumentException</code>异常被捕获后抛出了<code>java.io.InvalidObjectException</code>，虽然这里我们可以利用<code>BeanContextSupport</code>来强制序列化流程继续下去，但是抛出的异常会导致<code>BeanContextSupport</code>的<code>ObjectAnnotation</code>中<code>TC_ENDBLOCKDATA - 0x78</code>结尾标志无法被正常处理，如果我们不手动删除这个<code>TC_ENDBLOCKDATA - 0x78</code>那么会导致后面的结构归在<code>ObjectAnnotation</code>结构中，从而读取错误，反序列化出来的数据不是我们预期数据。所以我们在生成<code>BeanContextSupport</code>的<code>ObjectAnnotation</code>中不能按照正规的序列化结构，需要将标记结尾的结构<code>TC_ENDBLOCKDATA - 0x78</code>删除</p>
 <p>也正由于我们把<code>TC_ENDBLOCKDATA - 0x78</code>删除了，会导致我们在使用<code>SerializationDumper</code>工具查看<code>jdk8u20</code>的序列化数据结构出错，如下图所示：</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230415223523459.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230415223523459"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230415223523459.png" srcset="/img/loading.gif" lazyload alt="image-20230415223523459"> </p>
 <p>这里还有一个tips点，就是我们在插入<code>BeanContextSupport</code>对象的时候并不是像case中那样直接插入，而是借用假属性的概念插入。在<code>成员抛弃</code>中我们提到</p>
 <blockquote>
 <p>在反序列化中，如果当前这个对象中的某个字段并没有在字节流中出现，则这些字段会使用类中定义的默认值，<strong>如果这个值出现在字节流中，但是并不属于对象，则抛弃该值，但是如果这个值是一个对象的话，那么会为这个值分配一个 Handle。</strong></p>
@@ -738,8 +738,8 @@
 <p>JDK8u20这条链的思路是增加一个不存在的field字段，这个字段中是一个序列化类，它包裹住<code>AnnotationInvocationHandler</code>，catch住<code>AnnotationInvocationHandler</code>反序列化过程中的异常，并且在后续的反序列化中不报错，它会被正常反序列化。然后在需要<code>AnnotationInvocationHandler</code>的时候，替换为之前field反序列化中生成的<code>AnnotationInvocationHandler</code>的<code>reference</code>。</p>
 <p>这个field字段可以加在两个地方，一个是HashSet的field字段，另一个是hashSet的成员的field。</p>
 <p>利用链如下</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414222627594.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230414222627594"> </p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414222652854.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230414222652854"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414222627594.png" srcset="/img/loading.gif" lazyload alt="image-20230414222627594"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230414222652854.png" srcset="/img/loading.gif" lazyload alt="image-20230414222652854"> </p>
 <p>如果把<code>AnnotationInvocationHandler#readObject</code>当成内层try catch嵌套在外层<code>try catch</code>中，反序列化的时候会在内存中留下完整的<code>AnnotationInvocationHandler</code>和对应的handler。而此后在真正需要用到<code>AnnotationInvocationHandler</code>的时候，<code>ObjectInputStream</code>会直接引用这个<code>handler</code>。</p>
 <p>也就是说，如果你把<code>readObject</code>方法放在一个嵌套的try-catch块中，而且在反序列化过程中发生了异常，那么内层的catch块会处理异常，但是外层的try块会继续执行。这意味着<code>AnnotationInvocationHandler</code>对象和它的handler（一个从属性到值的映射）会留在内存中，即使它们没有完全初始化或验证。后来，当<code>AnnotationInvocationHandler</code>对象被另一个类（比如<code>ObjectInputStream</code>）使用时，它会直接引用<code>handler</code>映射，而不检查它的内容。这可能导致任意代码执行，如果<code>handler</code>映射包含了恶意的值</p>
 <p>所以需要找到一个<code>readObject</code>流程里有<code>try catch</code>且不影响反序列化流程的类。</p>
@@ -775,7 +775,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>7U21与8U20</div>
-      <div>https://decemberus.github.io/Decemberus.github-io/2023/03/12/原生JDK7u21与8u20/</div>
+      <div>https://blog.decemberus.com/2023/03/12/原生JDK7u21与8u20/</div>
     </div>
     <div class="license-meta">
       
@@ -817,7 +817,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Decemberus.github-io/2023/03/16/JMX%E5%AD%A6%E4%B9%A0/" title="Github CodeQL training 思路">
+                      <a href="/2023/03/16/JMX%E5%AD%A6%E4%B9%A0/" title="Github CodeQL training 思路">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Github CodeQL training 思路</span>
                         <span class="visible-mobile">上一篇</span>
@@ -827,7 +827,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Decemberus.github-io/2023/02/01/JackSon%E4%BD%BF%E7%94%A8%E5%8F%8A%E5%85%B6%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="JackSon使用及其反序列化">
+                      <a href="/2023/02/01/JackSon%E4%BD%BF%E7%94%A8%E5%8F%8A%E5%85%B6%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="JackSon使用及其反序列化">
                         <span class="hidden-mobile">JackSon使用及其反序列化</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -953,8 +953,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Decemberus.github-io/js/events.js" ></script>
-<script  src="/Decemberus.github-io/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -978,7 +978,7 @@
 
 
   
-    <script  src="/Decemberus.github-io/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -1115,7 +1115,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Decemberus.github-io/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -1123,7 +1123,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Decemberus.github-io/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   
