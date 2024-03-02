@@ -1,0 +1,918 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Decemberus.github-io/img/fluid.png">
+  <link rel="icon" href="/Decemberus.github-io/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Decemberus">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="SQLMap原理及其深入结构1234567891011121314151617181920文件&#x2F;文件夹 说明data&#x2F; 数据库注入检测载荷、用户自定义攻击载荷、字典、shell命令、数据库触发顺序等extra&#x2F; 一些额外功能，例如发出声响（beep）、运行cmd、安全执行、shellcode等lib&#x2F; 包含了sqlmap的多种连接库，如五种注入类型请求的参数、提权操作等。plugins&#x2F; 数据库信">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQLMap原理及其深入">
+<meta property="og:url" content="https://decemberus.github.io/Decemberus.github-io/2023/09/29/SQLMap%E5%8E%9F%E7%90%86%E5%8F%8A%E5%85%B6%E6%B7%B1%E5%85%A5/index.html">
+<meta property="og:site_name" content="欢迎回来">
+<meta property="og:description" content="SQLMap原理及其深入结构1234567891011121314151617181920文件&#x2F;文件夹 说明data&#x2F; 数据库注入检测载荷、用户自定义攻击载荷、字典、shell命令、数据库触发顺序等extra&#x2F; 一些额外功能，例如发出声响（beep）、运行cmd、安全执行、shellcode等lib&#x2F; 包含了sqlmap的多种连接库，如五种注入类型请求的参数、提权操作等。plugins&#x2F; 数据库信">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231010211713347.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231010231019510.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231012145356736.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231012135929646.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231012150331317.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231012145013945.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231016193146434.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231016193906549.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231016193855265.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231012140722536.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231012144339278.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231005140425111.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231005141336538.png">
+<meta property="article:published_time" content="2023-09-29T15:39:17.000Z">
+<meta property="article:modified_time" content="2024-03-02T05:29:47.747Z">
+<meta property="article:author" content="Decemberus">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231010211713347.png">
+  
+  
+  <title>SQLMap原理及其深入 - 欢迎回来</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/Decemberus.github-io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/Decemberus.github-io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/Decemberus.github-io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"decemberus.github.io","root":"/Decemberus.github-io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Decemberus.github-io/local-search.xml"};
+  </script>
+  <script  src="/Decemberus.github-io/js/utils.js" ></script>
+  <script  src="/Decemberus.github-io/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/Decemberus.github-io/">
+      <strong>enjoy的blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Decemberus.github-io/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="SQLMap原理及其深入"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-09-29 23:39" pubdate>
+          2023年9月29日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          18k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          151 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">SQLMap原理及其深入</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="SQLMap原理及其深入"><a href="#SQLMap原理及其深入" class="headerlink" title="SQLMap原理及其深入"></a>SQLMap原理及其深入</h1><h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs stylus">文件/文件夹 说明<br>data/ 数据库注入检测载荷、用户自定义攻击载荷、字典、shell命令、数据库触发顺序等<br><br>extra/ 一些额外功能，例如发出声响（beep）、运行cmd、安全执行、shellcode等<br><br>lib/ 包含了sqlmap的多种连接库，如五种注入类型请求的参数、提权操作等。<br><br>plugins/ 数据库信息和数据库通用事项<br><br>tamper/ 绕过脚本<br><br>thirdparty/ sqlmap使用的第三方的插件<br><br>sqlmap<span class="hljs-selector-class">.conf</span> sqlmap的配置文件，如各种默认参数（默认是没有设置参数、可设置默认参数进行批量或者自动化检测）<br><br>sqlmap<span class="hljs-selector-class">.py</span> sqlmap主程序文件<br><br>sqlmapapi<span class="hljs-selector-class">.py</span> sqlmap的api文件，可以将sqlmap集成到其他平台上<br><br>swagger<span class="hljs-selector-class">.yaml</span> api文档<br></code></pre></td></tr></table></figure>
+
+<h2 id="主函数分析"><a href="#主函数分析" class="headerlink" title="主函数分析"></a>主函数分析</h2><h3 id="两个重要的全局变量介绍"><a href="#两个重要的全局变量介绍" class="headerlink" title="两个重要的全局变量介绍"></a>两个重要的全局变量介绍</h3><p>conf和kb是sqlmap的两个全局变量，它们分别存储了sqlmap的配置信息和知识库信息。</p>
+<p>conf是一个字典，它包含了sqlmap的运行时参数，如目标URL，代理设置，注入技术，数据输出格式等。conf的值可以通过命令行参数，配置文件或交互式模式来设置或修改。conf的内容会影响sqlmap的行为和输出。</p>
+<p>kb是一个自定义类的实例，它包含了sqlmap在扫描过程中收集到的信息，如目标数据库类型，版本，表名，列名，注入点，有效的payload等。kb的值会根据sqlmap的探测结果不断更新和扩充。kb的内容会帮助sqlmap优化注入策略和提高效率。</p>
+<p>conf和kb是sqlmap的核心组件，它们在sqlmap.py中被初始化，并在整个项目中被引用和使用。</p>
+<h3 id="正式分析"><a href="#正式分析" class="headerlink" title="正式分析"></a>正式分析</h3><p>将断点打到loadBoundaries处，我们来看看他的执行过程</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231010211713347.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231010211713347"> </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">loadBoundaries</span>():<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    Loads boundaries from XML</span><br><span class="hljs-string"></span><br><span class="hljs-string">    &gt;&gt;&gt; conf.boundaries = []</span><br><span class="hljs-string">    &gt;&gt;&gt; loadBoundaries()</span><br><span class="hljs-string">    &gt;&gt;&gt; len(conf.boundaries) &gt; 0</span><br><span class="hljs-string">    True</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><br>    <span class="hljs-keyword">try</span>:<br>        doc = et.parse(paths.BOUNDARIES_XML)<br>    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> ex:<br>        errMsg = <span class="hljs-string">&quot;something appears to be wrong with &quot;</span><br>        errMsg += <span class="hljs-string">&quot;the file &#x27;%s&#x27; (&#x27;%s&#x27;). Please make &quot;</span> % (paths.BOUNDARIES_XML, getSafeExString(ex))<br>        errMsg += <span class="hljs-string">&quot;sure that you haven&#x27;t made any changes to it&quot;</span><br>        <span class="hljs-keyword">raise</span> SqlmapInstallationException(errMsg)<br><br>    root = doc.getroot()<br>    <span class="hljs-comment">#调用了这个函数去解析xml里面的内容</span><br>    parseXmlNode(root)<br></code></pre></td></tr></table></figure>
+
+<p>xml树的详细写法可以参考这个<a target="_blank" rel="noopener" href="https://docs.python.org/3/library/xml.etree.elementtree.html">文档</a></p>
+<p>上面的语句中，<code>doc.getroot()</code>相当于拿到了<code>xml</code>树的结构，之后就可以随便获取元素的值了，接着往下看<code>parseXmlNode</code>函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">parseXmlNode</span>(<span class="hljs-params">node</span>):<br>    <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> node.findall(<span class="hljs-string">&quot;boundary&quot;</span>):<br>        boundary = AttribDict()<br><br>        <span class="hljs-keyword">for</span> child <span class="hljs-keyword">in</span> element:<br>            <span class="hljs-keyword">if</span> child.text:<br>                values = cleanupVals(child.text, child.tag)<br>                boundary[child.tag] = values<br>            <span class="hljs-keyword">else</span>:<br>                boundary[child.tag] = <span class="hljs-literal">None</span><br><br>        conf.boundaries.append(boundary)<br><br>    <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> node.findall(<span class="hljs-string">&quot;test&quot;</span>):<br>        test = AttribDict()<br><br>        <span class="hljs-keyword">for</span> child <span class="hljs-keyword">in</span> element:<br>            <span class="hljs-keyword">if</span> child.text <span class="hljs-keyword">and</span> child.text.strip():<br>                values = cleanupVals(child.text, child.tag)<br>                test[child.tag] = values<br>            <span class="hljs-keyword">else</span>:<br>                <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(child.findall(<span class="hljs-string">&quot;*&quot;</span>)) == <span class="hljs-number">0</span>:<br>                    test[child.tag] = <span class="hljs-literal">None</span><br>                    <span class="hljs-keyword">continue</span><br>                <span class="hljs-keyword">else</span>:<br>                    test[child.tag] = AttribDict()<br><br>                <span class="hljs-keyword">for</span> gchild <span class="hljs-keyword">in</span> child:<br>                    <span class="hljs-keyword">if</span> gchild.tag <span class="hljs-keyword">in</span> test[child.tag]:<br>                        prevtext = test[child.tag][gchild.tag]<br>                        test[child.tag][gchild.tag] = [prevtext, gchild.text]<br>                    <span class="hljs-keyword">else</span>:<br>                        test[child.tag][gchild.tag] = gchild.text<br><br>        conf.tests.append(test)<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">boundary</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">level</span>&gt;</span>3<span class="hljs-tag">&lt;/<span class="hljs-name">level</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">clause</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">clause</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">where</span>&gt;</span>1,2<span class="hljs-tag">&lt;/<span class="hljs-name">where</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">ptype</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">ptype</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">prefix</span>&gt;</span>)<span class="hljs-tag">&lt;/<span class="hljs-name">prefix</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">suffix</span>&gt;</span>[GENERIC_SQL_COMMENT]<span class="hljs-tag">&lt;/<span class="hljs-name">suffix</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">boundary</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>我们把他拎出来看看这个究竟是如何一步步获取到xml里面的内容的</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231010231019510.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231010231019510"> </p>
+<p>第一次循环时<code>child.text</code>的值为3</p>
+<p>经过了一次循环成功获取了child了我们xml文档的第一个子标签，最后就能够成功获取所有值boundaries的内容，这里并没有使用到test内容，但是在下面的一些加载函数中就会使用到了</p>
+<p>最后进入到了start函数，开始正式执行<code>sqlmap</code>，注意这里的start函数不要打错地方了，我分析的时候打在了226行，但是实际上他是在224行</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231012145356736.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231012145356736"> </p>
+<p>命令行也有反映了</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231012135929646.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231012135929646"> </p>
+<h2 id="爬虫模块与url解析"><a href="#爬虫模块与url解析" class="headerlink" title="爬虫模块与url解析"></a>爬虫模块与url解析</h2><p> <img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231012150331317.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231012150331317"> </p>
+<p>前面是一些简单的参数参数设置，有一个有趣的地方是爬虫分析，我们来详细看这个模块</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> conf.crawlDepth <span class="hljs-keyword">and</span> conf.bulkFile:<br>    targets = getFileItems(conf.bulkFile)<br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(<span class="hljs-built_in">len</span>(targets)):<br>        target = <span class="hljs-literal">None</span><br><br>        <span class="hljs-keyword">try</span>:<br>            kb.targets = OrderedSet()<br>            target = targets[i]<br><br>            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> re.search(<span class="hljs-string">r&quot;(?i)\Ahttp[s]*://&quot;</span>, target):<br>                target = <span class="hljs-string">&quot;http://%s&quot;</span> % target<br><br>            infoMsg = <span class="hljs-string">&quot;starting crawler for target URL &#x27;%s&#x27; (%d/%d)&quot;</span> % (target, i + <span class="hljs-number">1</span>, <span class="hljs-built_in">len</span>(targets))<br>            logger.info(infoMsg)<br>			<span class="hljs-comment">#重要的函数在这里</span><br>            crawl(target)<br>        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> ex:<br>            <span class="hljs-keyword">if</span> target <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">isinstance</span>(ex, SqlmapUserQuitException):<br>                errMsg = <span class="hljs-string">&quot;problem occurred while crawling &#x27;%s&#x27; (&#x27;%s&#x27;)&quot;</span> % (target, getSafeExString(ex))<br>                logger.error(errMsg)<br>            <span class="hljs-keyword">else</span>:<br>                <span class="hljs-keyword">raise</span><br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-keyword">if</span> kb.targets:<br>                start()<br></code></pre></td></tr></table></figure>
+
+<p>重要的函数是<code>crawl(target)</code>，点进去看的话大致就是找到<code>html</code>标签，然后解析其连接，经过一种判断以后可以将其加入到一个新的<code>url</code>中去，然后在对这个新的<code>url</code>进行启动<code>start()</code>方法</p>
+<p>了解完了上面那些内容，我们就可以进入<code>start()</code>函数了</p>
+<p>我们来到<code>parseTargetUrl()</code>看看他是做什么的</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231012145013945.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231012145013945"> </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> re.search(<span class="hljs-string">r&quot;^(http|ws)s?://&quot;</span>, conf.url, re.I):<br>    <span class="hljs-comment">#没匹配到http和ws的情况</span><br>    <span class="hljs-keyword">if</span> re.search(<span class="hljs-string">r&quot;:443\b&quot;</span>, conf.url):<br>        conf.url = <span class="hljs-string">&quot;https://%s&quot;</span> % conf.url<br>    <span class="hljs-keyword">else</span>:<br>        conf.url = <span class="hljs-string">&quot;http://%s&quot;</span> % conf.url<br></code></pre></td></tr></table></figure>
+
+<p>没有输入协议的话先手动加入协议的选项</p>
+<p>这里有一个有趣的正则表达式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">hostnamePort = urlSplit.netloc.split(<span class="hljs-string">&quot;:&quot;</span>) <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> re.search(<span class="hljs-string">r&quot;\[.+\]&quot;</span>, urlSplit.netloc) <span class="hljs-keyword">else</span> filterNone((re.search(<span class="hljs-string">r&quot;\[.+\]&quot;</span>, urlSplit.netloc).group(<span class="hljs-number">0</span>), re.search(<span class="hljs-string">r&quot;\](:(?P&lt;port&gt;\d+))?&quot;</span>, urlSplit.netloc).group(<span class="hljs-string">&quot;port&quot;</span>)))<br><br></code></pre></td></tr></table></figure>
+
+<p>从一个 URL 中提取主机名和端口号，如果 URL 包含方括号，就用正则表达式匹配方括号内的内容和冒号后的数字，如果不包含方括号，就用冒号分割字符串。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">conf.scheme = (urlSplit.scheme.strip().lower() <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;http&quot;</span>)<br>conf.path = urlSplit.path.strip()<br>conf.hostname = hostnamePort[<span class="hljs-number">0</span>].strip()<br></code></pre></td></tr></table></figure>
+
+<p>之后便是一些协议，路径的取值，还有一些简单的配置，就不再赘述</p>
+<h2 id="WAF检测"><a href="#WAF检测" class="headerlink" title="WAF检测"></a>WAF检测</h2><p>当解析完url中，就会进行waf检测了</p>
+<p>这里面有很多很相似度检测的地方</p>
+<h2 id="注入检测"><a href="#注入检测" class="headerlink" title="注入检测"></a>注入检测</h2><h3 id="启发性检测"><a href="#启发性检测" class="headerlink" title="启发性检测"></a>启发性检测</h3><p>当检测完waf，我们就会开始我们的注入检测了</p>
+<p>这里有一个地方困扰了我好久，没搞明白为什么没进入这一块，最后才发现是这个testSqlInj的锅</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs python">testSqlInj = <span class="hljs-literal">False</span><br><br><span class="hljs-keyword">if</span> PLACE.GET <span class="hljs-keyword">in</span> conf.parameters <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">any</span>((conf.data, conf.testParameter)):<br>    <span class="hljs-keyword">for</span> parameter <span class="hljs-keyword">in</span> re.findall(<span class="hljs-string">r&quot;([^=]+)=([^%s]+%s?|\Z)&quot;</span> % (<br>    re.escape(conf.paramDel <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;&quot;</span>) <span class="hljs-keyword">or</span> DEFAULT_GET_POST_DELIMITER,<br>    re.escape(conf.paramDel <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;&quot;</span>) <span class="hljs-keyword">or</span> DEFAULT_GET_POST_DELIMITER), conf.parameters[PLACE.GET]):<br>        paramKey = (conf.hostname, conf.path, PLACE.GET, parameter[<span class="hljs-number">0</span>])<br><br>        <span class="hljs-keyword">if</span> paramKey <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> kb.testedParams:<br>            testSqlInj = <span class="hljs-literal">True</span><br>            <span class="hljs-keyword">break</span><br><span class="hljs-keyword">else</span>:<br>    paramKey = (conf.hostname, conf.path, <span class="hljs-literal">None</span>, <span class="hljs-literal">None</span>)<br>    <span class="hljs-keyword">if</span> paramKey <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> kb.testedParams:<br>        testSqlInj = <span class="hljs-literal">True</span><br><br><span class="hljs-keyword">if</span> testSqlInj <span class="hljs-keyword">and</span> conf.hostname <span class="hljs-keyword">in</span> kb.vulnHosts:<br>    <span class="hljs-keyword">if</span> kb.skipVulnHost <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:<br>        message = <span class="hljs-string">&quot;SQL injection vulnerability has already been detected &quot;</span><br>        message += <span class="hljs-string">&quot;against &#x27;%s&#x27;. Do you want to skip &quot;</span> % conf.hostname<br>        message += <span class="hljs-string">&quot;further tests involving it? [Y/n]&quot;</span><br><br>        kb.skipVulnHost = readInput(message, default=<span class="hljs-string">&#x27;Y&#x27;</span>, boolean=<span class="hljs-literal">True</span>)<br><br>    testSqlInj = <span class="hljs-keyword">not</span> kb.skipVulnHost<br><br><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> testSqlInj:<br>    infoMsg = <span class="hljs-string">&quot;skipping &#x27;%s&#x27;&quot;</span> % targetUrl<br>    logger.info(infoMsg)<br>    <span class="hljs-keyword">continue</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="启发检测"><a href="#启发检测" class="headerlink" title="启发检测"></a>启发检测</h3><h3 id="正式检测"><a href="#正式检测" class="headerlink" title="正式检测"></a>正式检测</h3><p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231016193146434.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231016193146434"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231016193906549.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231016193906549"> </p>
+<p>这里的clause参数在boundaries里面有详细说明是做什么的，他表示使用什么查询语句</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231016193855265.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231016193855265"> </p>
+<p>在判断联合查询注入时，用到了这个语句</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python">            <span class="hljs-keyword">if</span> stype == PAYLOAD.TECHNIQUE.UNION:<span class="hljs-comment">#检测到测试类型是联合注入的话</span><br>                configUnion(test.request.char)<span class="hljs-comment">#设置合适的联合查询字符</span><br>            ...<br>match = re.search(<span class="hljs-string">r&quot;(\d+)-(\d+)&quot;</span>, test.request.columns)<br><span class="hljs-keyword">if</span> match <span class="hljs-keyword">and</span> injection.data:<br>    lower, upper = <span class="hljs-built_in">int</span>(match.group(<span class="hljs-number">1</span>)), <span class="hljs-built_in">int</span>(match.group(<span class="hljs-number">2</span>))<br>    <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> (lower, upper):<br>        <span class="hljs-keyword">if</span> _ &gt; <span class="hljs-number">1</span>:<br>            __ = <span class="hljs-number">2</span> * (_ - <span class="hljs-number">1</span>) + <span class="hljs-number">1</span> <span class="hljs-keyword">if</span> _ == lower <span class="hljs-keyword">else</span> <span class="hljs-number">2</span> * _<br>            unionExtended = <span class="hljs-literal">True</span><br>            test.request._columns = test.request.columns<br>            test.request.columns = re.sub(<span class="hljs-string">r&quot;\b%d\b&quot;</span> % _, <span class="hljs-built_in">str</span>(__), test.request.columns)<br>            title = re.sub(<span class="hljs-string">r&quot;\b%d\b&quot;</span> % _, <span class="hljs-built_in">str</span>(__), title)<br>            test.title = re.sub(<span class="hljs-string">r&quot;\b%d\b&quot;</span> % _, <span class="hljs-built_in">str</span>(__), test.title)<br></code></pre></td></tr></table></figure>
+
+<p>他的目的时增加查询列数，例如原先语句是这样的</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">SELECT</span> <span class="hljs-type">name</span> <span class="hljs-keyword">FROM</span> Products <span class="hljs-keyword">WHERE</span> id=<span class="hljs-number">1</span><br><span class="hljs-keyword">UNION</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">NULL</span>,version(),<span class="hljs-keyword">NULL</span><br></code></pre></td></tr></table></figure>
+
+<p>经过增加列数以后，变成</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs SQL"><span class="hljs-keyword">SELECT</span> name <span class="hljs-keyword">FROM</span> Products <span class="hljs-keyword">WHERE</span> id<span class="hljs-operator">=</span><span class="hljs-number">1</span><br><span class="hljs-keyword">UNION</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">NULL</span>,<span class="hljs-keyword">NULL</span>,version(),<span class="hljs-keyword">NULL</span>,<span class="hljs-keyword">NULL</span>,<span class="hljs-keyword">NULL</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+<p>在这里有<code>initTargetEnv()</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">    <br><span class="hljs-keyword">def</span> <span class="hljs-title function_">stackedmethod</span>(<span class="hljs-params">f</span>):<br><span class="hljs-meta">    @functools.wraps(<span class="hljs-params">f</span>)</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">_</span>(<span class="hljs-params">*args, **kwargs</span>):<br>        threadData = getCurrentThreadData()<br>        originalLevel = <span class="hljs-built_in">len</span>(threadData.valueStack)<br><br>        <span class="hljs-keyword">try</span>:<br>            result = f(*args, **kwargs)<br></code></pre></td></tr></table></figure>
+
+<p>我们看这个函数，关注一下<code>@functools.wraps(f)</code>的用法</p>
+<blockquote>
+<p><code>@functools.wraps(f)</code> 是一个装饰器，它用于修改一个函数或方法，将 f 的元数据（如函数名、文档字符串、参数列表等）复制到被装饰的函数上。这样可以保持被装饰函数的原始信息，而不会被装饰器的影响。</p>
+<p>看下面官网的例子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> functools <span class="hljs-keyword">import</span> wraps<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">my_decorator</span>(<span class="hljs-params">f</span>):<br><span class="hljs-meta">    @wraps(<span class="hljs-params">f</span>)</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">wrapper</span>(<span class="hljs-params">*args, **kwds</span>):<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Calling decorated function&#x27;</span>)<br>        <span class="hljs-keyword">return</span> f(*args, **kwds)<br>    <span class="hljs-keyword">return</span> wrapper<br><br><span class="hljs-meta">@my_decorator</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">example</span>():<br>    <span class="hljs-string">&quot;&quot;&quot;Docstring&quot;&quot;&quot;</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Called example function&#x27;</span>)<br><br>example()<br>Calling decorated function<br>Called example function<br>example.__name__<br><span class="hljs-string">&#x27;example&#x27;</span><br>example.__doc__<br><span class="hljs-string">&#x27;Docstring&#x27;</span><br></code></pre></td></tr></table></figure>
+
+
+</blockquote>
+<p>当我们执行到result时，就会开始我们的执行查询语句</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231012140722536.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231012140722536"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231012144339278.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231012144339278"> </p>
+<p>但是执行到这里的话payload已经被拼接完成了，我比较感兴趣的地方是payload的拼接的地方，让我们往前回溯，找找payload是在哪里被拼接的</p>
+<p>经过了一系列的从kb与conf中取得值并做相应的判断，我们看到了一个有趣的地方，就是</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> cmdLineOptions.get(<span class="hljs-string">&quot;sqlmapShell&quot;</span>):<br>    cmdLineOptions.clear()<br>    conf.clear()<br>    kb.clear()<br>    conf.disableBanner = <span class="hljs-literal">True</span><br>    main()<br></code></pre></td></tr></table></figure>
+
+<p>这里就是实现sqlshell的地方了</p>
+<h2 id="tamper"><a href="#tamper" class="headerlink" title="tamper"></a>tamper</h2><h3 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python</span><br><br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">Copyright (c) 2006-2020 sqlmap developers (http://sqlmap.org/)</span><br><span class="hljs-string">See the file &#x27;LICENSE&#x27; for copying permission</span><br><span class="hljs-string">&quot;&quot;&quot;</span> <br><span class="hljs-comment"># 导入SQLMap中lib\core\enums中的PRIORITY优先级函数</span><br><span class="hljs-keyword">from</span> lib.core.enums <span class="hljs-keyword">import</span> PRIORITY<br><span class="hljs-comment"># 定义脚本优先级</span><br>__priority__ = PRIORITY.LOW<br><span class="hljs-comment"># 对当前脚本的介绍，可以为空</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">dependencies</span>():<br> 	<span class="hljs-keyword">pass</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">对传进来的payload进行修改并返回</span><br><span class="hljs-string">函数有两个参数。主要更改的是payload参数，kwargs参数用得不多。在官方提供的</span><br><span class="hljs-string">Tamper脚本中</span><br><span class="hljs-string"> 只被使用了两次，两次都只是更改了http-header</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">tamper</span>(<span class="hljs-params">payload, **kwargs</span>):<br> <span class="hljs-comment"># 增加相关的payload处理，再将payload返回</span><br> <span class="hljs-comment"># 必须返回最后的payload</span><br> 	<span class="hljs-keyword">return</span> payload<br><br><br></code></pre></td></tr></table></figure>
+
+<p>没看懂的模块</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">bluecoat</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="典型正则表达式解析"><a href="#典型正则表达式解析" class="headerlink" title="典型正则表达式解析"></a>典型正则表达式解析</h3><h4 id="匹配-1-AND-A-gt-B"><a href="#匹配-1-AND-A-gt-B" class="headerlink" title="匹配 1 AND A &gt; B"></a>匹配 1 AND A &gt; B</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">match = re.search(<span class="hljs-string">r&quot;(?i)(\b(AND|OR)\b\s+)([^&gt;]+?)\s*&gt;\s*(\w+|&#x27;[^&#x27;]+&#x27;)&quot;</span>, payload)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>(\b(AND|OR)\b\s+)</code>匹配了<code>AND</code>，这是第一个捕获组，也就是group(1)。</li>
+<li><code>([^&gt;]+?)</code>匹配了<code>A</code>，这是第二个捕获组，也就是group(2)。</li>
+<li><code>\s*&gt;\s*</code>匹配了<code>&gt;</code>，这是没有被捕获的部分。 </li>
+<li><code>(\w+|&#39;[^&#39;]+&#39;)</code>匹配了<code>B</code>，这是第三个捕获组，也就是group(3)。</li>
+</ul>
+<h4 id="halfversionedmorekeywords"><a href="#halfversionedmorekeywords" class="headerlink" title="halfversionedmorekeywords"></a>halfversionedmorekeywords</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">process</span>(<span class="hljs-params">match</span>):<br>    word = match.group(<span class="hljs-string">&#x27;word&#x27;</span>)<br>    <span class="hljs-comment">#group()是返回匹配的字符组</span><br><br>retVal = payload<br><br><span class="hljs-comment">#</span><br><span class="hljs-keyword">if</span> payload:<br>    retVal = re.sub(<span class="hljs-string">r&quot;(?\W&lt;=)(?P&lt;word&gt;[A-Za-z_]+)(?=\W|\Z)&quot;</span>, process, retVal)<br>    retVal = retVal.replace(<span class="hljs-string">&quot; /*!0&quot;</span>, <span class="hljs-string">&quot;/*!0&quot;</span>)<br>    <span class="hljs-comment">#这里要replace的原因是因为这个相当于是在字符串的前后各自加入一个注释符号，但是并没没有去除字符串之间的空格</span><br><br><span class="hljs-keyword">return</span> retVal<br></code></pre></td></tr></table></figure>
+
+<p><code>re.sub</code>的语法</p>
+<blockquote>
+<p><code>re.sub(pattern, repl, string, count=0, flags=0)</code></p>
+<p>其中：</p>
+<ul>
+<li>pattern是正则表达式；</li>
+<li>repl是要将匹配子串替换成的字符串；</li>
+<li>string是待做替换操作的字符串；</li>
+<li>count是最大替换次数，默认为0表示不限制替换次数（即将所有符合正则表达式的子串都替换成repl）；</li>
+</ul>
+</blockquote>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231005140425111.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231005140425111"> </p>
+<p><code>?&lt;=</code>这个代表后行断言，它表示匹配一个在某个字符或子表达式后面的位置，但不包括这个字符或子表达式本身（<code>\W</code>是非单词字符的意思），所以这里是匹配一个非单词字符后面紧跟的位置，但不包括这个单词本身</p>
+<p>例如</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/(?&lt;=\W)world/</span><br></code></pre></td></tr></table></figure>
+
+<p>这样，我们就可以确保只匹配到 “world” 这个单词，而不是 “Hello” 中的 “lo” 或者其他包含 “world” 的字符串。注意，这个正则表达式并不会匹配到逗号（,），因为它只是一个后行断言，不会消耗任何字符。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">(?<span class="hljs-selector-tag">P</span>&lt;word&gt;<span class="hljs-selector-attr">[A-Za-z_]</span>+)<br></code></pre></td></tr></table></figure>
+
+<p><code>(?P&lt;name&gt;…)</code> 是一个命名组，它表示匹配括号中的子表达式，并且给这个子表达式指定一个名称，可以用 name 来引用它。例如， <code>(?P&lt;year&gt;\d&#123;4&#125;)</code> 匹配一个四位数的年份，并且命名为 year</p>
+<p>在命名为<code>word</code>以后可以使用<code>match.group(&#39;word&#39;)</code>来获取匹配到的单词，然后对其处理</p>
+<p>如果我们不命名为<code>word</code>，就只能使用<code>match.group(1)</code>来获取匹配到的第一个子组</p>
+<figure class="highlight tp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs tp">(?=\<span class="hljs-keyword">W</span>|\<span class="hljs-keyword">Z</span>)<br></code></pre></td></tr></table></figure>
+
+<p>这里的?代表先行断言</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231005141336538.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231005141336538"> </p>
+<p>\Z则代表字符串的结束位置</p>
+<blockquote>
+<p>例如</p>
+<p>如果我们想要匹配字符串 “Hello, world!” 中的 “world”，我们可以使用这个正则表达式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js">/<span class="hljs-title function_">world</span>(?=\\W|\\Z)/<br></code></pre></td></tr></table></figure>
+
+<p>这样，我们就可以确保只匹配到 “world” 这个单词，而不是 “Hello” 中的 “lo” 或者其他包含 “world” 的字符串。注意，这个正则表达式并不会匹配到逗号（,）或者感叹号（!），因为它们只是一个先行断言，不会消耗任何字符。</p>
+</blockquote>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scheme">(<span class="hljs-name">?</span>\W&lt;=)(<span class="hljs-name">?P&lt;word&gt;</span>[<span class="hljs-name">A-Za-z_</span>]+)(<span class="hljs-name">?=</span>\W|\Z)<br></code></pre></td></tr></table></figure>
+
+<p>所以，这一个正则的意思是</p>
+<p>匹配一个由字母或下划线组成的单词，并且给这个单词命名为 word，以便后续引用。这个单词必须在非单词字符或字符串的结束位置之前，并且在非单词字符或字符串的开始位置之后。</p>
+<p><code>kb.keywords</code>是一个包含所有 SQL 关键字的列表，例如 “SELECT”、“FROM”、“WHERE” 等。</p>
+<p><code>IGNORE_SPACE_AFFECTED_KEYWORDS</code>是一个包含一些 SQL 关键字的列表，这些关键字在 SQL 语句中的空格会影响它们的含义。 例如，“SELECT” 和 “SELECT “ 是不同的关键字，前者表示选择操作，后者表示注释符号。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">process</span>(<span class="hljs-params">match</span>):<br>    word = match.group(<span class="hljs-string">&#x27;word&#x27;</span>)<br>    <span class="hljs-keyword">if</span> word.upper() <span class="hljs-keyword">in</span> kb.keywords <span class="hljs-keyword">and</span> word.upper() <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> IGNORE_SPACE_AFFECTED_KEYWORDS:<br>        <span class="hljs-keyword">return</span> match.group().replace(word, <span class="hljs-string">&quot;/*!0%s&quot;</span> % word)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">return</span> match.group()<br></code></pre></td></tr></table></figure>
+
+<p>根据一个正则表达式匹配的结果，对其中的单词进行替换。如果这个单词是一个关键字，并且不在忽略空格影响的关键字列表中(如果匹配到select就不会替换)，那么就在这个单词前面加上 “&#x2F;*!0”，否则就保持原样。这个函数返回替换后的字符串。</p>
+<p>这里有个不同的地方来了</p>
+<h4 id="versionedmorekeywords"><a href="#versionedmorekeywords" class="headerlink" title="versionedmorekeywords"></a>versionedmorekeywords</h4><p>在versionedmorekeywords中出现了一个极其类似的正则表达式写法，但是匹配的字符是完全不一样的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">re.sub(<span class="hljs-string">r&quot;(?&lt;=\W)(?P&lt;word&gt;[A-Za-z_]+)(?=\W|\Z)&quot;</span>, process, retVal)<br></code></pre></td></tr></table></figure>
+
+<p>如果 retVal 是 “Hello, world!”，那么 process 函数会被应用到 “Hello” 和 “world” 这两个单词上，而不会影响逗号和感叹号。</p>
+<blockquote>
+<p>这里就要引入两个概念了</p>
+<p><strong>普通的零宽断言：</strong></p>
+<ul>
+<li><strong>零宽度正预测先行断言</strong>（positive lookahead assertion），用 <code>(?=...)</code> 表示，表示当前位置后面的字符要符合某种模式。</li>
+<li><strong>零宽度负预测先行断言</strong>（negative lookahead assertion），用 <code>(?!...)</code> 表示，表示当前位置后面的字符不要符合某种模式。</li>
+<li><strong>零宽度正回顾后发断言</strong>（positive lookbehind assertion），用 <code>(?&lt;=...)</code> 表示，表示当前位置前面的字符要符合某种模式。</li>
+<li><strong>零宽度负回顾后发断言</strong>（negative lookbehind assertion），用 <code>(?&lt;!...)</code> 表示，表示当前位置前面的字符不要符合某种模式。</li>
+</ul>
+<p><strong>零宽度正预测先行断言</strong></p>
+<p>当我们想匹配字符串的开头或者一个非单词字符，可以使用另一种零宽断言，就是<strong>零宽度正预测先行断言</strong></p>
+<p>这个表达式用 <code>(?=...)</code> 表示。这个表达式表示当前位置后面的字符要符合某种模式</p>
+</blockquote>
+<p>这两个表达式的区别在于这个例子中的表达式要求单词前面一定是一个非单词字符，而前一个表达式允许单词前面是字符串的开头。这在处理字符串的边界情况时可能有影响。例如，如果 retVal 是 <code>“_Hello, world!”</code>，那么这个例子表达式不会匹配到 <code>“_Hello”</code> 这个单词，因为它前面有一个下划线，而上个例子的表达式会匹配到 <code>“_Hello”</code> 这个单词，因为它前面是字符串的开头。</p>
+<p>拿他的官方示例来说</p>
+<p>当我们输入</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">tamper(<span class="hljs-string">&#x27;1 UNION ALL SELECT NULL, NULL, CONCAT(CHAR(58,122,114,115,58),IFNULL(CAST(CURRENT_USER() AS CHAR),CHAR(32)),CHAR(58,115,114,121,58))#&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scheme">(<span class="hljs-name">?&lt;=</span>\W)(<span class="hljs-name">?P&lt;word&gt;</span>[<span class="hljs-name">A-Za-z_</span>]+)(<span class="hljs-name">?=</span>\W|\Z)<br></code></pre></td></tr></table></figure>
+
+<p> 这个表达式会匹配到以下单词：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">UNION</span><br><span class="hljs-keyword">ALL</span><br><span class="hljs-keyword">SELECT</span><br><span class="hljs-keyword">NULL</span><br>CONCAT<br><span class="hljs-type">CHAR</span><br>IFNULL<br><span class="hljs-keyword">CAST</span><br><span class="hljs-keyword">AS</span><br><span class="hljs-built_in">CURRENT_USER</span><br></code></pre></td></tr></table></figure>
+
+<p>而</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scheme">(<span class="hljs-name">?</span>\W&lt;=)(<span class="hljs-name">?P&lt;word&gt;</span>[<span class="hljs-name">A-Za-z_</span>]+)(<span class="hljs-name">?=</span>\W|\Z) <br></code></pre></td></tr></table></figure>
+
+<p>会匹配到</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-number">1</span><br><span class="hljs-keyword">UNION</span><br><span class="hljs-keyword">ALL</span><br><span class="hljs-keyword">SELECT</span><br><span class="hljs-keyword">NULL</span><br>CONCAT<br><span class="hljs-type">CHAR</span><br>IFNULL<br><span class="hljs-keyword">CAST</span><br><span class="hljs-keyword">AS</span><br><span class="hljs-built_in">CURRENT_USER</span><br></code></pre></td></tr></table></figure>
+
+<p>可以看出，这两个表达式的区别在于第一个表达式不会匹配到字符串的开头的数字 1，而第二个表达式会匹配到。这是因为第一个表达式要求单词前面一定是一个非单词字符，而第二个表达式允许单词前面是字符串的开头。</p>
+<h4 id="schemasplit双重匹配组"><a href="#schemasplit双重匹配组" class="headerlink" title="schemasplit双重匹配组"></a>schemasplit双重匹配组</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">tamper</span>(<span class="hljs-params">payload, **kwargs</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    Splits FROM schema identifiers (e.g. &#x27;testdb.users&#x27;) with whitespace (e.g. &#x27;testdb 9.e.users&#x27;)</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Requirement:</span><br><span class="hljs-string">        * MySQL</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Notes:</span><br><span class="hljs-string">        * Reference: https://media.blackhat.com/us-13/US-13-Salgado-SQLi-Optimization-and-Obfuscation-Techniques-Slides.pdf</span><br><span class="hljs-string"></span><br><span class="hljs-string">    &gt;&gt;&gt; tamper(&#x27;SELECT id FROM testdb.users&#x27;)</span><br><span class="hljs-string">    &#x27;SELECT id FROM testdb 9.e.users&#x27;</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><br>    <span class="hljs-keyword">return</span> re.sub(<span class="hljs-string">r&quot;(?i)( FROM \w+)\.(\w+)&quot;</span>, <span class="hljs-string">r&quot;\g&lt;1&gt; 9.e.\g&lt;2&gt;&quot;</span>, payload) <span class="hljs-keyword">if</span> payload <span class="hljs-keyword">else</span> payload<br></code></pre></td></tr></table></figure>
+
+<p>重点解释一下这里的<code>g&lt;1&gt; g&lt;2&gt;</code></p>
+<p><code>g&lt;1&gt;</code>对应着<code>g&lt;2&gt;</code>对应着前面的匹配组<code>( FROM \w+)</code>和<code>(\w+)</code></p>
+<h4 id="if2case"><a href="#if2case" class="headerlink" title="if2case"></a>if2case</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> payload <span class="hljs-keyword">and</span> payload.find(<span class="hljs-string">&quot;IF&quot;</span>) &gt; -<span class="hljs-number">1</span>:<br>    <span class="hljs-keyword">while</span> payload.find(<span class="hljs-string">&quot;IF(&quot;</span>) &gt; -<span class="hljs-number">1</span>:<br>        index = payload.find(<span class="hljs-string">&quot;IF(&quot;</span>)<br>        depth = <span class="hljs-number">1</span><br>        commas, end = [], <span class="hljs-literal">None</span><br><br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(index + <span class="hljs-built_in">len</span>(<span class="hljs-string">&quot;IF(&quot;</span>), <span class="hljs-built_in">len</span>(payload)):<br>            <span class="hljs-keyword">if</span> depth == <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> payload[i] == <span class="hljs-string">&#x27;,&#x27;</span>:<br>                commas.append(i)<br><br>            <span class="hljs-keyword">elif</span> depth == <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> payload[i] == <span class="hljs-string">&#x27;)&#x27;</span>:<br>                end = i<br>                <span class="hljs-keyword">break</span><br><br>            <span class="hljs-keyword">elif</span> payload[i] == <span class="hljs-string">&#x27;(&#x27;</span>:<br>                depth += <span class="hljs-number">1</span><br><br>            <span class="hljs-keyword">elif</span> payload[i] == <span class="hljs-string">&#x27;)&#x27;</span>:<br>                depth -= <span class="hljs-number">1</span><br><br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(commas) == <span class="hljs-number">2</span> <span class="hljs-keyword">and</span> end:<br>            a = payload[index + <span class="hljs-built_in">len</span>(<span class="hljs-string">&quot;IF(&quot;</span>):commas[<span class="hljs-number">0</span>]].strip(<span class="hljs-string">&quot;()&quot;</span>)<br>            b = payload[commas[<span class="hljs-number">0</span>] + <span class="hljs-number">1</span>:commas[<span class="hljs-number">1</span>]].lstrip().strip(<span class="hljs-string">&quot;()&quot;</span>)<br>            c = payload[commas[<span class="hljs-number">1</span>] + <span class="hljs-number">1</span>:end].lstrip().strip(<span class="hljs-string">&quot;()&quot;</span>)<br>            newVal = <span class="hljs-string">&quot;CASE WHEN (%s) THEN (%s) ELSE (%s) END&quot;</span> % (a, b, c)<br>            payload = payload[:index] + newVal + payload[end + <span class="hljs-number">1</span>:]<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-keyword">break</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="unmagicquotes"><a href="#unmagicquotes" class="headerlink" title="unmagicquotes"></a>unmagicquotes</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python">retVal = payload<br><br><span class="hljs-keyword">if</span> payload:<br>    found = <span class="hljs-literal">False</span><br>    retVal = <span class="hljs-string">&quot;&quot;</span><br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(<span class="hljs-built_in">len</span>(payload)):<br>        <span class="hljs-keyword">if</span> payload[i] == <span class="hljs-string">&#x27;\&#x27;&#x27;</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> found:<br>            retVal += <span class="hljs-string">&quot;%bf%27&quot;</span><br>            found = <span class="hljs-literal">True</span><br>        <span class="hljs-keyword">else</span>:<br>            retVal += payload[i]<br>            <span class="hljs-keyword">continue</span><br><br>    <span class="hljs-keyword">if</span> found:<br>        _ = re.sub(<span class="hljs-string">r&quot;(?i)\s*(AND|OR)[\s(]+([^\s]+)\s*(=|LIKE)\s*\2&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, retVal)<br>        <span class="hljs-keyword">if</span> _ != retVal:<br>            retVal = _<br>            retVal += <span class="hljs-string">&quot;-- -&quot;</span><br>        <span class="hljs-keyword">elif</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">any</span>(_ <span class="hljs-keyword">in</span> retVal <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> (<span class="hljs-string">&#x27;#&#x27;</span>, <span class="hljs-string">&#x27;--&#x27;</span>, <span class="hljs-string">&#x27;/*&#x27;</span>)):<br>            retVal += <span class="hljs-string">&quot;-- -&quot;</span><br><span class="hljs-keyword">return</span> retVal<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="space2comment"><a href="#space2comment" class="headerlink" title="space2comment"></a>space2comment</h4><p>如果仅仅是要识别空格的话，就不需要复杂的使用正则表达式了，比如下面的这一段</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs python"> <span class="hljs-keyword">if</span> payload:<br>     retVal = <span class="hljs-string">&quot;&quot;</span><br>     quote, doublequote, firstspace = <span class="hljs-literal">False</span>, <span class="hljs-literal">False</span>, <span class="hljs-literal">False</span><br><br>     <span class="hljs-comment">#检测是否遇到第一个空格</span><br>     <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(<span class="hljs-built_in">len</span>(payload)):<br>         <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> firstspace:<br>             <span class="hljs-keyword">if</span> payload[i].isspace():<br>                 firstspace = <span class="hljs-literal">True</span><br>                 retVal += <span class="hljs-string">&quot;/**/&quot;</span><br>                 <span class="hljs-keyword">continue</span><br><span class="hljs-comment">#这里的取反代表进入或者推出单引号包裹的字符串</span><br>         <span class="hljs-keyword">elif</span> payload[i] == <span class="hljs-string">&#x27;\&#x27;&#x27;</span>:<br>             quote = <span class="hljs-keyword">not</span> quote<br><br>         <span class="hljs-keyword">elif</span> payload[i] == <span class="hljs-string">&#x27;&quot;&#x27;</span>:<br>             doublequote = <span class="hljs-keyword">not</span> doublequote<br><br>         <span class="hljs-keyword">elif</span> payload[i] == <span class="hljs-string">&quot; &quot;</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> doublequote <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> quote:<br>             retVal += <span class="hljs-string">&quot;/**/&quot;</span><br>             <span class="hljs-keyword">continue</span><br><br>         retVal += payload[i]<br><br> <span class="hljs-keyword">return</span> retVal<br></code></pre></td></tr></table></figure>
+
+<p>后面的相关写法都是一模一样的</p>
+<p>这里有一个很疑惑的地方，为什么要设置一个firstspace变量，因为和firstspace相关的代码是否有注释都不会影响他的结果</p>
+<p>网上搜的结果是不对首个字段进行</p>
+<h4 id="space2dash"><a href="#space2dash" class="headerlink" title="space2dash"></a>space2dash</h4><p>这里可以记录空格另一种替换方式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> payload:<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(<span class="hljs-built_in">len</span>(payload)):<br>        <span class="hljs-keyword">if</span> payload[i].isspace():<br>            randomStr = <span class="hljs-string">&#x27;&#x27;</span>.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> xrange(random.randint(<span class="hljs-number">6</span>, <span class="hljs-number">12</span>)))<br>            retVal += <span class="hljs-string">&quot;--%s%%0A&quot;</span> % randomStr<br>        <span class="hljs-keyword">elif</span> payload[i] == <span class="hljs-string">&#x27;#&#x27;</span> <span class="hljs-keyword">or</span> payload[i:i + <span class="hljs-number">3</span>] == <span class="hljs-string">&#x27;-- &#x27;</span>:<br>            retVal += payload[i:]<br>            <span class="hljs-keyword">break</span><br>        <span class="hljs-keyword">else</span>:<br>            retVal += payload[i]<br><br><span class="hljs-keyword">return</span> retVal<br></code></pre></td></tr></table></figure>
+
+<p>先用<code>random.randint(6, 12)</code>生成一个6-12之间的随机整数n，然后用<code>xrange(n)</code>生成一个从0到n-1的迭代器，再用<code>for _ in</code>遍历这个迭代器，每次循环都用<code>random.choice(string.ascii_uppercase + string.ascii_lowercase)</code>从字母中随机选一个，最后用<code>&#39;&#39;.join</code>把所有选出的字母连接成一个新的字符串，并赋值给<code>randomStr</code>。这样就得到了一个随机长度（6到12个字符）的随机字符串。</p>
+<h4 id="字符内部随机填入注释符号"><a href="#字符内部随机填入注释符号" class="headerlink" title="字符内部随机填入注释符号"></a>字符内部随机填入注释符号</h4><h3 id="写的很妙的一些地方"><a href="#写的很妙的一些地方" class="headerlink" title="写的很妙的一些地方"></a>写的很妙的一些地方</h3><h4 id="xfftest-py随机生成IP地址"><a href="#xfftest-py随机生成IP地址" class="headerlink" title="xfftest.py随机生成IP地址"></a>xfftest.py随机生成IP地址</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">randomIP</span>():<br>    octets = [<span class="hljs-number">10</span>]<br><br>    <span class="hljs-keyword">while</span> <span class="hljs-keyword">not</span> octets <span class="hljs-keyword">or</span> octets[<span class="hljs-number">0</span>] <span class="hljs-keyword">in</span> (<span class="hljs-number">10</span>, <span class="hljs-number">172</span>, <span class="hljs-number">192</span>):<br>        octets = random.sample(xrange(<span class="hljs-number">1</span>, <span class="hljs-number">255</span>), <span class="hljs-number">4</span>)<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;.&#x27;</span>.join(<span class="hljs-built_in">str</span>(_) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> octets)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>octets为空列表</li>
+<li>octets的第一个元素是10、172或192中的一个</li>
+</ul>
+<p>如果满足其中一个条件，就重新生成四个随机数，并赋值给octets。如果不满足任何一个条件，就退出循环，并返回由octets组成的字符串作为IP地址。</p>
+<h4 id="首次tamper的kwargs的使用"><a href="#首次tamper的kwargs的使用" class="headerlink" title="首次tamper的kwargs的使用"></a>首次tamper的kwargs的使用</h4><p>这里出现在varnish.py里面</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">tamper</span>(<span class="hljs-params">payload, **kwargs</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    Appends a HTTP header &#x27;X-originating-IP&#x27; to bypass Varnish Firewall</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Reference:</span><br><span class="hljs-string">        * https://web.archive.org/web/20160815052159/http://community.hpe.com/t5/Protect-Your-Assets/Bypassing-web-application-firewalls-using-HTTP-headers/ba-p/6418366</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Notes:</span><br><span class="hljs-string">        Examples:</span><br><span class="hljs-string">        &gt;&gt; X-forwarded-for: TARGET_CACHESERVER_IP (184.189.250.X)</span><br><span class="hljs-string">        &gt;&gt; X-remote-IP: TARGET_PROXY_IP (184.189.250.X)</span><br><span class="hljs-string">        &gt;&gt; X-originating-IP: TARGET_LOCAL_IP (127.0.0.1)</span><br><span class="hljs-string">        &gt;&gt; x-remote-addr: TARGET_INTERNALUSER_IP (192.168.1.X)</span><br><span class="hljs-string">        &gt;&gt; X-remote-IP: * or %00 or %0A</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><br>    headers = kwargs.get(<span class="hljs-string">&quot;headers&quot;</span>, &#123;&#125;)<br>    headers[<span class="hljs-string">&quot;X-originating-IP&quot;</span>] = <span class="hljs-string">&quot;127.0.0.1&quot;</span><br>    <span class="hljs-keyword">return</span> payload<br></code></pre></td></tr></table></figure>
+
+<p>kwargs在函数定义中使用两个星号（**）来表示，这意味着函数会接收一个字典作为参数，字典中包含了所有传递给函数的关键字参数和它们的值</p>
+<h4 id="‘-’的妙用hex2char-py"><a href="#‘-’的妙用hex2char-py" class="headerlink" title="‘_’的妙用hex2char.py"></a>‘_’的妙用hex2char.py</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> payload:<br>     <span class="hljs-keyword">for</span> match <span class="hljs-keyword">in</span> re.finditer(<span class="hljs-string">r&quot;\b0x([0-9a-f]+)\b&quot;</span>, retVal):<br>         <span class="hljs-comment"># i = 0</span><br>         <span class="hljs-comment"># print(match.group(i))</span><br>         <span class="hljs-comment"># i = i + 1</span><br>         <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(match.group(<span class="hljs-number">1</span>)) &gt; <span class="hljs-number">2</span>:<br>             result = <span class="hljs-string">&quot;CONCAT(%s)&quot;</span> % <span class="hljs-string">&#x27;,&#x27;</span>.join(<span class="hljs-string">&quot;CHAR(%d)&quot;</span> % _ <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> getOrds(decodeHex(match.group(<span class="hljs-number">1</span>))))<br>         <span class="hljs-keyword">else</span>:<br>             result = <span class="hljs-string">&quot;CHAR(%d)&quot;</span> % <span class="hljs-built_in">ord</span>(decodeHex(match.group(<span class="hljs-number">1</span>)))<br>         retVal = retVal.replace(match.group(<span class="hljs-number">0</span>), result)<br><br> <span class="hljs-keyword">return</span> retVal<br></code></pre></td></tr></table></figure>
+
+<p>这里的正则表达式其实很简单，重点来看<code>result = &quot;CONCAT(%s)&quot; % &#39;,&#39;.join(&quot;CHAR(%d)&quot; % _ for _ in getOrds(decodeHex(match.group(1))))</code></p>
+<p>先来看看官方的getords的用法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">getOrds</span>(<span class="hljs-params">value</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    Returns ORD(...) representation of provided string value</span><br><span class="hljs-string"></span><br><span class="hljs-string">    &gt;&gt;&gt; getOrds(u&#x27;fo\\xf6bar&#x27;)</span><br><span class="hljs-string">    [102, 111, 246, 98, 97, 114]</span><br><span class="hljs-string">    &gt;&gt;&gt; getOrds(b&quot;fo\\xc3\\xb6bar&quot;)</span><br><span class="hljs-string">    [102, 111, 195, 182, 98, 97, 114]</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>	<span class="hljs-comment">#三元运算符</span><br>    <span class="hljs-keyword">return</span> [_ <span class="hljs-keyword">if</span> <span class="hljs-built_in">isinstance</span>(_, <span class="hljs-built_in">int</span>) <span class="hljs-keyword">else</span> <span class="hljs-built_in">ord</span>(_) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> value]<br></code></pre></td></tr></table></figure>
+
+<p>return处是一个列表推导式</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gams">[expression <span class="hljs-keyword">for</span> <span class="hljs-keyword">variable</span> in <span class="hljs-comment">iterable]</span><br></code></pre></td></tr></table></figure>
+
+<p>其中，<code>expression</code>是一个表达式，用来计算列表中的每个元素的值；<code>variable</code>是一个变量，用来接收<code>iterable</code>中的每个元素；<code>iterable</code>是一个可迭代对象，比如列表、元组、字符串等。</p>
+<p>转化为正常写法就是</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_my_ord</span>(<span class="hljs-params">value</span>):<br>    result = []<br>    <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> value:<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">isinstance</span>(_, <span class="hljs-built_in">int</span>):<br>            result.append(_)<br>        <span class="hljs-keyword">else</span>:<br>            result.append(<span class="hljs-built_in">ord</span>(_))<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">print</span>(result)<br></code></pre></td></tr></table></figure>
+
+
+
+<p>所以我们就能整个理解后面的这一段语句了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">_ <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> getOrds(decodeHex(match.group(<span class="hljs-number">1</span>)))<br></code></pre></td></tr></table></figure>
+
+<p>第一个_负责存储存储值</p>
+<p>但是还有一个误区，这里的并不能够返回一个正常的值，而是会返回一个对象，比如下面这段代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">blanks = [<span class="hljs-string">&quot;%09&quot;</span>, <span class="hljs-string">&quot;%0A&quot;</span>, <span class="hljs-string">&quot;%0C&quot;</span>, <span class="hljs-string">&quot;%0D&quot;</span>]<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;%s&quot;</span> % _  <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> blanks)<br></code></pre></td></tr></table></figure>
+
+<p>print返回的值是</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-section">&lt;generator object &lt;genexpr&gt;</span> <span class="hljs-attribute">at</span> <span class="hljs-number">0</span>x000002B639C786D0&gt;<br></code></pre></td></tr></table></figure>
+
+<p>这里只能作为return值来使用，例如我们使用下面的代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">gen_func</span>():<br>    blanks = [<span class="hljs-string">&quot;%09&quot;</span>, <span class="hljs-string">&quot;%0A&quot;</span>, <span class="hljs-string">&quot;%0C&quot;</span>, <span class="hljs-string">&quot;%0D&quot;</span>]<br>    <span class="hljs-keyword">return</span> (<span class="hljs-string">&quot;%s&quot;</span> % _  <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> blanks)<br><span class="hljs-keyword">if</span> __name__ ==<span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    <span class="hljs-keyword">for</span> value <span class="hljs-keyword">in</span> gen_func():<br>        <span class="hljs-built_in">print</span>(value)<br></code></pre></td></tr></table></figure>
+
+<p>这样就能够得到每一个值</p>
+<h4 id="字符串中间插入字符randomcomment-py"><a href="#字符串中间插入字符randomcomment-py" class="headerlink" title="字符串中间插入字符randomcomment.py"></a>字符串中间插入字符randomcomment.py</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(<span class="hljs-number">1</span>, <span class="hljs-built_in">len</span>(word) - <span class="hljs-number">1</span>):<br>    _ += <span class="hljs-string">&quot;%s%s&quot;</span> % (<span class="hljs-string">&quot;/**/&quot;</span> <span class="hljs-keyword">if</span> randomRange(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;&quot;</span>, word[i])<br>_ += word[-<span class="hljs-number">1</span>]<br></code></pre></td></tr></table></figure>
+
+<p><code>(&quot;/**/&quot; if randomRange(0, 1) else &quot;&quot;)</code> 是一个条件表达式，它表示如果randomRange(0, 1)的结果是1，就返回<code>/**/</code>这个字符串，否则返回空字符串<code>&quot;&quot;</code>。randomRange(0, 1)是一个函数，它可以生成0或1的随机数。</p>
+<blockquote>
+<p>格式大概是这样的(第一次见这种写法)</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mel">value1 <span class="hljs-keyword">if</span> <span class="hljs-keyword">condition</span> <span class="hljs-keyword">else</span> value2<br></code></pre></td></tr></table></figure>
+
+<p>它的意思是根据条件的真假，返回不同的值。如果条件为真，就返回value1，如果条件为假，就返回value2。比如，如果我们写：</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs actionscript"><span class="hljs-string">&quot;yes&quot;</span> <span class="hljs-keyword">if</span> <span class="hljs-number">1</span> &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;no&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>它的意思是如果1大于0，就返回”yes”，否则返回”no”。因为1大于0是一个真的条件，所以这个表达式的结果是”yes”。</p>
+<p>在这一段话中，我们写了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-string">&quot;/**/&quot;</span> <span class="hljs-keyword">if</span> <span class="hljs-title function_">randomRange</span><span class="hljs-params">(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>)</span> <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>它的意思是如果randomRange(0, 1)的结果是1，就返回”&#x2F;**&#x2F;“，否则返回””。randomRange(0, 1)是一个函数，它可以生成0或1的随机数。所以这个表达式的结果有两种可能：</p>
+<ul>
+<li>如果randomRange(0, 1)生成的是1，就返回”&#x2F;**&#x2F;“</li>
+<li>如果randomRange(0, 1)生成的是0，就返回””</li>
+</ul>
+<p>这样就实现了随机地加上或不加上”&#x2F;**&#x2F;“符号的效果。</p>
+</blockquote>
+<p>到了这里tamper模块的基本东西我们就学完了</p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SQLMap原理及其深入</div>
+      <div>https://decemberus.github.io/Decemberus.github-io/2023/09/29/SQLMap原理及其深入/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Decemberus</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年9月29日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2023/11/03/CodeQl%E5%B8%B8%E8%A7%81%E6%BC%8F%E6%B4%9E%E6%A2%B3%E7%90%86/" title="CodeQl常见漏洞梳理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CodeQl常见漏洞梳理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2023/08/02/%E5%9F%9F%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="域渗透基础知识">
+                        <span class="hidden-mobile">域渗透基础知识</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/Decemberus.github-io/js/events.js" ></script>
+<script  src="/Decemberus.github-io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/Decemberus.github-io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/Decemberus.github-io/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/Decemberus.github-io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

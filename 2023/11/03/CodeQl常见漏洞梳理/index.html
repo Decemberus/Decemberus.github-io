@@ -1,0 +1,830 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Decemberus.github-io/img/fluid.png">
+  <link rel="icon" href="/Decemberus.github-io/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Decemberus">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="CodeQl常见漏洞梳理XXE存在漏洞的代码 12345public void parse(Socket sock) throws Exception &amp;#123;  DocumentBuilderFactory factory &#x3D; DocumentBuilderFactory.newInstance();  DocumentBuilder builder &#x3D; factory.newDocumen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CodeQl常见漏洞梳理">
+<meta property="og:url" content="https://decemberus.github.io/Decemberus.github-io/2023/11/03/CodeQl%E5%B8%B8%E8%A7%81%E6%BC%8F%E6%B4%9E%E6%A2%B3%E7%90%86/index.html">
+<meta property="og:site_name" content="欢迎回来">
+<meta property="og:description" content="CodeQl常见漏洞梳理XXE存在漏洞的代码 12345public void parse(Socket sock) throws Exception &amp;#123;  DocumentBuilderFactory factory &#x3D; DocumentBuilderFactory.newInstance();  DocumentBuilder builder &#x3D; factory.newDocumen">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394606_610f546eaa54d9e27ddaa.png">
+<meta property="article:published_time" content="2023-11-03T10:19:37.000Z">
+<meta property="article:modified_time" content="2024-03-02T05:18:30.223Z">
+<meta property="article:author" content="Decemberus">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394606_610f546eaa54d9e27ddaa.png">
+  
+  
+  <title>CodeQl常见漏洞梳理 - 欢迎回来</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/Decemberus.github-io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/Decemberus.github-io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/Decemberus.github-io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"decemberus.github.io","root":"/Decemberus.github-io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Decemberus.github-io/local-search.xml"};
+  </script>
+  <script  src="/Decemberus.github-io/js/utils.js" ></script>
+  <script  src="/Decemberus.github-io/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/Decemberus.github-io/">
+      <strong>enjoy的blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Decemberus.github-io/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CodeQl常见漏洞梳理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-03 18:19" pubdate>
+          2023年11月3日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          23k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          196 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">CodeQl常见漏洞梳理</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="CodeQl常见漏洞梳理"><a href="#CodeQl常见漏洞梳理" class="headerlink" title="CodeQl常见漏洞梳理"></a>CodeQl常见漏洞梳理</h1><h2 id="XXE"><a href="#XXE" class="headerlink" title="XXE"></a>XXE</h2><p>存在漏洞的代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">parse</span><span class="hljs-params">(Socket sock)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>  <span class="hljs-type">DocumentBuilderFactory</span> <span class="hljs-variable">factory</span> <span class="hljs-operator">=</span> DocumentBuilderFactory.newInstance();<br>  <span class="hljs-type">DocumentBuilder</span> <span class="hljs-variable">builder</span> <span class="hljs-operator">=</span> factory.newDocumentBuilder();<br>  builder.parse(sock.getInputStream()); <span class="hljs-comment">//unsafe</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>而没有漏洞的代码是这样的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">disableDTDParse</span><span class="hljs-params">(Socket sock)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>  <span class="hljs-type">DocumentBuilderFactory</span> <span class="hljs-variable">factory</span> <span class="hljs-operator">=</span> DocumentBuilderFactory.newInstance();<br>  factory.setFeature(<span class="hljs-string">&quot;http://apache.org/xml/features/disallow-doctype-decl&quot;</span>, <span class="hljs-literal">true</span>);<br>  <span class="hljs-type">DocumentBuilder</span> <span class="hljs-variable">builder</span> <span class="hljs-operator">=</span> factory.newDocumentBuilder();<br>  builder.parse(sock.getInputStream()); <span class="hljs-comment">//safe</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java<br><span class="hljs-keyword">import</span> semmle.code.java.dataflow.DataFlow<br><span class="hljs-keyword">import</span> semmle.code.java.security.XxeRemoteQuery<br><span class="hljs-keyword">import</span> XxeFlow::PathGraph<br><br>from XxeFlow::PathNode source, XxeFlow::PathNode sink<br>where XxeFlow::flowPath(source, sink)<br>select sink.getNode(), source, sink,<br>  <span class="hljs-string">&quot;XML parsing depends on a $@ without guarding against external entity expansion.&quot;</span>,<br>  source.getNode(), <span class="hljs-string">&quot;user-provided value&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>点进xssflow</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">module</span> XxeConfig <span class="hljs-keyword">implements</span> <span class="hljs-title class_">DataFlow</span>::ConfigSig &#123;<br>  predicate <span class="hljs-title function_">isSource</span><span class="hljs-params">(DataFlow::Node src)</span> &#123; src <span class="hljs-keyword">instanceof</span> ThreatModelFlowSource &#125;<br><br>  predicate <span class="hljs-title function_">isSink</span><span class="hljs-params">(DataFlow::Node sink)</span> &#123; sink <span class="hljs-keyword">instanceof</span> XxeSink &#125;<br><br>  predicate <span class="hljs-title function_">isBarrier</span><span class="hljs-params">(DataFlow::Node sanitizer)</span> &#123; sanitizer <span class="hljs-keyword">instanceof</span> XxeSanitizer &#125;<br><br>  predicate <span class="hljs-title function_">isAdditionalFlowStep</span><span class="hljs-params">(DataFlow::Node n1, DataFlow::Node n2)</span> &#123;<br>    any(XxeAdditionalTaintStep s).step(n1, n2)<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>重点是isSink不知道它是什么</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">import</span> semmle.code.java.dataflow.DataFlow<br><br><span class="hljs-comment">/** A node where insecure XML parsing takes place. */</span><br><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">XxeSink</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">DataFlow</span>::Node &#123; &#125;<br><br><span class="hljs-comment">/** A node that acts as a sanitizer in configurations realted to XXE vulnerabilities. */</span><br><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">XxeSanitizer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">DataFlow</span>::Node &#123; &#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * A unit class for adding additional taint steps.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * Extend this class to add additional taint steps that should apply to flows related to</span><br><span class="hljs-comment"> * XXE vulnerabilities.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">XxeAdditionalTaintStep</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Unit</span> &#123;<br>  <span class="hljs-comment">/**</span><br><span class="hljs-comment">   * Holds if the step from `node1` to `node2` should be considered a taint</span><br><span class="hljs-comment">   * step for flows related to XXE vulnerabilities.</span><br><span class="hljs-comment">   */</span><br>  <span class="hljs-keyword">abstract</span> predicate <span class="hljs-title function_">step</span><span class="hljs-params">(DataFlow::Node n1, DataFlow::Node n2)</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>这里要介绍codeql和java中不一样的地方</p>
+<blockquote>
+<p>学过java的人可能会很费解，我们继承了一个abstract抽象类，连个实现方法都没有，怎么就能够达到获取各种source的目的呢？</p>
+<p>CodeQL和Java不太一样，只要我们的子类继承了这个<code>RemoteFlowSource</code>类，那么所有子类就会被调用，它所代表的source也会被加载。</p>
+<p>我们在 <code>RemoteFlowSource</code>定义下面会看到非常多子类，就是这个道理，它们的结果都会被用and串联加载。</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394606_610f546eaa54d9e27ddaa.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="img"> </p>
+</blockquote>
+<p>于是我们能找到这个实现类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DefaultXxeSink</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">XxeSink</span> &#123;<br>  DefaultXxeSink() &#123;<br>    not SafeSaxSourceFlow::flowTo(<span class="hljs-built_in">this</span>) and<br>    <span class="hljs-title function_">exists</span><span class="hljs-params">(XmlParserCall parse |</span><br><span class="hljs-params">      parse.getSink()</span> = <span class="hljs-built_in">this</span>.asExpr() and<br>      not parse.isSafe()<br>    )<br>  &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>先来看<code>XmlParserCall</code>，这是一个抽象类，我们需要查看他的实现类，这里只拿一个类来做对比</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">DocumentBuilderParse</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">XmlParserCall</span> &#123;<br>  DocumentBuilderParse() &#123;<br>    exists(Method m |<br>      <span class="hljs-built_in">this</span>.getMethod() = m and<br>      m.getDeclaringType() <span class="hljs-keyword">instanceof</span> DocumentBuilder and<br>      m.hasName(<span class="hljs-string">&quot;parse&quot;</span>)<br>    )<br>  &#125;<br><br>  override Expr <span class="hljs-title function_">getSink</span><span class="hljs-params">()</span> &#123; result = <span class="hljs-built_in">this</span>.getArgument(<span class="hljs-number">0</span>) &#125;<br><br>  override predicate <span class="hljs-title function_">isSafe</span><span class="hljs-params">()</span> &#123;<br>    SafeDocumentBuilderToDocumentBuilderParseFlow::flowsTo(DataFlow::exprNode(<span class="hljs-built_in">this</span>.getQualifier()))<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>而<code>DocumentBuilder</code>则是一个这样的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">DocumentBuilder</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">RefType</span> &#123;<br>  DocumentBuilder() &#123; <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;javax.xml.parsers&quot;</span>, <span class="hljs-string">&quot;DocumentBuilder&quot;</span>) &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如此一来我们就能明白，其实这个意思就是找到有没有<code>javax.xml.parsers.DocumentBuilder</code>这个类</p>
+<p>我们接着来看他的<code>isSafe</code>方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">  override predicate <span class="hljs-title function_">isSafe</span><span class="hljs-params">()</span> &#123;<br>    SafeDocumentBuilderToDocumentBuilderParseFlow::flowsTo(DataFlow::exprNode(<span class="hljs-built_in">this</span>.getQualifier()))<br><span class="hljs-comment">//override predicate isSafe() &#123;</span><br><br>  &#125;<br></code></pre></td></tr></table></figure>
+
+<p>这个谓词的参数是<code>DataFlow::exprNode(this.getQualifier())</code>，也就是这个XML解析器的调用的限定符（也就是<code>DocumentBuilder</code>对象）的数据流节点</p>
+<p>这里检查一个数据流节点是否可以流向一个满足<code>safeDocumentBuilderNode</code>谓词的数据流节点，也就是是否可以流向一个安全的<code>DocumentBuilder</code>对象。</p>
+<p>至于怎么定义xml解释器是不是合适的，就不做分析了</p>
+<h2 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h2><h3 id="官方示例"><a href="#官方示例" class="headerlink" title="官方示例"></a>官方示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java<br><span class="hljs-keyword">import</span> semmle.code.java.security.XssQuery<br><span class="hljs-keyword">import</span> XssFlow::PathGraph<br><br>from XssFlow::PathNode source, XssFlow::PathNode sink<br>where XssFlow::flowPath(source, sink)<br>select sink.getNode(), source, sink, <span class="hljs-string">&quot;Cross-site scripting vulnerability due to a $@.&quot;</span>,<br>  source.getNode(), <span class="hljs-string">&quot;user-provided value&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>这里还是使用codeql官方的示例，和上面的步骤一样，我们还是找到了xssSink这个类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DefaultXssSink</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">XssSink</span> &#123;<br>  DefaultXssSink() &#123;<br>    sinkNode(<span class="hljs-built_in">this</span>, [<span class="hljs-string">&quot;html-injection&quot;</span>, <span class="hljs-string">&quot;js-injection&quot;</span>])<br>    or<br>    <span class="hljs-title function_">exists</span><span class="hljs-params">(MethodCall ma |</span><br><span class="hljs-params">      ma.getMethod()</span> <span class="hljs-keyword">instanceof</span> WritingMethod and<br>      XssVulnerableWriterSourceToWritingMethodFlow::flowToExpr(ma.getQualifier()) and<br>      <span class="hljs-built_in">this</span>.asExpr() = ma.getArgument(_)<br>    )<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">module</span> XssVulnerableWriterSourceToWritingMethodFlowConfig <span class="hljs-keyword">implements</span> <span class="hljs-title class_">DataFlow</span>::ConfigSig &#123;<br>  predicate <span class="hljs-title function_">isSource</span><span class="hljs-params">(DataFlow::Node src)</span> &#123; src.asExpr() <span class="hljs-keyword">instanceof</span> XssVulnerableWriterSource &#125;<br><br>  predicate <span class="hljs-title function_">isSink</span><span class="hljs-params">(DataFlow::Node sink)</span> &#123;<br>    exists(MethodCall ma |<br>      sink.asExpr() = ma.getQualifier() and ma.getMethod() <span class="hljs-keyword">instanceof</span> WritingMethod<br>    )<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们一步步顺着代码往上面追，可以看到这个</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">XssVulnerableWriterSource</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">MethodCall</span> &#123;<br>  XssVulnerableWriterSource() &#123;<br>    <span class="hljs-built_in">this</span>.getMethod() <span class="hljs-keyword">instanceof</span> ServletResponseGetWriterMethod<br>        <span class="hljs-comment">//向客户端发送数据的方法</span><br>    or<br>    <span class="hljs-built_in">this</span>.getMethod() <span class="hljs-keyword">instanceof</span> ServletResponseGetOutputStreamMethod<br>        <span class="hljs-comment">//像客户端发送二进制数据的方法</span><br>    or<br>    <span class="hljs-title function_">exists</span><span class="hljs-params">(Method m | m = <span class="hljs-built_in">this</span>.getMethod()</span> |<br>      m.getDeclaringType().getQualifiedName() = <span class="hljs-string">&quot;javax.servlet.jsp.JspContext&quot;</span> and<br>      m.getName() = <span class="hljs-string">&quot;getOut&quot;</span><br>           <span class="hljs-comment">//像客户端发送数据的方法</span><br>    )<br>    or<br>    <span class="hljs-built_in">this</span>.getMethod() <span class="hljs-keyword">instanceof</span> FacesGetResponseWriterMethod<br>    or<br>    <span class="hljs-built_in">this</span>.getMethod() <span class="hljs-keyword">instanceof</span> FacesGetResponseStreamMethod<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>发现就是找到能向客户端发送数据的方法作为source</p>
+<p>分析完了source，再来看sink</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">predicate <span class="hljs-title function_">isSink</span><span class="hljs-params">(DataFlow::Node sink)</span> &#123;<br>  exists(MethodCall ma |<br>    sink.asExpr() = ma.getQualifier() and ma.getMethod() <span class="hljs-keyword">instanceof</span> WritingMethod<br>  )<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>而这里的<code>WritingMethod</code>是这个</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WritingMethod</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Method</span> &#123;<br>  WritingMethod() &#123;<br>    <span class="hljs-built_in">this</span>.getDeclaringType().getAnAncestor().hasQualifiedName(<span class="hljs-string">&quot;java.io&quot;</span>, _) and<br>    (<br>      <span class="hljs-built_in">this</span>.getName().matches(<span class="hljs-string">&quot;print%&quot;</span>) or<br>      <span class="hljs-built_in">this</span>.getName() = <span class="hljs-string">&quot;append&quot;</span> or<br>      <span class="hljs-built_in">this</span>.getName() = <span class="hljs-string">&quot;format&quot;</span> or<br>      <span class="hljs-built_in">this</span>.getName() = <span class="hljs-string">&quot;write&quot;</span><br>    )<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>可以发现这里其实就是可以往服务端写入的一些代码，也就是将数据以某种格式或方式输出的方法</p>
+<p>题外话:</p>
+<p>可以注意到一个有意思的现象，我们可以看到不管是xxe还是xss，都是将这个作为source</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">predicate <span class="hljs-title function_">isSource</span><span class="hljs-params">(DataFlow::Node source)</span> &#123; source <span class="hljs-keyword">instanceof</span> ThreatModelFlowSource &#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里我一直把threat堪称thread当成继承当前的线程来用，实际上是威胁，跟进去查看</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ThreatModelFlowSource</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">DataFlow</span>::Node &#123;<br>  ThreatModelFlowSource() &#123;<br>    exists(string kind |<br>      <span class="hljs-comment">// Specific threat model.</span><br>      currentThreatModel(kind) and<br>      (<span class="hljs-built_in">this</span>.(SourceNode).getThreatModel() = kind or <span class="hljs-title function_">sourceNode</span><span class="hljs-params">(<span class="hljs-built_in">this</span>, kind)</span>)<br>    )<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们对<code>currentThreatModel</code>感兴趣</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java">predicate <span class="hljs-title function_">currentThreatModel</span><span class="hljs-params">(string kind)</span> &#123;<br>  threatModelEnabled(kind)<br>  or<br>  <span class="hljs-comment">// For any threat model kind not mentioned in the configuration or grouping tables, its state of</span><br>  <span class="hljs-comment">// enablement is controlled only by the entries that specifiy the &quot;all&quot; kind.</span><br>  not <span class="hljs-title function_">knownThreatModel</span><span class="hljs-params">(kind)</span> and <span class="hljs-title function_">threatModelEnabled</span><span class="hljs-params">(<span class="hljs-string">&quot;all&quot;</span>)</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>跟进<code>threatModelEnabled</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> predicate <span class="hljs-title function_">threatModelEnabled</span><span class="hljs-params">(string kind)</span> &#123;<br>  <span class="hljs-comment">// Find the highest-priority configuration row whose `kind` column includes the specified threat</span><br>  <span class="hljs-comment">// model kind. If such a row exists and its `enabled` column is `true`, then the threat model is</span><br>  <span class="hljs-comment">// enabled.</span><br>  knownThreatModel(kind) and<br>  <span class="hljs-title function_">max</span><span class="hljs-params">(<span class="hljs-type">boolean</span> enabled, <span class="hljs-type">int</span> priority |</span><br><span class="hljs-params">    exists(string configuredKind | configuredKind = getParentThreatModel*(kind)</span> |<br>      threatModelConfiguration(configuredKind, enabled, priority)<br>    )<br>  |<br>    enabled order by priority<br>  ) = <span class="hljs-literal">true</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>threatModelConfiguration的官方解释是</p>
+<blockquote>
+<p><strong>predicate threatModelConfiguration(string kind, boolean enable, int priority)</strong></p>
+<p>Holds configuration entries to specify which threat models are enabled.</p>
+<ul>
+<li><code>kind</code> - Specifies the threat model to configure. This can be the name of a specific threat model (for example, <code>environment</code>), a group (<code>local</code>), or <code>all</code>.</li>
+<li><code>enable</code> - <code>true</code> to enable the specified threat model (and its children), or <code>false</code> to disable it.</li>
+<li><code>priority</code> - The order in which the configuration should be applied. Lower values are applied first.</li>
+</ul>
+<p>The final configuration is the result of processing each row in ascending order of its <code>priority</code> column. For example:</p>
+<ul>
+<li><code>&#123; kind: &quot;all&quot;, enable: true, priority: 0 &#125;</code></li>
+<li><code>&#123; kind: &quot;remote&quot;, enable: false, priority: 1 &#125;</code></li>
+<li><code>&#123; kind: &quot;environment&quot;, enable: true, priority: 2 &#125;</code> This configuration first enables all threat models, then disables the <code>remote</code> group, and finally re-enables the <code>environment</code> threat model.</li>
+</ul>
+</blockquote>
+<h3 id="React中的Xss类型"><a href="#React中的Xss类型" class="headerlink" title="React中的Xss类型"></a>React中的Xss类型</h3><p>React应用的XSS的产生情况一般有：</p>
+<ul>
+<li><p>调用dangerouslySetInnerHTML</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Hello</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>&#123;<br>  render() &#123;<br>    <span class="hljs-keyword">return</span> &lt;div<br>        dangerouslySetInnerHTML=&#123;&#123;html:&#x27;&lt;img/src=<span class="hljs-string">&quot;x&quot;</span>/onerror=<span class="hljs-string">&quot;alert(1)&quot;</span>/&gt;&#x27;&#125;&#125;<br>    &gt;&lt;/div&gt;;<br>  &#125;<br>&#125;<br><br><span class="hljs-type">ReactDOM</span>.render(<br>  &lt;<span class="hljs-type">Hello</span> name=<span class="hljs-string">&quot;World&quot;</span> /&gt;,<br>  document.getElementById(&#x27;container&#x27;)<br>);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p>直接将恶意html渲染到DOM中；</p>
+<ul>
+<li><p>a标签的链接判断不严格</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs scala">const userWebsite = <span class="hljs-string">&quot;javascript:alert(&#x27;Hacked!&#x27;);&quot;</span>;<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserProfilePage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>&#123;<br>  render() &#123;<br>    <span class="hljs-keyword">return</span> (<br>      &lt;a href=&#123;userWebsite&#125;&gt;<span class="hljs-type">My</span> <span class="hljs-type">Website</span>&lt;/a&gt;<br>    )<br>  &#125;<br>&#125;<br><br><span class="hljs-type">ReactDOM</span>.render(&lt;<span class="hljs-type">UserProfilePage</span> /&gt;, document.querySelector(<span class="hljs-string">&quot;#app&quot;</span>));<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p>a标签对于链接缺少过滤，可以通过插入javascript类的url来实现oneclick XSS.</p>
+<ul>
+<li><p>直接调用innerHTML&#x2F;outerHTML</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">var <span class="hljs-attribute">x</span>=document.createElement(&#x27;div&#x27;)<br>x.<span class="hljs-attribute">innerHTML</span>=<span class="hljs-string">&quot;user controllable data&quot;</span>;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>直接设置href</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">var <span class="hljs-attribute">x</span>=document.createElement(&#x27;a&#x27;)<br>x.<span class="hljs-attribute">href</span>=<span class="hljs-string">&quot;javascript:alert(1)&quot;</span>;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>参数注入(注入dangerouslySetInnerHTML的情况)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> r=&#123;...input&#125;<br><span class="hljs-keyword">return</span> (<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> </span></span><br><span class="hljs-tag"><span class="language-xml">    <span class="hljs-attr">...r</span></span></span><br><span class="hljs-tag"><span class="language-xml">    &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br>)<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="CodeQL代码实现"><a href="#CodeQL代码实现" class="headerlink" title="CodeQL代码实现"></a>CodeQL代码实现</h4><h5 id="dangerouly"><a href="#dangerouly" class="headerlink" title="dangerouly"></a>dangerouly</h5><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">override predicate is<span class="hljs-constructor">Source(DataFlow::Node <span class="hljs-params">nd</span>)</span>&#123;<br>       not (nd.<span class="hljs-keyword">as</span><span class="hljs-constructor">Expr()</span> instanceof ConstantExpr)<br>       <span class="hljs-keyword">and</span> not exists(nd.<span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span>.<span class="hljs-keyword">to</span><span class="hljs-constructor">LowerCase()</span>.index<span class="hljs-constructor">Of(<span class="hljs-string">&quot;icon&quot;</span>)</span>)<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>React应用而言Source点其实不是很容易确定，而且盲目设置Source来源于location.hash&#x2F;XHR如果<code>isAdditionalTaintStep</code>函数设置不好的话很难能达到预期结果。因此我仅仅判断了Source是否是常量的情形。</p>
+<p>而第二段语句是为了排除dangerouslySetInnerHTML来加载svg图片时的场景</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs scala"> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReactDangerousSetInnerHTMLSinks</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">DataFlow</span></span>::<span class="hljs-type">Node</span> &#123;<br>   <span class="hljs-type">ReactDangerousSetInnerHTMLSinks</span>() &#123;<br>    exists(<span class="hljs-type">JSXAttribute</span> attr |<br>      attr.getName() = <span class="hljs-string">&quot;dangerouslySetInnerHTML&quot;</span> and attr.getValue() = <span class="hljs-keyword">this</span>.asExpr()<br>    )<br><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>sink的话就只需要验证是不是一个jsx节点并检测dangerousSetInnerHtml</p>
+<p>因为我们想要完整的利用链子而不是简单的利用链，我们需要把嵌在html里面的语句也拿出来找一遍，于是我们需要用到<code>isAdditionalTaintStep</code></p>
+<p>下面是其官方解释</p>
+<blockquote>
+<p>Holds if data may flow from <code>node1</code> to <code>node2</code> in addition to the normal data-flow steps.</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java">override predicate <span class="hljs-title function_">isAdditionalTaintStep</span><span class="hljs-params">(DataFlow::Node pred, DataFlow::Node succ)</span> &#123;<br>        exists(DataFlow::ObjectLiteralNode obj, DataFlow::Node html_value |<span class="hljs-comment">//这里ObjectLiteralNode是，对象字面量表达式是一种用花括号括起来的键值对列表</span><br>        obj.hasPropertyWrite(<span class="hljs-string">&quot;__html&quot;</span>, html_value) and<span class="hljs-comment">//__表示一个值是html代码而不是普通的文本</span><br>        succ = obj <span class="hljs-type">and</span><br>        <span class="hljs-variable">pred</span> <span class="hljs-operator">=</span> html_value<br>        )<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>最终语句如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> javascript<br><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ReactDangerousSetInnerHTMLSinks</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">DataFlow</span>::Node &#123;<br>   ReactDangerousSetInnerHTMLSinks() &#123;<br>    exists(JSXAttribute attr |<br>      attr.getName() = <span class="hljs-string">&quot;dangerouslySetInnerHTML&quot;</span> and attr.getValue() = <span class="hljs-built_in">this</span>.asExpr()<br>    )<br><br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ReactSetInnerHtmlTracker</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">TaintTracking</span>::Configuration&#123;<br>    ReactSetInnerHtmlTracker() &#123;<br>        <span class="hljs-built_in">this</span> = <span class="hljs-string">&quot;ReactSetInnerHtmlTracker&quot;</span><br>    &#125;<br><br>    override predicate <span class="hljs-title function_">isSource</span><span class="hljs-params">(DataFlow::Node nd)</span>&#123;<br>       not (nd.asExpr() <span class="hljs-keyword">instanceof</span> ConstantExpr)<br>       and not <span class="hljs-title function_">exists</span><span class="hljs-params">(nd.toString()</span>.toLowerCase().indexOf(<span class="hljs-string">&quot;icon&quot;</span>))<br>    &#125;<br><br>    override predicate <span class="hljs-title function_">isSink</span><span class="hljs-params">(DataFlow::Node nd)</span>&#123;<br>        nd <span class="hljs-keyword">instanceof</span> ReactDangerousSetInnerHTMLSinks<br>    &#125;<br><br>    override predicate <span class="hljs-title function_">isAdditionalTaintStep</span><span class="hljs-params">(DataFlow::Node pred, DataFlow::Node succ)</span> &#123;<br>        exists(DataFlow::ObjectLiteralNode obj, DataFlow::Node html_value |<br>        obj.hasPropertyWrite(<span class="hljs-string">&quot;__html&quot;</span>, html_value) <span class="hljs-type">and</span><br>        <span class="hljs-variable">succ</span> <span class="hljs-operator">=</span> obj <span class="hljs-type">and</span><br>        <span class="hljs-variable">pred</span> <span class="hljs-operator">=</span> html_value<br>        )<br>    &#125;<br>&#125;<br><br><br><br>from ReactSetInnerHtmlTracker pt, DataFlow::Node source, DataFlow::Node sink<br>where pt.hasFlow(source, sink)<br>select source,sink<br></code></pre></td></tr></table></figure>
+
+<h5 id="a标签过滤不严"><a href="#a标签过滤不严" class="headerlink" title="a标签过滤不严"></a>a标签过滤不严</h5><p>对应的情况是这样的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">const</span> <span class="hljs-variable">userWebsite</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;javascript:alert(&#x27;Hacked!&#x27;);&quot;</span>;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">UserProfilePage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">React</span>.Component &#123;<br>  render() &#123;<br>    <span class="hljs-keyword">return</span> (<br>      &lt;a href=&#123;userWebsite&#125;&gt;My Website&lt;/a&gt;<br>    )<br>  &#125;<br>&#125;<br><br>ReactDOM.render(&lt;UserProfilePage /&gt;, document.querySelector(<span class="hljs-string">&quot;#app&quot;</span>))<br></code></pre></td></tr></table></figure>
+
+<p>会让恶意代码直接插入，所以我们仿照前面的方法，继承类名字改为href</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReactSetHrefSinks</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">DataFlow</span></span>::<span class="hljs-type">Node</span> &#123;<br>   <span class="hljs-type">ReactSetHrefSinks</span>() &#123;<br>    exists(<span class="hljs-type">JSXAttribute</span> attr |<br>      attr.getName() = <span class="hljs-string">&quot;href&quot;</span> and attr.getValue() = <span class="hljs-keyword">this</span>.asExpr()<br>    )<br><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>由于我们之前设置的属性是针对特定情况的，所以我们这里不需要实现<code>isAdditionalTaintStep</code>方法了</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">import</span> javascript<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReactSetHrefSinks</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">DataFlow</span></span>::<span class="hljs-type">Node</span> &#123;<br>   <span class="hljs-type">ReactSetHrefSinks</span>() &#123;<br>    exists(<span class="hljs-type">JSXAttribute</span> attr |<br>      attr.getName() = <span class="hljs-string">&quot;href&quot;</span> and attr.getValue() = <span class="hljs-keyword">this</span>.asExpr()<br>    )<br><br>  &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReactSetHrefTracker</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">TaintTracking</span></span>::<span class="hljs-type">Configuration</span>&#123;<br>    <span class="hljs-type">ReactSetHrefTracker</span>() &#123;<br>        <span class="hljs-keyword">this</span> = <span class="hljs-string">&quot;ReactSetHrefTracker&quot;</span><br>    &#125;<br><br>    <span class="hljs-keyword">override</span> predicate isSource(<span class="hljs-type">DataFlow</span>::<span class="hljs-type">Node</span> nd)&#123;<br>       exists(|<br>       not (nd.asExpr() instanceof <span class="hljs-type">ConstantExpr</span>)<br>       and not exists(nd.toString().toLowerCase().indexOf(<span class="hljs-string">&quot;icon&quot;</span>))<br>       )<br>    &#125;<br><br>    <span class="hljs-keyword">override</span> predicate isSink(<span class="hljs-type">DataFlow</span>::<span class="hljs-type">Node</span> nd)&#123;<br>      nd instanceof <span class="hljs-type">ReactSetHrefSinks</span><br>    &#125;<br><br>&#125;<br><br><br><br>from <span class="hljs-type">ReactSetHrefTracker</span> pt, <span class="hljs-type">DataFlow</span>::<span class="hljs-type">Node</span> source, <span class="hljs-type">DataFlow</span>::<span class="hljs-type">Node</span> sink<br>where pt.hasFlow(source, sink)<br>select source,sink<br></code></pre></td></tr></table></figure>
+
+<h5 id="直接调用innerHTML-x2F-outerHTML"><a href="#直接调用innerHTML-x2F-outerHTML" class="headerlink" title="直接调用innerHTML&#x2F;outerHTML"></a>直接调用innerHTML&#x2F;outerHTML</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">var <span class="hljs-attribute">x</span>=document.createElement(&#x27;div&#x27;)<br>x.<span class="hljs-attribute">innerHTML</span>=<span class="hljs-string">&quot;user controllable data&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>和上面一样，只需要让sink为判断是存在PropWrite事件，写入的属性为innerHTML&#x2F;outerHTML&#x2F;href即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> javascript<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">InnerHTMLSinks</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">DataFlow</span>::Node &#123;<br>   InnerHTMLSinks()&#123;<br>       exists(DataFlow::PropWrite pw |<br>       pw.getPropertyName().regexpMatch(<span class="hljs-string">&quot;(innerHTML|outerHTML)&quot;</span>)<br>       and pw.getRhs() = <span class="hljs-built_in">this</span><br>       )<br>   &#125;<br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">InnerHtmlTracker</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">TaintTracking</span>::Configuration&#123;<br>    InnerHtmlTracker() &#123;<br>        <span class="hljs-built_in">this</span> = <span class="hljs-string">&quot;InnerHtmlTracker&quot;</span><br>    &#125;<br><br>    override predicate <span class="hljs-title function_">isSource</span><span class="hljs-params">(DataFlow::Node nd)</span>&#123;<br>       not nd.asExpr() <span class="hljs-keyword">instanceof</span> ConstantExpr<br>    &#125;<br><br>    override predicate <span class="hljs-title function_">isSink</span><span class="hljs-params">(DataFlow::Node nd)</span>&#123;<br>        nd <span class="hljs-keyword">instanceof</span> InnerHTMLSinks<br>    &#125;<br>&#125;<br><br><br><br>from InnerHtmlTracker pt, DataFlow::Node source, DataFlow::Node sink<br>where pt.hasFlow(source, sink)<br>select source,sink<br></code></pre></td></tr></table></figure>
+
+<h3 id="DomXSS的判断例子"><a href="#DomXSS的判断例子" class="headerlink" title="DomXSS的判断例子"></a>DomXSS的判断例子</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs js">&lt;!<span class="hljs-variable constant_">DOCTYPE</span> html&gt;<br>&lt;html&gt;<br>&lt;head&gt;<br>	&lt;meta charset=&quot;utf-8&quot;&gt;<br>	&lt;title&gt;DoraBox - DOM_XSS&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;form action=&#x27;&#x27; method=&#x27;GET&#x27;&gt;<br>name: <br>&lt;input type=&#x27;text&#x27; name=&#x27;name&#x27; id=&#x27;form1&#x27;&gt;<br>&lt;input type=&#x27;submit&#x27; name=&#x27;submit&#x27; value=&#x27;submit&#x27;&gt;<br>&lt;/form&gt;<br>&lt;hr&gt;<br>&lt;script type=&#x27;text/javascript&#x27;&gt;<br>function getURLValue(name)&#123;<br> 	var reg = new RegExp(&#x27;(^|&amp;)&#x27;+ name +&#x27;=([^&amp;]*)(&amp;|$)&#x27;);<br>	var r = window.location.search.substr(1).match(reg);<br>    //<br>	if(r != null)&#123;<br> 		return unescape(r[2]);<br> 	&#125;else&#123;<br>	 	return &quot;&quot;;<br> 	&#125;<br>&#125;<br>document.write(getURLValue(&#x27;name&#x27;));<br>&lt;/script&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li><code>window.location.search</code>是一个属性，它返回URL中问号（?）后面的部分，也就是查询字符串（query string）。</li>
+<li><code>substr(1)</code>是一个方法，它返回一个字符串的子串，从指定的位置开始，一直到字符串的末尾。这里的参数1表示从第一个字符开始，也就是去掉问号（?）。</li>
+<li><code>match(reg)</code>是一个方法，它使用一个正则表达式（reg）来匹配一个字符串，如果匹配成功，返回一个包含匹配结果的数组，如果匹配失败，返回null。</li>
+<li><code>reg</code>是一个正则表达式，它的作用是匹配URL中的参数名和参数值，具体来说，它的格式是<code>(^|&amp;)name=([^&amp;]*)(&amp;|$)</code>，其中<code>name</code>是要获取的参数名，<code>(^|&amp;)</code>表示以<code>&amp;</code>或者开始，<code>([^&amp;]*)</code>表示不包含<code>&amp;</code>的任意字符，<code>(&amp;|$)</code>表示以<code>&amp;</code>或者结束。</li>
+<li><code>r</code>是一个变量，它存储了<code>match(reg)</code>的返回值，也就是匹配结果的数组，如果没有匹配到，它的值是null。</li>
+</ul>
+<p>举个例子，假设当前的URL是<code>https://www.bing.com/search?q=var+r+%3D+window.location.search.substr(1).match(reg)%3B&amp;qs=n&amp;form=QBLH&amp;sp=-1&amp;pq=var+r+%3D+window.location.search.substr(1).match(reg)%3B&amp;sc=0-48&amp;sk=&amp;cvid=9F4D8E5F6E7A4E0F8C7F8E5F1F0E6F0E</code>，那么：</p>
+<ul>
+<li><code>window.location.search</code>的值是<code>?q=var+r+%3D+window.location.search.substr(1).match(reg)%3B&amp;qs=n&amp;form=QBLH&amp;sp=-1&amp;pq=var+r+%3D+window.location.search.substr(1).match(reg)%3B&amp;sc=0-48&amp;sk=&amp;cvid=9F4D8E5F6E7A4E0F8C7F8E5F1F0E6F0E</code>。</li>
+<li><code>substr(1)</code>的值是<code>q=var+r+%3D+window.location.search.substr(1).match(reg)%3B&amp;qs=n&amp;form=QBLH&amp;sp=-1&amp;pq=var+r+%3D+window.location.search.substr(1).match(reg)%3B&amp;sc=0-48&amp;sk=&amp;cvid=9F4D8E5F6E7A4E0F8C7F8E5F1F0E6F0E</code>。</li>
+<li>如果要获取参数<code>q</code>的值，那么<code>reg</code>的值是<code>(^|&amp;)q=([^&amp;]*)(&amp;|$)</code>。</li>
+<li><code>r</code>的值是<code>[&quot;&amp;q=var+r+%3D+window.location.search.substr(1).match(reg)%3B&quot;, &quot;&amp;&quot;, &quot;var+r+%3D+window.location.search.substr(1).match(reg)%3B&quot;, &quot;&quot;]</code>，这是一个包含四个元素的数组，分别对应正则表达式的四个括号里的内容。</li>
+<li><code>r[2]</code>的值是<code>var+r+%3D+window.location.search.substr(1).match(reg)%3B</code>，这就是参数<code>q</code>的值，它是一个经过URL编码的字符串，可以用<code>decodeURIComponent</code>方法来解码，得到原始的字符串<code>var r = window.location.search.substr(1).match(reg);</code></li>
+</ul>
+</blockquote>
+<p>所以可以按照下面这个办法来改，首先找到一个调用到那些一分割字符的函数，接着再找到windows.location</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LocationHashSource</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">DataFlow</span>::Node &#123;<br>    LocationHashSource() &#123;<br>        exists(CallExpr dollarCall, PropAccess pr |<br>      <span class="hljs-built_in">this</span>.asExpr() <span class="hljs-keyword">instanceof</span> CallExpr <span class="hljs-title function_">and</span><br>      <span class="hljs-params">(dollarCall.getCalleeName()</span> = <span class="hljs-string">&quot;split&quot;</span><br>       or dollarCall.getCalleeName() = <span class="hljs-string">&quot;substr&quot;</span><br>        or dollarCall.getCalleeName() = <span class="hljs-string">&quot;substring&quot;</span><br>      ) and dollarCall.getReceiver() = pr<br>      <span class="hljs-title function_">and</span>  <span class="hljs-params">(pr.getBase()</span>.toString() = <span class="hljs-string">&quot;window.location&quot;</span> <br>      or pr.getBase().toString() = <span class="hljs-string">&quot;location&quot;</span>)<br>      and <span class="hljs-built_in">this</span>.asExpr() = dollarCall<br>      )<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>而sink的话直接使用上面的，稍作修改即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">DocumentWriteSinks</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">DataFlow</span>::Node &#123;<br>   DocumentWriteSinks() &#123;<br>    exists(CallExpr call|<br>        call.getCalleeName() = <span class="hljs-string">&quot;write&quot;</span> <br>        and call.getReceiver().toString() = <span class="hljs-string">&quot;document&quot;</span> <br>        and <span class="hljs-built_in">this</span>.asExpr() = call.getArgument(<span class="hljs-number">0</span>)<br>    )<br><br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">InnerHTMLSinks</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">DataFlow</span>::Node &#123;<br>    InnerHTMLSinks()&#123;<br>        exists(DataFlow::PropWrite pw |<br>        pw.getPropertyName().regexpMatch(<span class="hljs-string">&quot;(innerHTML|outerHTML)&quot;</span>)<br>        and pw.getRhs() = <span class="hljs-built_in">this</span><br>       )<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>编码函数会导致数据流断开，所以添加额外的数据流判断</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java">override predicate <span class="hljs-title function_">isAdditionalTaintStep</span><span class="hljs-params">(DataFlow::Node pred, DataFlow::Node succ)</span> &#123;<br>    exists(CallExpr call |<br>    (call.getCalleeName() = <span class="hljs-string">&quot;unescape&quot;</span><br>        or call.getCalleeName() = <span class="hljs-string">&quot;atob&quot;</span><br>        or call.getCalleeName() = <span class="hljs-string">&quot;decodeURI&quot;</span><br>        or call.getCalleeName() = <span class="hljs-string">&quot;decodeURIComponent&quot;</span><br>    ) and succ.asExpr() = call and<br>    pred.asExpr() = call.getArgument(<span class="hljs-number">0</span>)<br>    )<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>总体实现语句如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> javascript<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DocumentWriteSinks</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">DataFlow</span>::Node &#123;<br>   DocumentWriteSinks() &#123;<br>    exists(CallExpr call|<br>        call.getCalleeName() = <span class="hljs-string">&quot;write&quot;</span> <br>        and call.getReceiver().toString() = <span class="hljs-string">&quot;document&quot;</span> <br>        and <span class="hljs-built_in">this</span>.asExpr() = call.getArgument(<span class="hljs-number">0</span>)<br>    )<br><br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">InnerHTMLSinks</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">DataFlow</span>::Node &#123;<br>    InnerHTMLSinks()&#123;<br>        exists(DataFlow::PropWrite pw |<br>        pw.getPropertyName().regexpMatch(<span class="hljs-string">&quot;(innerHTML|outerHTML)&quot;</span>)<br>        and pw.getRhs() = <span class="hljs-built_in">this</span><br>       )<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">LocationHashSource</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">DataFlow</span>::Node &#123;<br>    LocationHashSource() &#123;<br>        exists(CallExpr dollarCall, PropAccess pr |<br>      <span class="hljs-built_in">this</span>.asExpr() <span class="hljs-keyword">instanceof</span> CallExpr <span class="hljs-title function_">and</span><br>      <span class="hljs-params">(dollarCall.getCalleeName()</span> = <span class="hljs-string">&quot;split&quot;</span><br>       or dollarCall.getCalleeName() = <span class="hljs-string">&quot;substr&quot;</span><br>        or dollarCall.getCalleeName() = <span class="hljs-string">&quot;substring&quot;</span><br>      ) and dollarCall.getReceiver() = pr<br>      <span class="hljs-title function_">and</span>  <span class="hljs-params">(pr.getBase()</span>.toString() = <span class="hljs-string">&quot;window.location&quot;</span> <br>      or pr.getBase().toString() = <span class="hljs-string">&quot;location&quot;</span>)<br>      and <span class="hljs-built_in">this</span>.asExpr() = dollarCall<br>      )<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DocumentWriteTracker</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">TaintTracking</span>::Configuration&#123;<br>   DocumentWriteTracker() &#123;<br>        <span class="hljs-built_in">this</span> = <span class="hljs-string">&quot;DocumentWriteTracker&quot;</span><br>    &#125;<br><br>    override predicate <span class="hljs-title function_">isSource</span><span class="hljs-params">(DataFlow::Node nd)</span>&#123;<br>       nd <span class="hljs-keyword">instanceof</span> LocationHashSource<br>    &#125;<br><br>    override predicate <span class="hljs-title function_">isSink</span><span class="hljs-params">(DataFlow::Node nd)</span>&#123;<br>        nd <span class="hljs-keyword">instanceof</span> DocumentWriteSinks<br>        or nd <span class="hljs-keyword">instanceof</span> InnerHTMLSinks<br>    &#125;<br><br>    override predicate <span class="hljs-title function_">isAdditionalTaintStep</span><span class="hljs-params">(DataFlow::Node pred, DataFlow::Node succ)</span> &#123;<br>        exists(CallExpr call |<br>        (call.getCalleeName() = <span class="hljs-string">&quot;unescape&quot;</span><br>            or call.getCalleeName() = <span class="hljs-string">&quot;atob&quot;</span><br>            or call.getCalleeName() = <span class="hljs-string">&quot;decodeURI&quot;</span><br>            or call.getCalleeName() = <span class="hljs-string">&quot;decodeURIComponent&quot;</span><br>        ) and succ.asExpr() = call and<br>        pred.asExpr() = call.getArgument(<span class="hljs-number">0</span>)<br>        )<br>    &#125;<br>&#125;<br><br>from DocumentWriteTracker pt, DataFlow::Node source, DataFlow::Node sink<br>where pt.hasFlow(source, sink) <br>select source,sink<br></code></pre></td></tr></table></figure>
+
+<h2 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h2><h3 id="1-sinks"><a href="#1-sinks" class="headerlink" title="1 sinks:"></a>1 sinks:</h3><p>格式：namespace;type;subtypes;names;signature;ext;input;additionalTaintStep;additionalTaintStepInput;additionalTaintStep1;additionalTaintStepInput1…</p>
+<p>namespace：包名 type：类名 names：触发漏洞方法名 input：触发漏洞方法名的形参位置 additionalTaintStep：依赖的污点</p>
+<h4 id="1-1-java-net"><a href="#1-1-java-net" class="headerlink" title="1.1 java-net:"></a>1.1 java-net:</h4><figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs scss">java<span class="hljs-selector-class">.net</span>;URL;false;<span class="hljs-selector-attr">[openConnection, openStream]</span>;;;Argument<span class="hljs-selector-attr">[-1]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URL</span>(String);Argument<span class="hljs-selector-attr">[0]</span><br><br>java<span class="hljs-selector-class">.net</span>;URLClassLoader;false;<span class="hljs-selector-attr">[loadClass, getResourceAsStream, findResource, getResource]</span>;;;Argument<span class="hljs-selector-attr">[-1]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URLClassLoader</span>(URL[]);Argument<span class="hljs-selector-attr">[0]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URL</span>(String);Argument<span class="hljs-selector-attr">[0]</span><br>java<span class="hljs-selector-class">.net</span>;URLClassLoader;false;<span class="hljs-selector-attr">[loadClass, getResourceAsStream, findResource, getResource]</span>;;;Argument<span class="hljs-selector-attr">[-1]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URLClassLoader</span>(URL[], ClassLoader);Argument<span class="hljs-selector-attr">[0]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URL</span>(String);Argument<span class="hljs-selector-attr">[0]</span><br>java<span class="hljs-selector-class">.net</span>;URLClassLoader;false;<span class="hljs-selector-attr">[loadClass, getResourceAsStream, findResource, getResource]</span>;;;Argument<span class="hljs-selector-attr">[-1]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URLClassLoader</span>(URL[],ClassLoader,URLStreamHandlerFactory);Argument<span class="hljs-selector-attr">[0]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URL</span>(String);Argument<span class="hljs-selector-attr">[0]</span><br>java<span class="hljs-selector-class">.net</span>;URLClassLoader;false;<span class="hljs-selector-attr">[loadClass, getResourceAsStream, findResource, getResource]</span>;;;Argument<span class="hljs-selector-attr">[-1]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URLClassLoader</span>(String,URL[],ClassLoader);Argument<span class="hljs-selector-attr">[1]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URL</span>(String);Argument<span class="hljs-selector-attr">[0]</span><br>java<span class="hljs-selector-class">.net</span>;URLClassLoader;false;<span class="hljs-selector-attr">[loadClass, getResourceAsStream, findResource, getResource]</span>;;;Argument<span class="hljs-selector-attr">[-1]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URLClassLoader</span>(String,URL[],ClassLoader,URLStreamHandlerFactory);Argument<span class="hljs-selector-attr">[1]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URL</span>(String);Argument<span class="hljs-selector-attr">[0]</span><br><br><br>java<span class="hljs-selector-class">.net</span>;URLClassLoader;false;<span class="hljs-selector-attr">[loadClass, getResourceAsStream, findResource, getResource]</span>;;;Argument<span class="hljs-selector-attr">[-1]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URLClassLoader</span><span class="hljs-selector-class">.newInstance</span>(URL[]);Argument<span class="hljs-selector-attr">[0]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URL</span>(String);Argument<span class="hljs-selector-attr">[0]</span><br>java<span class="hljs-selector-class">.net</span>;URLClassLoader;false;<span class="hljs-selector-attr">[loadClass, getResourceAsStream, findResource, getResource]</span>;;;Argument<span class="hljs-selector-attr">[-1]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URLClassLoader</span><span class="hljs-selector-class">.newInstance</span>(URL[],ClassLoader);Argument<span class="hljs-selector-attr">[0]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URL</span>(String);Argument<span class="hljs-selector-attr">[0]</span><br><br>java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.http</span>;HttpRequest;false;<span class="hljs-selector-attr">[newBuilder]</span>;;;Argument<span class="hljs-selector-attr">[0]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URI</span><span class="hljs-selector-class">.create</span>(String);Argument<span class="hljs-selector-attr">[0]</span>	# jdk11<br>java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.http</span>;HttpRequest<span class="hljs-selector-class">.Builder</span>;false;<span class="hljs-selector-attr">[uri]</span>;;;Argument<span class="hljs-selector-attr">[0]</span>;java<span class="hljs-selector-class">.net</span><span class="hljs-selector-class">.URI</span><span class="hljs-selector-class">.create</span>(String);Argument<span class="hljs-selector-attr">[0]</span>	# jdk11<br></code></pre></td></tr></table></figure>
+
+
+
+<p>java.net.URI.create(String);Argument[0] 应该做为一个全局污点</p>
+<h4 id="1-2-springframework"><a href="#1-2-springframework" class="headerlink" title="1.2 springframework:"></a>1.2 springframework:</h4><p>org.springframework.web.client.RestTemplate 属于 spring-web模块</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">org.springframework.web.client;RestTemplate;<span class="hljs-literal">false</span>;[<span class="hljs-built_in">put</span>，<span class="hljs-built_in">delete</span>,exchange,execute,getForEntity,getForObject,headForHeaders,optionsForAllow,patchForObject,postForEntity,postForLocation,postForObject];;;Argument[<span class="hljs-number">0</span>]	<br>org.springframework.web.client;RestTemplate;<span class="hljs-literal">false</span>;[<span class="hljs-built_in">put</span>，<span class="hljs-built_in">delete</span>,doExecute,execute,getForEntity,getForObject,headForHeaders,optionsForAllow,patchForObject,postForEntity,postForLocation,postForObject];;;Argument[<span class="hljs-number">0</span>];java.net.URI.<span class="hljs-built_in">create</span>(String);Argument[<span class="hljs-number">0</span>]<br>org.springframework.web.client;RestTemplate;<span class="hljs-literal">false</span>;[exchange];;;Argument[<span class="hljs-number">0</span>];org.springframework.<span class="hljs-keyword">http</span>.RequestEntity&lt;T&gt;(...,URI,...);Argument[ParameterType = URI]  <span class="hljs-comment"># 创建RequestEntity对象，URI形参位置</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-示例"><a href="#2-示例" class="headerlink" title="2 示例"></a>2 示例</h3><h4 id="Java-net-ssrf"><a href="#Java-net-ssrf" class="headerlink" title="Java net ssrf"></a>Java net ssrf</h4><p>java.net.URL 支持的协议：file、ftp、http、https、jar、mailto、netdoc</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.net.URL;<br><span class="hljs-keyword">import</span> java.net.URI;<br><span class="hljs-keyword">import</span> java.net.http.HttpClient;<br><span class="hljs-keyword">import</span> java.net.http.HttpRequest;<br><span class="hljs-keyword">import</span> java.net.http.HttpResponse;<br><span class="hljs-keyword">import</span> java.net.http.HttpResponse.BodyHandlers;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">badJavaNetURLSSRF</span><span class="hljs-params">(HttpServletRequest request)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>	<span class="hljs-type">String</span> <span class="hljs-variable">requestUrl</span> <span class="hljs-operator">=</span> request.getParameter(<span class="hljs-string">&quot;url&quot;</span>);<br>	<span class="hljs-type">URL</span> <span class="hljs-variable">xxx</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">URL</span>(requestUrl);<br>	xxx.openConnection();  <span class="hljs-comment">//bad</span><br>	xxx.openStream();  <span class="hljs-comment">//bad</span><br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">badJavaNetURLClassLoaderSSRF</span><span class="hljs-params">(HttpServletRequest request)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>	<span class="hljs-type">String</span> <span class="hljs-variable">requestUrl</span> <span class="hljs-operator">=</span> request.getParameter(<span class="hljs-string">&quot;url&quot;</span>);<br>	URL[] urls = <span class="hljs-keyword">new</span> <span class="hljs-title class_">URL</span>[]&#123;xxx&#125;;<br>	<span class="hljs-type">URLClassLoader</span> <span class="hljs-variable">urlClassLoader</span> <span class="hljs-operator">=</span> URLClassLoader.newInstance(urls);<br>	urlClassLoader.findResource(<span class="hljs-string">&quot;test&quot;</span>);  <span class="hljs-comment">//bad</span><br>	urlClassLoader.loadClass(<span class="hljs-string">&quot;aaa&quot;</span>);  <span class="hljs-comment">//bad</span><br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">badJavaNetHttpRequestSSRF</span><span class="hljs-params">(HttpServletRequest request)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>	<span class="hljs-type">String</span> <span class="hljs-variable">requestUrl</span> <span class="hljs-operator">=</span> request.getParameter(<span class="hljs-string">&quot;url&quot;</span>);<br>	<span class="hljs-type">HttpClient</span> <span class="hljs-variable">client</span> <span class="hljs-operator">=</span> HttpClient.newHttpClient();<br>	<span class="hljs-type">HttpRequest</span> <span class="hljs-variable">request</span> <span class="hljs-operator">=</span> HttpRequest.newBuilder().uri(URI.create(requestUrl)).build();	<span class="hljs-comment">//bad</span><br>	client.sendAsync(request, BodyHandlers.ofString()).thenApply(HttpResponse::body).thenAccept(System.out::println).join();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="springframework-ssrf"><a href="#springframework-ssrf" class="headerlink" title="springframework ssrf"></a>springframework ssrf</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.net.URI;<br><span class="hljs-keyword">import</span> org.springframework.web.client.RestTemplate;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">badRestTemplateSSRF</span><span class="hljs-params">(HttpServletRequest request)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>	<span class="hljs-type">String</span> <span class="hljs-variable">requestUrl</span> <span class="hljs-operator">=</span> request.getParameter(<span class="hljs-string">&quot;url&quot;</span>);<br>	<span class="hljs-type">RestTemplate</span> <span class="hljs-variable">restTemplate</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RestTemplate</span>();<br>	restTemplate.delete(requestUrl);	<span class="hljs-comment">//bad</span><br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">badRestTemplateUriSSRF</span><span class="hljs-params">(HttpServletRequest request)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>	<span class="hljs-type">String</span> <span class="hljs-variable">requestUrl</span> <span class="hljs-operator">=</span> request.getParameter(<span class="hljs-string">&quot;url&quot;</span>);<br>	<span class="hljs-type">RestTemplate</span> <span class="hljs-variable">restTemplate</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RestTemplate</span>();<br>	restTemplate.delete(URI.create(requestUrl));	<span class="hljs-comment">//bad</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CodeQl常见漏洞梳理</div>
+      <div>https://decemberus.github.io/Decemberus.github-io/2023/11/03/CodeQl常见漏洞梳理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Decemberus</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月3日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2023/11/16/Github%20ctf4%20training/" title="Github CodeQL training 思路">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Github CodeQL training 思路</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2023/09/29/SQLMap%E5%8E%9F%E7%90%86%E5%8F%8A%E5%85%B6%E6%B7%B1%E5%85%A5/" title="SQLMap原理及其深入">
+                        <span class="hidden-mobile">SQLMap原理及其深入</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/Decemberus.github-io/js/events.js" ></script>
+<script  src="/Decemberus.github-io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/Decemberus.github-io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/Decemberus.github-io/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/Decemberus.github-io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

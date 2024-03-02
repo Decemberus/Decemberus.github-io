@@ -1,0 +1,817 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Decemberus.github-io/img/fluid.png">
+  <link rel="icon" href="/Decemberus.github-io/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Decemberus">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Javasist参考Javassist Tutorial 创建Classmaven 123456&lt;!-- https:&#x2F;&#x2F;mvnrepository.com&#x2F;artifact&#x2F;javassist&#x2F;javassist --&gt;        &lt;dependency&gt;            &lt;groupId&gt;javassist&lt;&#x2F;groupId&gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javasist">
+<meta property="og:url" content="https://decemberus.github.io/Decemberus.github-io/2023/04/02/Javasist/index.html">
+<meta property="og:site_name" content="欢迎回来">
+<meta property="og:description" content="Javasist参考Javassist Tutorial 创建Classmaven 123456&lt;!-- https:&#x2F;&#x2F;mvnrepository.com&#x2F;artifact&#x2F;javassist&#x2F;javassist --&gt;        &lt;dependency&gt;            &lt;groupId&gt;javassist&lt;&#x2F;groupId&gt;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230513191417751.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230513191425024.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230513234728612.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230514000955812.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230514141221047.png">
+<meta property="article:published_time" content="2023-04-02T09:39:17.000Z">
+<meta property="article:modified_time" content="2024-03-02T05:24:05.685Z">
+<meta property="article:author" content="Decemberus">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230513191417751.png">
+  
+  
+  <title>Javasist - 欢迎回来</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/Decemberus.github-io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/Decemberus.github-io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/Decemberus.github-io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"decemberus.github.io","root":"/Decemberus.github-io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Decemberus.github-io/local-search.xml"};
+  </script>
+  <script  src="/Decemberus.github-io/js/utils.js" ></script>
+  <script  src="/Decemberus.github-io/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/Decemberus.github-io/">
+      <strong>enjoy的blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Decemberus.github-io/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Javasist"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-02 17:39" pubdate>
+          2023年4月2日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          13k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          112 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Javasist</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="Javasist"><a href="#Javasist" class="headerlink" title="Javasist"></a>Javasist</h1><p>参考<a target="_blank" rel="noopener" href="https://www.javassist.org/tutorial/tutorial.html">Javassist Tutorial</a></p>
+<h2 id="创建Class"><a href="#创建Class" class="headerlink" title="创建Class"></a>创建Class</h2><p>maven</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!-- https://mvnrepository.com/artifact/javassist/javassist --&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>javassist<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>javassist<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.12.1.GA<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>使用javassist来创建一个Person类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.y4er.learn;<br><br><span class="hljs-keyword">import</span> javassist.*;<br><br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CreateClass</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-comment">// 获取javassist维护的类池</span><br>        <span class="hljs-type">ClassPool</span> <span class="hljs-variable">pool</span> <span class="hljs-operator">=</span> ClassPool.getDefault();<br><br>        <span class="hljs-comment">// 创建一个空类first_learn,类名为person</span><br>        <span class="hljs-type">CtClass</span> <span class="hljs-variable">ctClass</span> <span class="hljs-operator">=</span> pool.makeClass(<span class="hljs-string">&quot;com.y4er.learn.Person&quot;</span>);<br><br>        <span class="hljs-comment">// 给ctClass类添加一个string类型的字段为name</span><br>        <span class="hljs-type">CtField</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CtField</span>(pool.get(<span class="hljs-string">&quot;java.lang.String&quot;</span>), <span class="hljs-string">&quot;name&quot;</span>, ctClass);<br><br>        <span class="hljs-comment">// 设置private权限</span><br>        name.setModifiers(Modifier.PRIVATE);<br><br>        <span class="hljs-comment">// 初始化name字段为zhangsan</span><br>        ctClass.addField(name, CtField.Initializer.constant(<span class="hljs-string">&quot;zhangsan&quot;</span>));<br><br>        <span class="hljs-comment">// 生成get、set方法</span><br>        ctClass.addMethod(CtNewMethod.getter(<span class="hljs-string">&quot;getName&quot;</span>,name));<br>        ctClass.addMethod(CtNewMethod.setter(<span class="hljs-string">&quot;setName&quot;</span>,name));<br><br>        <span class="hljs-comment">// 添加无参构造函数</span><br>        <span class="hljs-type">CtConstructor</span> <span class="hljs-variable">ctConstructor</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CtConstructor</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">CtClass</span>[]&#123;&#125;, ctClass);<br>        ctConstructor.setBody(<span class="hljs-string">&quot;&#123;name=\&quot;xiaoming\&quot;;&#125;&quot;</span>);<br>        ctClass.addConstructor(ctConstructor);<br><br>        <span class="hljs-comment">// 添加有参构造</span><br>        <span class="hljs-type">CtConstructor</span> <span class="hljs-variable">ctConstructor1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CtConstructor</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">CtClass</span>[]&#123;pool.get(<span class="hljs-string">&quot;java.lang.String&quot;</span>)&#125;, ctClass);<br>        ctConstructor1.setBody(<span class="hljs-string">&quot;&#123;$0.name=$1;&#125;&quot;</span>);<br>        ctClass.addConstructor(ctConstructor1);<br><br>        <span class="hljs-comment">// 创建一个public方法printName() 无参无返回值</span><br>        <span class="hljs-type">CtMethod</span> <span class="hljs-variable">printName</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CtMethod</span>(CtClass.voidType, <span class="hljs-string">&quot;printName&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">CtClass</span>[]&#123;&#125;, ctClass);<br>        printName.setModifiers(Modifier.PUBLIC);<br>        printName.setBody(<span class="hljs-string">&quot;&#123;System.out.println($0.name);&#125;&quot;</span>);<br>        ctClass.addMethod(printName);<br><br>        <span class="hljs-comment">// 写入class文件</span><br>        ctClass.writeFile();<br>        ctClass.detach();<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>执行以后生成了Person.class</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230513191417751.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230513191417751"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230513191425024.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230513191425024"> </p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>从上文的demo中可以看到部分使用方法，在javassist中CtClass代表的就是类class，ClassPool就是CtClass的容器，ClassPool维护了所有创建的CtClass对象，需要注意的是当CtClass数量过大会占用大量内存，需要调用CtClass.detach()释放内存。</p>
+<h3 id="ClassPool"><a href="#ClassPool" class="headerlink" title="ClassPool"></a>ClassPool</h3><p>ClassPool重点有以下几个方法：</p>
+<ol>
+<li><p>getDefault() 单例获取ClassPool</p>
+</li>
+<li><p>appendClassPath() 将目录添加到ClassPath</p>
+</li>
+<li><p>insertClassPath() 在ClassPath插入jar</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs abnf">ClassPool pool <span class="hljs-operator">=</span> ClassPool.getDefault()<span class="hljs-comment">;</span><br>pool.insertClassPath(<span class="hljs-string">&quot;/usr/local/javalib&quot;</span>)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>同时也可以是URL</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ClassPool</span> <span class="hljs-variable">pool</span> <span class="hljs-operator">=</span> ClassPool.getDefault();<br><span class="hljs-type">ClassPath</span> <span class="hljs-variable">cp</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">URLClassPath</span>(<span class="hljs-string">&quot;www.javassist.org&quot;</span>, <span class="hljs-number">80</span>, <span class="hljs-string">&quot;/java/&quot;</span>, <span class="hljs-string">&quot;org.javassist.&quot;</span>);<br>pool.insertClassPath(cp);<br></code></pre></td></tr></table></figure>
+
+<p>同样可以是一个字节码（没明白）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ClassPool</span> <span class="hljs-variable">cp</span> <span class="hljs-operator">=</span> ClassPool.getDefault();<br><span class="hljs-type">byte</span>[] b = a <span class="hljs-type">byte</span> array;<br><span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">name</span>;<br>cp.insertClassPath(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ByteArrayClassPath</span>(name, b));<br><span class="hljs-type">CtClass</span> <span class="hljs-variable">cc</span> <span class="hljs-operator">=</span> cp.get(name);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>get() 根据名称获取CtClass对象</p>
+<p>在get的时候可以先<code>appendClassPath()</code></p>
+</li>
+<li><p>toClass() 将CtClass转为Class 一旦被转换则不能修改</p>
+</li>
+<li><p>makeClass() 创建新的类或接口</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">CtClass ctClass <span class="hljs-operator">=</span> pool.makeClass(<span class="hljs-string">&quot;com.y4er.learn.Person&quot;</span>)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>​	</p>
+<p>更多移步官方文档：<a target="_blank" rel="noopener" href="http://www.javassist.org/html/javassist/ClassPool.html">http://www.javassist.org/html/javassist/ClassPool.html</a></p>
+<p>除了可以通过getDefault的方法获取ClassPool之外，还可以通过</p>
+<h3 id="CtClass"><a href="#CtClass" class="headerlink" title="CtClass"></a>CtClass</h3><p>CtClass需要关注的方法：</p>
+<ol>
+<li><p>addConstructor() 添加构造函数</p>
+</li>
+<li><p>addField() 添加字段</p>
+</li>
+<li><p>addInterface() 添加接口</p>
+</li>
+<li><p>addMethod() 添加方法</p>
+<p>上面那四个方法都可以参照反射的方法去做</p>
+</li>
+<li><p>freeze() 冻结类使其不能被修改</p>
+</li>
+<li><p>defrost() 解冻使其能被修改</p>
+</li>
+<li><p>detach() 从ClassPool中删除类</p>
+</li>
+<li><p>toBytecode() 转字节码</p>
+</li>
+<li><p>toClass() 转Class对象</p>
+</li>
+<li><p>writeFile() 写入.class文件</p>
+</li>
+<li><p>setModifiers() 设置修饰符</p>
+</li>
+</ol>
+<p>移步：<a target="_blank" rel="noopener" href="http://www.javassist.org/html/javassist/CtClass.html">http://www.javassist.org/html/javassist/CtClass.html</a></p>
+<h3 id="CtMehod"><a href="#CtMehod" class="headerlink" title="CtMehod"></a>CtMehod</h3><p>CtMethod继承CtBehavior，需要关注的方法：</p>
+<ol>
+<li>insertBefore 在方法的起始位置插入代码</li>
+<li>insterAfter 在方法的所有 return 语句前插入代码</li>
+<li>insertAt 在指定的位置插入代码</li>
+<li>setBody 将方法的内容设置为要写入的代码，当方法被 abstract修饰时，该修饰符被移除</li>
+<li>make 创建一个新的方法</li>
+</ol>
+<p>更多移步：<a target="_blank" rel="noopener" href="http://www.javassist.org/html/javassist/CtBehavior.html">http://www.javassist.org/html/javassist/CtBehavior.html</a></p>
+<h2 id="使用CtClass生成对象"><a href="#使用CtClass生成对象" class="headerlink" title="使用CtClass生成对象"></a>使用CtClass生成对象</h2><p>类加载的一个tip</p>
+<h3 id="反射调用"><a href="#反射调用" class="headerlink" title="反射调用"></a>反射调用</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 实例化</span><br><span class="hljs-type">Object</span> <span class="hljs-variable">o</span> <span class="hljs-operator">=</span> ctClass.toClass().newInstance();<br><span class="hljs-type">Method</span> <span class="hljs-variable">setName</span> <span class="hljs-operator">=</span> o.getClass().getMethod(<span class="hljs-string">&quot;setName&quot;</span>, String.class);<br>setName.invoke(o,<span class="hljs-string">&quot;Y4er&quot;</span>);<br><span class="hljs-type">Method</span> <span class="hljs-variable">printName1</span> <span class="hljs-operator">=</span> o.getClass().getMethod(<span class="hljs-string">&quot;printName&quot;</span>);<br>printName1.invoke(o);<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="加载class文件"><a href="#加载class文件" class="headerlink" title="加载class文件"></a>加载class文件</h3><h4 id="加载文件的提示"><a href="#加载文件的提示" class="headerlink" title="加载文件的提示"></a>加载文件的提示</h4><p>如果同一个类文件由两个不同的类加载器加载，则JVM会使用相同的名称和定义创建两个不同的类。这两个类被视为不同的类。由于这两个类不相同，因此一个类的实例不能赋值给另一个类的变量。在这两个类之间的强制转换操作失败并抛出ClassCastException异常。</p>
+<p>例如这个代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">MyClassLoader</span> <span class="hljs-variable">myLoader</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyClassLoader</span>();<br><span class="hljs-type">Class</span> <span class="hljs-variable">clazz</span> <span class="hljs-operator">=</span> myLoader.loadClass(<span class="hljs-string">&quot;Box&quot;</span>);<br><span class="hljs-type">Object</span> <span class="hljs-variable">obj</span> <span class="hljs-operator">=</span> clazz.newInstance();<br><span class="hljs-type">Box</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> (Box)obj; <span class="hljs-comment">// 这总是抛出ClassCastException异常。</span><br></code></pre></td></tr></table></figure>
+
+<p>Box类由两个类加载器加载。假设一个类加载器CL加载了一个包含此代码段的类。由于此代码段引用了MyClassLoader、Class、Object和Box，CL也会加载这些类（除非它委托给另一个类加载器）。因此，变量b的类型是由CL加载的Box类。另一方面，myLoader也加载了Box类。对象obj是由myLoader加载的Box类的实例。因此，最后一个语句总是会抛出ClassCastException异常，因为obj的类是与变量b的类型所使用的Box类的不同版本。</p>
+<p>直接看下面的示例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span> &#123;    <span class="hljs-comment">// loaded by PL</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> x, y;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getX</span><span class="hljs-params">()</span> &#123; <span class="hljs-keyword">return</span> x; &#125;<br>        :<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Box</span> &#123;      <span class="hljs-comment">// the initiator is L but the real loader is PL</span><br>    <span class="hljs-keyword">private</span> Point upperLeft, size;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getBaseX</span><span class="hljs-params">()</span> &#123; <span class="hljs-keyword">return</span> upperLeft.x; &#125;<br>        :<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Window</span> &#123;    <span class="hljs-comment">// loaded by a class loader L</span><br>    <span class="hljs-keyword">private</span> Box box;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getBaseX</span><span class="hljs-params">()</span> &#123; <span class="hljs-keyword">return</span> box.getBaseX(); &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>假设一个类Window是由类加载器L加载的。Window的发起者和真实加载器都是L。由于Window的定义引用了Box类，JVM会请求L来加载Box。在这种情况下，假设L将这个任务委托给了父类加载器PL。Box的发起者是L，但是真实加载器是PL。在这种情况下，Point的发起者不是L，而是PL，因为它与Box的真实加载器相同。因此，L不需要加载Point。</p>
+<p>在看一个例子</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> x, y;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getX</span><span class="hljs-params">()</span> &#123; <span class="hljs-keyword">return</span> x; &#125;<br>        :<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Box</span> &#123;      <span class="hljs-comment">// the initiator is L but the real loader is PL</span><br>    <span class="hljs-keyword">private</span> Point upperLeft, size;<br>    <span class="hljs-keyword">public</span> Point <span class="hljs-title function_">getSize</span><span class="hljs-params">()</span> &#123; <span class="hljs-keyword">return</span> size; &#125;<br>        :<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Window</span> &#123;    <span class="hljs-comment">// loaded by a class loader L</span><br>    <span class="hljs-keyword">private</span> Box box;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">widthIs</span><span class="hljs-params">(<span class="hljs-type">int</span> w)</span> &#123;<br>        <span class="hljs-type">Point</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> box.getSize();<br>        <span class="hljs-type">return</span> <span class="hljs-variable">w</span> <span class="hljs-operator">=</span>= p.getX();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>现在，Window 的定义也引用了 Point。在这种情况下，当 L 被请求加载 Point 时，它也必须委派给 PL。<strong>你必须避免两个类加载器重复加载相同的类</strong>。两个加载器中的一个必须委派给另一个。</p>
+<p>如果在加载 Point 时 L 没有委派给 PL，则 widthIs() 将抛出 ClassCastException。由于 Box 的真实加载器是 PL，在 Box 中引用的 Point 也由 PL 加载。因此，getSize() 的结果是由 PL 加载的 Point 实例，而 widthIs() 中变量 p 的类型是由 L 加载的 Point。JVM 视它们为不同的类型，因此会因类型不匹配而抛出异常。</p>
+<p>这种行为有点不方便，但是是必要的。如果以下语句：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">Point p <span class="hljs-operator">=</span> box.getSize()<span class="hljs-comment">; </span><br></code></pre></td></tr></table></figure>
+
+<p>没有抛出异常，那么 Window 的程序员可以破坏 Point 对象的封装。例如，在由以下定义加载 Point 的 L 中，Point 中的字段 x 是私有的，但是 Window 类可以直接访问 x 的值：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> x, y;    <span class="hljs-comment">// not private</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> <span class="hljs-title">getX</span>()</span> &#123; <span class="hljs-keyword">return</span> x; &#125;<br>        :<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="加载示例"><a href="#加载示例" class="headerlink" title="加载示例"></a>加载示例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ClassPool</span> <span class="hljs-variable">pool</span> <span class="hljs-operator">=</span> ClassPool.getDefault();<br>pool.appendClassPath(<span class="hljs-string">&quot;E:\\code\\java\\javassist-learn\\com\\y4er\\learn&quot;</span>);<br><span class="hljs-type">CtClass</span> <span class="hljs-variable">PersonClass</span> <span class="hljs-operator">=</span> pool.get(<span class="hljs-string">&quot;com.y4er.learn.Person&quot;</span>);<br><span class="hljs-type">Object</span> <span class="hljs-variable">o</span> <span class="hljs-operator">=</span> PersonClass.toClass().newInstance();<br><span class="hljs-comment">//接下来反射调用</span><br><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="通过接口调用-没弄出来"><a href="#通过接口调用-没弄出来" class="headerlink" title="通过接口调用(没弄出来)"></a>通过接口调用(没弄出来)</h3><p>新建一个接口IPerson，将Person类的方法全部抽象出来</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.y4er.learn;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">IPerson</span> &#123;<br>    String <span class="hljs-title function_">getName</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">setName</span><span class="hljs-params">(String name)</span>;<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">printName</span><span class="hljs-params">()</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ClassPool</span> <span class="hljs-variable">pool</span> <span class="hljs-operator">=</span> ClassPool.getDefault();<br>pool.appendClassPath(<span class="hljs-string">&quot;E:\\code\\java\\javassist-learn\\com\\y4er\\learn\\Person.class&quot;</span>);<br><br><span class="hljs-type">CtClass</span> <span class="hljs-variable">IPerson</span> <span class="hljs-operator">=</span> pool.get(<span class="hljs-string">&quot;com.y4er.learn.IPerson&quot;</span>);<br><span class="hljs-type">CtClass</span> <span class="hljs-variable">Person</span> <span class="hljs-operator">=</span> pool.get(<span class="hljs-string">&quot;com.y4er.learn.Person&quot;</span>);<br>Person.defrost();<br>Person.setInterfaces(<span class="hljs-keyword">new</span> <span class="hljs-title class_">CtClass</span>[]&#123;IPerson&#125;);<br><br><span class="hljs-type">IPerson</span> <span class="hljs-variable">o</span> <span class="hljs-operator">=</span> (IPerson) Person.toClass().newInstance();<br>o.setName(<span class="hljs-string">&quot;aaa&quot;</span>);<br>System.out.println(o.getName());<br>o.printName();<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="修改现有的类"><a href="#修改现有的类" class="headerlink" title="修改现有的类"></a>修改现有的类</h2><h3 id="实现切片"><a href="#实现切片" class="headerlink" title="实现切片"></a>实现切片</h3><p>javassist大多数情况下用户修改已有的类，比如常见的日志切面。我仍然使用Person类来讲解：</p>
+<p>此时我想在printName方法的执行效果如下</p>
+<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs brainfuck"><span class="hljs-literal">------</span> <span class="hljs-comment">printName start</span> <span class="hljs-literal">------</span><br><span class="hljs-comment">xiaoming</span><br><span class="hljs-literal">------</span> <span class="hljs-comment">printName  over</span> <span class="hljs-literal">------</span><br><br></code></pre></td></tr></table></figure>
+
+<p>写一下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> modify;<br><span class="hljs-keyword">import</span> javassist.*;<br><br><span class="hljs-keyword">import</span> java.lang.reflect.Method;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Modify</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception&#123;<br>        <span class="hljs-type">ClassPool</span> <span class="hljs-variable">pool</span> <span class="hljs-operator">=</span> ClassPool.getDefault();<br>        pool.appendClassPath(<span class="hljs-string">&quot;D:\\Code_Project\\Java\\Javasist\\first_learn1&quot;</span>);<br>        <span class="hljs-type">CtClass</span> <span class="hljs-variable">Person</span> <span class="hljs-operator">=</span> pool.get(<span class="hljs-string">&quot;Person&quot;</span>);<br>        Person.defrost();<br><br>        <span class="hljs-type">CtMethod</span> <span class="hljs-variable">printName1</span> <span class="hljs-operator">=</span> Person.getDeclaredMethod(<span class="hljs-string">&quot;printName&quot;</span>, <span class="hljs-literal">null</span>);<br>        printName1.insertBefore(<span class="hljs-string">&quot;System.out.println(\&quot;------ printName start ------\&quot;);&quot;</span>);<br>        printName1.insertAfter(<span class="hljs-string">&quot;System.out.println(\&quot;------ printName  over ------\&quot;);&quot;</span>);<br><br>        <span class="hljs-type">Object</span> <span class="hljs-variable">o</span> <span class="hljs-operator">=</span> Person.toClass().newInstance();<br>        <span class="hljs-type">Method</span> <span class="hljs-variable">printName2</span> <span class="hljs-operator">=</span> o.getClass().getMethod(<span class="hljs-string">&quot;printName&quot;</span>);<br>        printName2.invoke(o, <span class="hljs-literal">null</span>);<br><br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>很轻松实现了切面</p>
+<h3 id="实现修改字段"><a href="#实现修改字段" class="headerlink" title="实现修改字段"></a>实现修改字段</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> modify;<br><span class="hljs-keyword">import</span> javassist.*;<br><br><span class="hljs-keyword">import</span> java.lang.reflect.Field;<br><span class="hljs-keyword">import</span> java.lang.reflect.Method;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Modify</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception&#123;<br>        <span class="hljs-type">ClassPool</span> <span class="hljs-variable">pool</span> <span class="hljs-operator">=</span> ClassPool.getDefault();<br>        pool.appendClassPath(<span class="hljs-string">&quot;D:\\Code_Project\\Java\\Javasist\\first_learn1&quot;</span>);<br>        <span class="hljs-type">CtClass</span> <span class="hljs-variable">Person</span> <span class="hljs-operator">=</span> pool.get(<span class="hljs-string">&quot;Person&quot;</span>);<br><br><br><span class="hljs-comment">//        CtMethod printName1 = Person.getDeclaredMethod(&quot;printName&quot;, null);</span><br><span class="hljs-comment">//        printName1.insertBefore(&quot;System.out.println(\&quot;------ printName start ------\&quot;);&quot;);</span><br><span class="hljs-comment">//        printName1.insertAfter(&quot;System.out.println(\&quot;------ printName  over ------\&quot;);&quot;);</span><br><br>        <span class="hljs-type">Object</span> <span class="hljs-variable">o</span> <span class="hljs-operator">=</span> Person.toClass().newInstance();<br>        <span class="hljs-type">Method</span> <span class="hljs-variable">printName2</span> <span class="hljs-operator">=</span> o.getClass().getMethod(<span class="hljs-string">&quot;printName&quot;</span>);<br>        Field name=o.getClass().getDeclaredField(<span class="hljs-string">&quot;name&quot;</span>);<br>        name.setAccessible(<span class="hljs-literal">true</span>);<br>        name.set(o,<span class="hljs-string">&quot;lyj&quot;</span>);<br>        printName2.invoke(o, <span class="hljs-literal">null</span>);<br><br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230513234728612.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230513234728612"> </p>
+<h2 id="字节码层面的api"><a href="#字节码层面的api" class="headerlink" title="字节码层面的api"></a>字节码层面的api</h2><p><a target="_blank" rel="noopener" href="https://www.javassist.org/html/javassist/bytecode/ClassFile.html">ClassFile (Javassist API)</a></p>
+<h3 id="获取类并将其转化为字节码"><a href="#获取类并将其转化为字节码" class="headerlink" title="获取类并将其转化为字节码"></a>获取类并将其转化为字节码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> bytecode;<br><br><span class="hljs-keyword">import</span> javassist.ByteArrayClassPath;<br><span class="hljs-keyword">import</span> javassist.ClassPool;<br><span class="hljs-keyword">import</span> javassist.CtClass;<br><span class="hljs-keyword">import</span> java.util.Base64;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ToByteCode</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception&#123;<br>        <span class="hljs-type">ClassPool</span> <span class="hljs-variable">pool</span> <span class="hljs-operator">=</span> ClassPool.getDefault();<br>        pool.appendClassPath(<span class="hljs-string">&quot;D:\\Code_Project\\Java\\Javasist\\first_learn1&quot;</span>);<br>        <span class="hljs-type">CtClass</span> <span class="hljs-variable">Person</span> <span class="hljs-operator">=</span> pool.get(<span class="hljs-string">&quot;Person&quot;</span>);<br>        <span class="hljs-type">byte</span>[] bytecode=Person.toBytecode();<br>        String str=<span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(Base64.getEncoder().encode(bytecode));<br>        System.out.println(str);<br><br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="白手起家获取类文件"><a href="#白手起家获取类文件" class="headerlink" title="白手起家获取类文件"></a>白手起家获取类文件</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ClassFile</span> <span class="hljs-variable">cf</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ClassFile</span>(<span class="hljs-literal">false</span>, <span class="hljs-string">&quot;test.Foo&quot;</span>, <span class="hljs-literal">null</span>);<br>cf.setInterfaces(<span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>[] &#123; <span class="hljs-string">&quot;java.lang.Cloneable&quot;</span> &#125;);<br> <br><span class="hljs-type">FieldInfo</span> <span class="hljs-variable">f</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">FieldInfo</span>(cf.getConstPool(), <span class="hljs-string">&quot;width&quot;</span>, <span class="hljs-string">&quot;I&quot;</span>);<br>f.setAccessFlags(AccessFlag.PUBLIC);<br>cf.addField(f);<br><br>cf.write(<span class="hljs-keyword">new</span> <span class="hljs-title class_">DataOutputStream</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FileOutputStream</span>(<span class="hljs-string">&quot;Foo.class&quot;</span>)));<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230514000955812.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230514000955812"> </p>
+<p>成功创建了Foo.class文件</p>
+<h3 id="添加或者删除一个成员变量"><a href="#添加或者删除一个成员变量" class="headerlink" title="添加或者删除一个成员变量"></a>添加或者删除一个成员变量</h3><p>用addField或者removeField</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> bytecode;<br><br><span class="hljs-keyword">import</span> javassist.ClassPool;<br><span class="hljs-keyword">import</span> javassist.CtClass;<br><span class="hljs-keyword">import</span> javassist.CtField;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AddRemoveMember</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception&#123;<br>        ClassPool pool=ClassPool.getDefault();<br>        pool.appendClassPath(<span class="hljs-string">&quot;D:\\Code_Project\\Java\\Javasist\\first_learn1&quot;</span>);<br>        CtClass ctclass=pool.get(<span class="hljs-string">&quot;Person&quot;</span>);<br><br>        CtField ctField=<span class="hljs-keyword">new</span> <span class="hljs-title class_">CtField</span>(CtClass.intType,<span class="hljs-string">&quot;mynumber&quot;</span>,ctclass);<br>        ctclass.addField(ctField);<br><br>        CtField ctField1=ctclass.getField(<span class="hljs-string">&quot;name&quot;</span>);<br>        ctclass.removeField(ctField1);<br><br>        ctclass.writeFile(<span class="hljs-string">&quot;D:\\Code_Project\\Java\\Javasist\\src\\test&quot;</span>);<span class="hljs-comment">//将修改完后的字节码输出</span><br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>这里有一个要注意的点，我们看官方文档可知</p>
+<table>
+<thead>
+<tr>
+<th align="left"><code>java.util.List&lt;FieldInfo&gt;</code></th>
+<th><code>getFields()</code></th>
+<th>Returns all the fields declared in the clas</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Modifier and Type</td>
+<td>Method</td>
+<td>Description</td>
+</tr>
+</tbody></table>
+<p>getField获得的是一个FieldInfo对象</p>
+<p>而我们用的是ctField，原因在于</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CtField</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">CtMember</span> &#123;<br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">javaLangString</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;java.lang.String&quot;</span>;<br>    <span class="hljs-keyword">protected</span> FieldInfo fieldInfo;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230514141221047.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20230514141221047"> </p>
+<p>修改完后的类成功的按照我们指定的方式</p>
+<h3 id="遍历方法体"><a href="#遍历方法体" class="headerlink" title="遍历方法体"></a>遍历方法体</h3><p>使用<code>CodeIterator</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ClassFile</span> <span class="hljs-variable">cf</span> <span class="hljs-operator">=</span> ... ;<br><span class="hljs-type">MethodInfo</span> <span class="hljs-variable">minfo</span> <span class="hljs-operator">=</span> cf.getMethod(<span class="hljs-string">&quot;move&quot;</span>);    <span class="hljs-comment">// we assume move is not overloaded.</span><br><span class="hljs-type">CodeAttribute</span> <span class="hljs-variable">ca</span> <span class="hljs-operator">=</span> minfo.getCodeAttribute();<br><span class="hljs-type">CodeIterator</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> ca.iterator();<br><span class="hljs-type">CodeIterator</span> <span class="hljs-variable">ci</span> <span class="hljs-operator">=</span> ... ;<br><span class="hljs-keyword">while</span> (ci.hasNext()) &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">index</span> <span class="hljs-operator">=</span> ci.next();<br>    <span class="hljs-type">int</span> <span class="hljs-variable">op</span> <span class="hljs-operator">=</span> ci.byteAt(index);<br>    System.out.println(Mnemonic.OPCODE[op]);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>他的方法如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">void</span> <span class="hljs-title function_">begin</span><span class="hljs-params">()</span><br><span class="hljs-comment">//Move to the first instruction.</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">move</span><span class="hljs-params">(<span class="hljs-type">int</span> index)</span><br><span class="hljs-comment">//Move to the instruction specified by the given index.</span><br><span class="hljs-type">boolean</span> <span class="hljs-title function_">hasNext</span><span class="hljs-params">()</span><br><span class="hljs-comment">//Returns true if there is more instructions.</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">next</span><span class="hljs-params">()</span><br><span class="hljs-comment">//Returns the index of the next instruction.</span><br><span class="hljs-comment">//Note that it does not return the opcode of the next instruction.</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">byteAt</span><span class="hljs-params">(<span class="hljs-type">int</span> index)</span><br><span class="hljs-comment">//Returns the unsigned 8bit value at the index.</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">u16bitAt</span><span class="hljs-params">(<span class="hljs-type">int</span> index)</span><br><span class="hljs-comment">//Returns the unsigned 16bit value at the index.</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">write</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] code, <span class="hljs-type">int</span> index)</span><br><span class="hljs-comment">//Writes a byte array at the index.</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">insert</span><span class="hljs-params">(<span class="hljs-type">int</span> index, <span class="hljs-type">byte</span>[] code)</span><br><span class="hljs-comment">//Inserts a byte array at the index. Branch offsets etc. are //automatically adjusted.</span><br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://www.javassist.org/tutorial/tutorial3.html">Javassist Tutorial3</a></p>
+<figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs prolog">#include&lt;stdio.h&gt;<br>int main(void)<br>&#123;<br>    char v9[<span class="hljs-number">26</span>]; // [esp+<span class="hljs-number">140</span>h] [ebp<span class="hljs-number">-28</span>h]<br>    v9[<span class="hljs-number">0</span>] = <span class="hljs-number">-91</span>;<br>  v9[<span class="hljs-number">1</span>] = <span class="hljs-number">67</span>;<br>  v9[<span class="hljs-number">2</span>] = <span class="hljs-number">83</span>;<br>  v9[<span class="hljs-number">3</span>] = <span class="hljs-number">-108</span>;<br>  v9[<span class="hljs-number">4</span>] = <span class="hljs-number">95</span>;<br>  v9[<span class="hljs-number">5</span>] = <span class="hljs-number">19</span>;<br>  v9[<span class="hljs-number">6</span>] = <span class="hljs-number">-115</span>;<br>  v9[<span class="hljs-number">7</span>] = <span class="hljs-number">64</span>;<br>  v9[<span class="hljs-number">8</span>] = <span class="hljs-number">-106</span>;<br>  v9[<span class="hljs-number">9</span>] = <span class="hljs-number">84</span>;<br>  v9[<span class="hljs-number">10</span>] = <span class="hljs-number">105</span>;<br>  v9[<span class="hljs-number">11</span>] = <span class="hljs-number">83</span>;<br>  v9[<span class="hljs-number">12</span>] = <span class="hljs-number">-113</span>;<br>  v9[<span class="hljs-number">13</span>] = <span class="hljs-number">126</span>;<br>  v9[<span class="hljs-number">14</span>] = <span class="hljs-number">-65</span>;<br>  v9[<span class="hljs-number">15</span>] = <span class="hljs-number">-102</span>;<br>  v9[<span class="hljs-number">16</span>] = <span class="hljs-number">-81</span>;<br>  v9[<span class="hljs-number">17</span>] = <span class="hljs-number">89</span>;<br>  v9[<span class="hljs-number">18</span>] = <span class="hljs-number">83</span>;<br>  v9[<span class="hljs-number">19</span>] = <span class="hljs-number">122</span>;<br>  v9[<span class="hljs-number">20</span>] = <span class="hljs-number">95</span>;<br>  v9[<span class="hljs-number">21</span>] = <span class="hljs-number">-96</span>;<br>  v9[<span class="hljs-number">22</span>] = <span class="hljs-number">-94</span>;<br>  v9[<span class="hljs-number">23</span>] = <span class="hljs-number">105</span>;<br>  v9[<span class="hljs-number">24</span>] = <span class="hljs-number">-9</span>;<br>    v9[<span class="hljs-number">25</span>] = <span class="hljs-string">&#x27;_&#x27;</span>;<br>    for (int i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">25</span>; i++)<br>    &#123;<br>        v9[i] ^= <span class="hljs-string">&#x27;S&#x27;</span>;<br>    &#125;<br>    for (int i = <span class="hljs-number">24</span>; i &gt;=<span class="hljs-number">0</span>; i--)<br>    &#123;<br>        v9[i] += v9[i+<span class="hljs-number">1</span>];<br>    &#125;<br>    for (int i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">26</span>; i++)<br>    &#123;<br>        v9[i] += <span class="hljs-number">30</span>;<br>    &#125;<br>    char v5[] = <span class="hljs-string">&quot;abcdefghijklmnopqrstuvwxyz&quot;</span>;<br>    char v4[] = <span class="hljs-string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span>;<br>    for (int i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">26</span>; i++)<br>    &#123;<br>        if (v9[i] == <span class="hljs-string">&#x27;&#123;&#x27;</span> || v9[i] == <span class="hljs-string">&#x27;&#125;&#x27;</span>)<br>        &#123;<br>            continue;<br>        &#125;<br>        <br>            if (v9[i] &gt;= <span class="hljs-string">&#x27;A&#x27;</span> &amp;&amp; v9[i] &lt;= <span class="hljs-string">&#x27;Z&#x27;</span>)<br>            &#123;<br>                v9[i] += <span class="hljs-number">1</span>;<br>            &#125;<br>            else if (v9[i] &gt;= <span class="hljs-string">&#x27;a&#x27;</span> &amp;&amp; v9[i] &lt;= <span class="hljs-string">&#x27;z&#x27;</span>)<br>            &#123;<br>                v9[i] += <span class="hljs-number">1</span>;<br>            &#125;<br>    &#125;<br>    printf(<span class="hljs-string">&quot;%s&quot;</span>,v9);<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="我的一些实例项目"><a href="#我的一些实例项目" class="headerlink" title="我的一些实例项目"></a>我的一些实例项目</h2><p>弹计算器的一个恶意类</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.runtime.<span class="hljs-type">AbstractTranslet</span>;<br><br>public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EvilClassCalc</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractTranslet</span> </span>&#123;<br>    public <span class="hljs-type">EvilClassCalc</span>() &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-type">Runtime</span>.getRuntime().exec(<span class="hljs-string">&quot;calc&quot;</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (<span class="hljs-type">Exception</span> var2) &#123;<br>        &#125;<br><br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>实现代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> evilclass;<br><br><span class="hljs-keyword">import</span> javassist.*;<br><span class="hljs-keyword">import</span> javassist.bytecode.ClassFile;<br><br><span class="hljs-keyword">import</span> java.io.IOException;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">evilclass</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> CannotCompileException, NotFoundException, IOException &#123;<br>        <span class="hljs-type">ClassPool</span> <span class="hljs-variable">pool</span> <span class="hljs-operator">=</span> ClassPool.getDefault();<br>        <span class="hljs-type">CtClass</span> <span class="hljs-variable">evilClassCalc</span> <span class="hljs-operator">=</span> pool.makeClass(<span class="hljs-string">&quot;EvilClassCalc&quot;</span>);<br>        evilClassCalc.setSuperclass(pool.get(<span class="hljs-string">&quot;com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet&quot;</span>));<br>        <span class="hljs-type">CtConstructor</span> <span class="hljs-variable">ctConstructor</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CtConstructor</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">CtClass</span>[]&#123;&#125;, evilClassCalc);<br>        ctConstructor.setBody(<span class="hljs-string">&quot;        try &#123;\n&quot;</span> +<br>                <span class="hljs-string">&quot;            Runtime.getRuntime().exec(\&quot;calc\&quot;);\n&quot;</span> +<br>                <span class="hljs-string">&quot;        &#125; catch (Exception var2) &#123;\n&quot;</span> +<br>                <span class="hljs-string">&quot;        &#125;&quot;</span>);<br>        evilClassCalc.addConstructor(ctConstructor);<br>        evilClassCalc.writeFile();<br>        evilClassCalc.detach();<br><br><br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>我的错误是少加了一行</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">evilClassCalc.add<span class="hljs-constructor">Constructor(<span class="hljs-params">ctConstructor</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>导致构造方法没有被成功加入，加上去就好了</p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Javasist</div>
+      <div>https://decemberus.github.io/Decemberus.github-io/2023/04/02/Javasist/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Decemberus</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年4月2日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2023/04/07/TemplatesImpl%E5%9C%A8Shiro%E4%B8%AD%E7%9A%84%E5%88%A9%E7%94%A8%E8%A1%A5%E5%85%85/" title="TemplatesImpl在Shiro中的利用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">TemplatesImpl在Shiro中的利用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2023/03/16/JMX%E5%AD%A6%E4%B9%A0/" title="Github CodeQL training 思路">
+                        <span class="hidden-mobile">Github CodeQL training 思路</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/Decemberus.github-io/js/events.js" ></script>
+<script  src="/Decemberus.github-io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/Decemberus.github-io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/Decemberus.github-io/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/Decemberus.github-io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

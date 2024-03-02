@@ -1,0 +1,699 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Decemberus.github-io/img/fluid.png">
+  <link rel="icon" href="/Decemberus.github-io/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Decemberus">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="CodeQL log4j实战构建过程 12git clone https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;logging-log4j2.gitgit checkout be881e5  pom.xml中注释掉无关内容 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CodeQL log4j实战">
+<meta property="og:url" content="https://decemberus.github.io/Decemberus.github-io/2024/01/01/CodeQL%20log4j%E5%AE%9E%E6%88%98/index.html">
+<meta property="og:site_name" content="欢迎回来">
+<meta property="og:description" content="CodeQL log4j实战构建过程 12git clone https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;logging-log4j2.gitgit checkout be881e5  pom.xml中注释掉无关内容 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231125205127207.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231125205610200.png">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231125211327599.png">
+<meta property="article:published_time" content="2024-01-01T10:29:01.000Z">
+<meta property="article:modified_time" content="2024-03-02T05:17:29.675Z">
+<meta property="article:author" content="Decemberus">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231125205127207.png">
+  
+  
+  <title>CodeQL log4j实战 - 欢迎回来</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/Decemberus.github-io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/Decemberus.github-io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/Decemberus.github-io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"decemberus.github.io","root":"/Decemberus.github-io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Decemberus.github-io/local-search.xml"};
+  </script>
+  <script  src="/Decemberus.github-io/js/utils.js" ></script>
+  <script  src="/Decemberus.github-io/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/Decemberus.github-io/">
+      <strong>enjoy的blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Decemberus.github-io/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CodeQL log4j实战"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-01 18:29" pubdate>
+          2024年1月1日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          16k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          138 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">CodeQL log4j实战</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="CodeQL-log4j实战"><a href="#CodeQL-log4j实战" class="headerlink" title="CodeQL log4j实战"></a>CodeQL log4j实战</h1><p>构建过程</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">git clone https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/apache/</span>logging-log4j2.git<br>git checkout be881e5<br></code></pre></td></tr></table></figure>
+
+<p>pom.xml中注释掉无关内容</p>
+<figure class="highlight bnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><code class="hljs bnf"><span class="hljs-attribute">&lt;modules&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-api-java9<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-api<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-core-java9<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-core<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;!-- &lt;module&gt;</span>log4j-layout-template-json<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-core-its<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-1.2-api<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-slf4j-impl<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-slf4j18-impl<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-to-slf4j<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-jcl<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-flume-ng<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-taglib<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-jmx-gui<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-samples<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-bom<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-jdbc-dbcp2<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-jpa<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-couchdb<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-mongodb3<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-mongodb4<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-cassandra<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-web<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-perf<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-iostreams<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-jul<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-jpl<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-liquibase<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-appserver<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-osgi<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-docker<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-kubernetes<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-spring-boot<span class="hljs-attribute">&lt;/module&gt;</span><br><br>    <span class="hljs-attribute">&lt;module&gt;</span>log4j-spring-cloud-config<span class="hljs-attribute">&lt;/module&gt;</span> --&gt;<br><br>  <span class="hljs-attribute">&lt;/modules&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>现在直接构建数据库会报找不到toolchain的错误，所以我们需要去maven的根目录下面构建toolchain</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">toolchains</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">toolchain</span>&gt;</span>  <br><br>  <span class="hljs-tag">&lt;<span class="hljs-name">type</span>&gt;</span>jdk<span class="hljs-tag">&lt;/<span class="hljs-name">type</span>&gt;</span>  <br><br>  <span class="hljs-tag">&lt;<span class="hljs-name">provides</span>&gt;</span>  <br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>9<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>  <br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">vendor</span>&gt;</span>sun<span class="hljs-tag">&lt;/<span class="hljs-name">vendor</span>&gt;</span>  <br><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">provides</span>&gt;</span>  <br><br>  <span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span>  <br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">jdkHome</span>&gt;</span>C:\Program Files\Java\jdk-9.0.4<span class="hljs-tag">&lt;/<span class="hljs-name">jdkHome</span>&gt;</span>  <br><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span>  <br><br><span class="hljs-tag">&lt;/<span class="hljs-name">toolchain</span>&gt;</span>  <br><br><span class="hljs-tag">&lt;/<span class="hljs-name">toolchains</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>构建数据库</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">CodeQL database create Log4jDB <span class="hljs-params">--language=java</span> <span class="hljs-params">--overwrite</span> <span class="hljs-params">--command=</span><span class="hljs-string">&quot;mvn clean install -Dmaven.test.skip=true&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>我们根据<a target="_blank" rel="noopener" href="https://github.com/SummerSec/LookupInterface/blob/main/TaintTracking.ql">LookupInterface</a>来修改我们自己的代码，下面这个用来找到常见的触发JNDIlookup的方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Context</span> <span class="hljs-keyword">extends</span>  <span class="hljs-title class_">RefType</span>&#123;<br>    Context()&#123;<br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;javax.naming&quot;</span>, <span class="hljs-string">&quot;Context&quot;</span>)<br>        or<br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;javax.naming&quot;</span>, <span class="hljs-string">&quot;InitialContext&quot;</span>)<br>        or<br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;org.springframework.jndi&quot;</span>, <span class="hljs-string">&quot;JndiCallback&quot;</span>)<br>        or <br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;org.springframework.jndi&quot;</span>, <span class="hljs-string">&quot;JndiTemplate&quot;</span>)<br>        or<br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;org.springframework.jndi&quot;</span>, <span class="hljs-string">&quot;JndiLocatorDelegate&quot;</span>)<br>        or<br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;org.apache.shiro.jndi&quot;</span>, <span class="hljs-string">&quot;JndiCallback&quot;</span>)<br>        or<br>        <span class="hljs-built_in">this</span>.getQualifiedName().matches(<span class="hljs-string">&quot;%JndiCallback&quot;</span>)<br>        or<br>        <span class="hljs-built_in">this</span>.getQualifiedName().matches(<span class="hljs-string">&quot;%JndiLocatorDelegate&quot;</span>)<br>        or<br>        <span class="hljs-built_in">this</span>.getQualifiedName().matches(<span class="hljs-string">&quot;%JndiTemplate&quot;</span>)<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>寻找那里调用了Context的lookup方法</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">from</span> <span class="hljs-keyword">Call</span> <span class="hljs-keyword">call</span>,Callable parseExpression<br><br><span class="hljs-keyword">where</span><br><br>    <span class="hljs-keyword">call</span>.getCallee() = parseExpression <span class="hljs-keyword">and</span> <br><br>    parseExpression.getDeclaringType() instanceof Context <span class="hljs-keyword">and</span><br><br>    parseExpression.hasName(&quot;lookup&quot;)<br><br><span class="hljs-keyword">select</span> <span class="hljs-keyword">call</span><br></code></pre></td></tr></table></figure>
+
+<p>如此一来我们就找到了sink</p>
+<p>虽然Codeql定义了<code>RemoteFlowSource</code>支持多种source，但是我们还是要根据实际的代码业务来分析可能作为source的点。</p>
+<p>在Log4j作为日志记录的工具，除了从HTTP请求中获取输入点外，还可以在记录日志请求或者解析配置文件中来获取source。先不看解析配置文件获取source的点了，因为这需要分析Log4j解析配置文件的流程比较复杂。所以目前我们只考虑通过日志记录作为source的情况。稍微了解Log4j的同学都知道，Log4j会通过<code>error/fatal/info/debug/trace</code>等方法对不同级别的日志进行记录。通过分析我们可以看到我们输入的message都调用了<code>logIfEnabled</code>方法并作为第四个参数输入，所以可以将这里定义为source。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Logger</span> <span class="hljs-keyword">extends</span>  <span class="hljs-title class_">RefType</span>&#123;<br>    Logger()&#123;<br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;org.apache.logging.log4j.spi&quot;</span>, <span class="hljs-string">&quot;AbstractLogger&quot;</span>)<br>    &#125;<br>&#125;<br><br>predicate <span class="hljs-title function_">isLookup</span><span class="hljs-params">(Expr arg)</span> &#123;<br>    exists(MethodAccess ma |<br>        ma.getMethod().getName() = <span class="hljs-string">&quot;lookup&quot;</span><br>        and<br>        ma.getMethod().getDeclaringType() <span class="hljs-keyword">instanceof</span> Context<br>        <span class="hljs-type">and</span><br>        <span class="hljs-variable">arg</span> <span class="hljs-operator">=</span> ma.getArgument(<span class="hljs-number">0</span>)<br>    )<br>&#125;<br><br>predicate <span class="hljs-title function_">isLogging</span><span class="hljs-params">(Expr arg)</span> &#123;<br>    exists(MethodAccess ma |<br>        ma.getMethod().getName() = <span class="hljs-string">&quot;logIfEnabled&quot;</span><br>        and<br>        ma.getMethod().getDeclaringType() <span class="hljs-keyword">instanceof</span> Logger<br>        <span class="hljs-type">and</span><br>        <span class="hljs-variable">arg</span> <span class="hljs-operator">=</span> ma.getArgument(<span class="hljs-number">3</span>)<br>    )<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>接下来定义source和sink</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">TainttrackLookup</span>  <span class="hljs-keyword">extends</span> <span class="hljs-title class_">TaintTracking</span>::Configuration &#123;<br>    TainttrackLookup() &#123; <br>        <span class="hljs-built_in">this</span> = <span class="hljs-string">&quot;TainttrackLookup&quot;</span> <br>    &#125;<br>    override predicate <span class="hljs-title function_">isSource</span><span class="hljs-params">(DataFlow::Node source)</span> &#123;<br>       exists(Expr exp |<br>           isLogging(exp)<br>           and<br>           source.asExpr() = exp<br>        )<br>    &#125;<br>    override predicate <span class="hljs-title function_">isSink</span><span class="hljs-params">(DataFlow::Node sink)</span> &#123;<br>        exists(Expr arg |<br>            isLookup(arg)<br>            and<br>            sink.asExpr() = arg<br>        )<br>    &#125;<br>&#125; <br></code></pre></td></tr></table></figure>
+
+<p>整体的代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"> *<span class="hljs-doctag">@name</span> Tainttrack Context lookup</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"> *<span class="hljs-doctag">@kind</span> path-problem</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"> */</span><br><br><span class="hljs-keyword">import</span> java<br><br><span class="hljs-keyword">import</span> semmle.code.java.dataflow.FlowSources<br><br><span class="hljs-keyword">import</span> DataFlow::PathGraph<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Context</span> <span class="hljs-keyword">extends</span>  <span class="hljs-title class_">RefType</span>&#123;<br><br>    Context()&#123;<br><br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;javax.naming&quot;</span>, <span class="hljs-string">&quot;Context&quot;</span>)<br><br>        or<br><br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;javax.naming&quot;</span>, <span class="hljs-string">&quot;InitialContext&quot;</span>)<br><br>        or<br><br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;org.springframework.jndi&quot;</span>, <span class="hljs-string">&quot;JndiCallback&quot;</span>)<br><br>        or <br><br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;org.springframework.jndi&quot;</span>, <span class="hljs-string">&quot;JndiTemplate&quot;</span>)<br><br>        or<br><br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;org.springframework.jndi&quot;</span>, <span class="hljs-string">&quot;JndiLocatorDelegate&quot;</span>)<br><br>        or<br><br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;org.apache.shiro.jndi&quot;</span>, <span class="hljs-string">&quot;JndiCallback&quot;</span>)<br><br>        or<br><br>        <span class="hljs-built_in">this</span>.getQualifiedName().matches(<span class="hljs-string">&quot;%JndiCallback&quot;</span>)<br><br>        or<br><br>        <span class="hljs-built_in">this</span>.getQualifiedName().matches(<span class="hljs-string">&quot;%JndiLocatorDelegate&quot;</span>)<br><br>        or<br><br>        <span class="hljs-built_in">this</span>.getQualifiedName().matches(<span class="hljs-string">&quot;%JndiTemplate&quot;</span>)<br><br>    &#125;<br><br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Logger</span> <span class="hljs-keyword">extends</span>  <span class="hljs-title class_">RefType</span>&#123;<br><br>    Logger()&#123;<br><br>        <span class="hljs-built_in">this</span>.hasQualifiedName(<span class="hljs-string">&quot;org.apache.logging.log4j.spi&quot;</span>, <span class="hljs-string">&quot;AbstractLogger&quot;</span>)<br><br>    &#125;<br><br>&#125;<br><br>predicate <span class="hljs-title function_">isLookup</span><span class="hljs-params">(Expr arg)</span> &#123;<br><br>    exists(MethodAccess ma |<br><br>        ma.getMethod().getName() = <span class="hljs-string">&quot;lookup&quot;</span><br><br>        and<br><br>        ma.getMethod().getDeclaringType() <span class="hljs-keyword">instanceof</span> Context<br><br>        <span class="hljs-type">and</span><br><br>        <span class="hljs-variable">arg</span> <span class="hljs-operator">=</span> ma.getArgument(<span class="hljs-number">0</span>)<br><br>    )<br><br>&#125;<br><br>predicate <span class="hljs-title function_">isLogging</span><span class="hljs-params">(Expr arg)</span> &#123;<br><br>    exists(MethodAccess ma |<br><br>        ma.getMethod().getName() = <span class="hljs-string">&quot;logIfEnabled&quot;</span><br><br>        and<br><br>        ma.getMethod().getDeclaringType() <span class="hljs-keyword">instanceof</span> Logger<br><br>        <span class="hljs-type">and</span><br><br>        <span class="hljs-variable">arg</span> <span class="hljs-operator">=</span> ma.getArgument(<span class="hljs-number">3</span>)<br><br>    )<br><br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">TainttrackLookup</span>  <span class="hljs-keyword">extends</span> <span class="hljs-title class_">TaintTracking</span>::Configuration &#123;<br><br>    TainttrackLookup() &#123; <br><br>        <span class="hljs-built_in">this</span> = <span class="hljs-string">&quot;TainttrackLookup&quot;</span> <br><br>    &#125;<br><br><br><br>    override predicate <span class="hljs-title function_">isSource</span><span class="hljs-params">(DataFlow::Node source)</span> &#123;<br><br>        exists(Expr exp |<br><br>            isLogging(exp)<br><br>            and<br><br>            source.asExpr() = exp<br><br>        )<br><br>    &#125;<br><br><br><br>    override predicate <span class="hljs-title function_">isSink</span><span class="hljs-params">(DataFlow::Node sink)</span> &#123;<br><br>        exists(Expr arg |<br><br>            isLookup(arg)<br><br>            and<br><br>            sink.asExpr() = arg<br><br>        )<br><br>    &#125;<br><br>&#125; <br><br>from TainttrackLookup config , DataFlow::PathNode source, DataFlow::PathNode sink<br><br>where<br><br>    config.hasFlowPath(source, sink)<br><br>select sink.getNode(), source, sink, <span class="hljs-string">&quot;unsafe lookup&quot;</span>, source.getNode(), <span class="hljs-string">&quot;this is user input&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>虽然使用CodeQL查询语句可以找到很多使用Log4j打印日志的地方，但是在实际的代码中，可能不会使用logIfEnabled方法，而是直接使用其他的方法，比如info, debug, error等，这些方法不需要传入Marker参数，而是直接传入message参数，这样就会导致CodeQL查询语句的源点不准确，无法追踪到用户输入的数据。</p>
+<p>所以我们需要变一下source，我们source并不一定是一定要调用logIFEnabled方法的，还有可能需要是带有一个参数的<code>error/fatal/info/debug/trace</code>等方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LoggerInput</span> <span class="hljs-keyword">extends</span>  <span class="hljs-title class_">Method</span> &#123;<br><br>    LoggerInput()&#123;<br><br>        <span class="hljs-comment">//限定调用的类名、方法名、以及方法只有一个参数</span><br><br>        <span class="hljs-built_in">this</span>.getDeclaringType() <span class="hljs-keyword">instanceof</span> Logger and<br><br>        <span class="hljs-built_in">this</span>.hasName(<span class="hljs-string">&quot;error&quot;</span>) and <span class="hljs-built_in">this</span>.getNumberOfParameters() = <span class="hljs-number">1</span><br><br>    &#125;<br><br>    <span class="hljs-comment">//将第一个参数作为source</span><br><br>    Parameter <span class="hljs-title function_">getAnUntrustedParameter</span><span class="hljs-params">()</span> &#123; result = <span class="hljs-built_in">this</span>.getParameter(<span class="hljs-number">0</span>) &#125;<br><br>&#125;<br><br>override predicate <span class="hljs-title function_">isSource</span><span class="hljs-params">(DataFlow::Node source)</span> &#123;<br><br>        exists(LoggerInput LoggerMethod |<br><br>            source.asParameter() = LoggerMethod.getAnUntrustedParameter())<br><br>    &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231125205127207.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231125205127207"> </p>
+<p>我们可以找到以下四条路径,我们先看第一条路径</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231125205610200.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231125205610200"> </p>
+<p>这里由于需要让filter不为null的时候才可以触发，而这里默认为null，所以我们在看看其他的链子</p>
+<p>从上往下看第二条链子</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231125211327599.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20231125211327599"> </p>
+<p>但是在<code>AbstractLogger#tryLogMessage</code>中Codeql会直接分析到<code>AbstractLogger#log</code>而实际请求时会解析到<code>Logger#log</code>方法。这是因为<code>Logger</code>是<code>AbstractLogger</code>的子类并且也实现了log方法，而且我们实例化的也是Logger对象，所以这里会调用到<code>Logger#log</code>。</p>
+<p>下面还有一条链子</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-number">1</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">AbstractLogger</span>.</span></span>java:<span class="hljs-number">709</span>:<span class="hljs-number">23</span><br><span class="hljs-number">2</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">AbstractLogger</span>.</span></span>java:<span class="hljs-number">710</span>:<span class="hljs-number">47</span><br><span class="hljs-number">3</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">AbstractLogger</span>.</span></span>java:<span class="hljs-number">1833</span>:<span class="hljs-number">89</span><br><span class="hljs-number">4</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">AbstractLogger</span>.</span></span>java:<span class="hljs-number">1836</span>:<span class="hljs-number">51</span><br><span class="hljs-number">5</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">AbstractLogger</span>.</span></span>java:<span class="hljs-number">2139</span>:<span class="hljs-number">94</span><br><span class="hljs-number">6</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">AbstractLogger</span>.</span></span>java:<span class="hljs-number">2142</span>:<span class="hljs-number">59</span><br><span class="hljs-number">7</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">AbstractLogger</span>.</span></span>java:<span class="hljs-number">2155</span>:<span class="hljs-number">43</span><br><span class="hljs-number">8</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">AbstractLogger</span>.</span></span>java:<span class="hljs-number">2159</span>:<span class="hljs-number">67</span><br><span class="hljs-number">9</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">AbstractLogger</span>.</span></span>java:<span class="hljs-number">2202</span>:<span class="hljs-number">32</span><br><span class="hljs-number">10</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">AbstractLogger</span>.</span></span>java:<span class="hljs-number">2205</span>:<span class="hljs-number">48</span><br><span class="hljs-number">11</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Logger</span>.</span></span>java:<span class="hljs-number">158</span>:<span class="hljs-number">9</span><br><span class="hljs-number">12</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Logger</span>.</span></span>java:<span class="hljs-number">162</span>:<span class="hljs-number">17</span><br><span class="hljs-number">13</span>	data : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">AwaitCompletionReliabilityStrategy</span>.</span></span>java:<span class="hljs-number">78</span>:<span class="hljs-number">83</span><br><span class="hljs-number">14</span>	data : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">AwaitCompletionReliabilityStrategy</span>.</span></span>java:<span class="hljs-number">82</span>:<span class="hljs-number">67</span><br><span class="hljs-number">15</span>	data : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">LoggerConfig</span>.</span></span>java:<span class="hljs-number">430</span>:<span class="hljs-number">28</span><br><span class="hljs-number">16</span>	data : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">LoggerConfig</span>.</span></span>java:<span class="hljs-number">454</span>:<span class="hljs-number">17</span><br><span class="hljs-number">17</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ReusableLogEventFactory</span>.</span></span>java:<span class="hljs-number">78</span>:<span class="hljs-number">86</span><br><span class="hljs-number">18</span>	message : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ReusableLogEventFactory</span>.</span></span>java:<span class="hljs-number">100</span>:<span class="hljs-number">27</span><br><span class="hljs-number">19</span>	msg : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">MutableLogEvent</span>.</span></span>java:<span class="hljs-number">209</span>:<span class="hljs-number">28</span><br><span class="hljs-number">20</span>	(...)... : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">MutableLogEvent</span>.</span></span>java:<span class="hljs-number">211</span>:<span class="hljs-number">46</span><br><span class="hljs-number">21</span>	reusable : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">MutableLogEvent</span>.</span></span>java:<span class="hljs-number">212</span>:<span class="hljs-number">13</span><br><span class="hljs-number">22</span>	parameter this : Message 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ReusableObjectMessage</span>.</span></span>java:<span class="hljs-number">47</span>:<span class="hljs-number">17</span><br><span class="hljs-number">23</span>	obj : Object 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ReusableObjectMessage</span>.</span></span>java:<span class="hljs-number">48</span>:<span class="hljs-number">44</span><span class="hljs-operator"></span><br><span class="hljs-operator">...</span><br><span class="hljs-operator"></span><span class="hljs-number">88</span>	convert<span class="hljs-constructor">JndiName(<span class="hljs-operator">...</span>)</span> : String 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">JndiLookup</span>.</span></span>java:<span class="hljs-number">54</span>:<span class="hljs-number">33</span><br><span class="hljs-number">89</span>	jndiName : String 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">JndiLookup</span>.</span></span>java:<span class="hljs-number">56</span>:<span class="hljs-number">56</span><br><span class="hljs-number">90</span>	name : String 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">JndiManager</span>.</span></span>java:<span class="hljs-number">171</span>:<span class="hljs-number">25</span><br><span class="hljs-number">91</span>	name 	<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">JndiManager</span>.</span></span>java:<span class="hljs-number">172</span>:<span class="hljs-number">40</span><br></code></pre></td></tr></table></figure>
+
+<p>这条链在执行到<code>MutableLogEvent#setMessage</code>时和CodeQL的分析结果略有不同。在CodeQL中<code>resusable.formatTo</code>会调用到<code>ReusableObjectMessage</code>中。 但是实际运行过程中由于MessgeFactorty创建Message对象时默认创建的是<code>ResableSimpleMessage</code>对象，所以会执行到<code>ResableSimpleMessage#formatTo</code>方法。</p>
+<p>所以问题来了，我们现在如没有办法发现那个漏洞的</p>
+<p>但是我们可以根据出发连来分析为什么没有发现，在前面的CodeQL已经分析到了createEvent方法。 查看createEvent方法的调用，在<code>Log4jShell</code>的触发链中实际上是在对返回LogEvent的处理过程中触发的，所以这里CodeQL可能没有将返回的LogEvent对象再当作污点进行分析，所以导致没有分析成功。</p>
+<p>所以可以通过创建一个<code>isAdditionalTaintStep</code>函数，将<code>ReusableLogEventFactory#createEvent</code>的第六个参数Message和<code>LoggerConfig#log</code>第一个参数<code>logEvent</code>连接起来。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java">override predicate <span class="hljs-title function_">isAdditionalTaintStep</span><span class="hljs-params">(DataFlow::Node fromNode, DataFlow::Node toNode)</span> &#123;<br>    exists(MethodAccess ma,MethodAccess ma2 |<br>        ma.getMethod().getDeclaringType().hasQualifiedName(<span class="hljs-string">&quot;org.apache.logging.log4j.core.impl&quot;</span>, <span class="hljs-string">&quot;ReusableLogEventFactory&quot;</span>) <br>        and ma.getMethod().hasName(<span class="hljs-string">&quot;createEvent&quot;</span>) and fromNode.asExpr()=ma.getArgument(<span class="hljs-number">5</span>) and ma2.getMethod().getDeclaringType().hasQualifiedName(<span class="hljs-string">&quot;org.apache.logging.log4j.core.config&quot;</span>, <span class="hljs-string">&quot;LoggerConfig&quot;</span>)  <br>        and ma2.getMethod().hasName(<span class="hljs-string">&quot;log&quot;</span>) and ma2.getMethod().getNumberOfParameters() = <span class="hljs-number">2</span> and toNode.asExpr()=ma2.getArgument(<span class="hljs-number">0</span>)<br>                )<br>  &#125;<br></code></pre></td></tr></table></figure>
+
+<p> 最后我们就可以通过CodeQL分析到Log4j shell漏洞的调用链。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-number">1</span>	message : Message 	AbstractLogger<span class="hljs-selector-class">.java</span>:<span class="hljs-number">709</span>:<span class="hljs-number">23</span><br><span class="hljs-number">2</span>	message : Message 	AbstractLogger<span class="hljs-selector-class">.java</span>:<span class="hljs-number">710</span>:<span class="hljs-number">47</span><br><span class="hljs-number">3</span>	message : Message 	AbstractLogger<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1833</span>:<span class="hljs-number">89</span><br><span class="hljs-number">4</span>	message : Message 	AbstractLogger<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1836</span>:<span class="hljs-number">51</span><br><span class="hljs-number">5</span>	message : Message 	AbstractLogger<span class="hljs-selector-class">.java</span>:<span class="hljs-number">2139</span>:<span class="hljs-number">94</span><br><span class="hljs-number">6</span>	message : Message 	AbstractLogger<span class="hljs-selector-class">.java</span>:<span class="hljs-number">2142</span>:<span class="hljs-number">59</span><br><span class="hljs-number">7</span>	message : Message 	AbstractLogger<span class="hljs-selector-class">.java</span>:<span class="hljs-number">2155</span>:<span class="hljs-number">43</span><br><span class="hljs-number">8</span>	message : Message 	AbstractLogger<span class="hljs-selector-class">.java</span>:<span class="hljs-number">2159</span>:<span class="hljs-number">67</span><br><span class="hljs-number">9</span>	message : Message 	AbstractLogger<span class="hljs-selector-class">.java</span>:<span class="hljs-number">2202</span>:<span class="hljs-number">32</span><br><span class="hljs-number">10</span>	message : Message 	AbstractLogger<span class="hljs-selector-class">.java</span>:<span class="hljs-number">2205</span>:<span class="hljs-number">48</span><br><span class="hljs-number">11</span>	message : Message 	Logger<span class="hljs-selector-class">.java</span>:<span class="hljs-number">158</span>:<span class="hljs-number">9</span><br><span class="hljs-number">12</span>	message : Message 	Logger<span class="hljs-selector-class">.java</span>:<span class="hljs-number">162</span>:<span class="hljs-number">17</span><br><span class="hljs-number">13</span>	data : Message 	DefaultReliabilityStrategy<span class="hljs-selector-class">.java</span>:<span class="hljs-number">61</span>:<span class="hljs-number">83</span><br><span class="hljs-number">14</span>	data : Message 	DefaultReliabilityStrategy<span class="hljs-selector-class">.java</span>:<span class="hljs-number">63</span>:<span class="hljs-number">69</span><br><span class="hljs-number">15</span>	data : Message 	LoggerConfig<span class="hljs-selector-class">.java</span>:<span class="hljs-number">430</span>:<span class="hljs-number">28</span><br><span class="hljs-number">16</span>	data : Message 	LoggerConfig<span class="hljs-selector-class">.java</span>:<span class="hljs-number">454</span>:<span class="hljs-number">96</span><br><span class="hljs-number">17</span>	message : Message 	ReusableLogEventFactory<span class="hljs-selector-class">.java</span>:<span class="hljs-number">58</span>:<span class="hljs-number">47</span><br><span class="hljs-number">18</span>	message : Message 	ReusableLogEventFactory<span class="hljs-selector-class">.java</span>:<span class="hljs-number">60</span>:<span class="hljs-number">67</span><br><span class="hljs-number">19</span>	event : LogEvent 	LoggerConfig<span class="hljs-selector-class">.java</span>:<span class="hljs-number">469</span>:<span class="hljs-number">13</span><br><span class="hljs-number">20</span>	event : LogEvent 	LoggerConfig<span class="hljs-selector-class">.java</span>:<span class="hljs-number">479</span>:<span class="hljs-number">24</span><br><span class="hljs-number">21</span>	event : LogEvent 	LoggerConfig<span class="hljs-selector-class">.java</span>:<span class="hljs-number">481</span>:<span class="hljs-number">29</span><br><span class="hljs-number">22</span>	event : LogEvent 	LoggerConfig<span class="hljs-selector-class">.java</span>:<span class="hljs-number">495</span>:<span class="hljs-number">34</span><br><span class="hljs-number">23</span>	event : LogEvent 	LoggerConfig<span class="hljs-selector-class">.java</span>:<span class="hljs-number">498</span>:<span class="hljs-number">27</span><br><span class="hljs-number">24</span>	event : LogEvent 	LoggerConfig<span class="hljs-selector-class">.java</span>:<span class="hljs-number">536</span>:<span class="hljs-number">34</span><br><span class="hljs-number">25</span>	event : LogEvent 	LoggerConfig<span class="hljs-selector-class">.java</span>:<span class="hljs-number">540</span>:<span class="hljs-number">38</span><br><span class="hljs-number">26</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">80</span>:<span class="hljs-number">30</span><br><span class="hljs-number">27</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">84</span>:<span class="hljs-number">38</span><br><span class="hljs-number">28</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">117</span>:<span class="hljs-number">47</span><br><span class="hljs-number">29</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">120</span>:<span class="hljs-number">27</span><br><span class="hljs-number">30</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">126</span>:<span class="hljs-number">32</span><br><span class="hljs-number">31</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">129</span>:<span class="hljs-number">29</span><br><span class="hljs-number">32</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">154</span>:<span class="hljs-number">34</span><br><span class="hljs-number">33</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">156</span>:<span class="hljs-number">29</span><br><span class="hljs-number">34</span>	event : LogEvent 	AbstractDatabaseAppender<span class="hljs-selector-class">.java</span>:<span class="hljs-number">107</span>:<span class="hljs-number">30</span><br><span class="hljs-number">35</span>	event : LogEvent 	AbstractDatabaseAppender<span class="hljs-selector-class">.java</span>:<span class="hljs-number">110</span>:<span class="hljs-number">37</span><br><span class="hljs-number">36</span>	event : LogEvent 	AbstractDatabaseManager<span class="hljs-selector-class">.java</span>:<span class="hljs-number">260</span>:<span class="hljs-number">42</span><br><span class="hljs-number">37</span>	event : LogEvent 	AbstractDatabaseManager<span class="hljs-selector-class">.java</span>:<span class="hljs-number">262</span>:<span class="hljs-number">20</span><br><span class="hljs-number">38</span>	event : LogEvent 	AbstractDatabaseManager<span class="hljs-selector-class">.java</span>:<span class="hljs-number">122</span>:<span class="hljs-number">27</span><br><span class="hljs-number">39</span>	event : LogEvent 	AbstractDatabaseManager<span class="hljs-selector-class">.java</span>:<span class="hljs-number">123</span>:<span class="hljs-number">25</span><br><span class="hljs-number">40</span>	parameter this : LogEvent 	Log4jLogEvent<span class="hljs-selector-class">.java</span>:<span class="hljs-number">530</span>:<span class="hljs-number">26</span><br><span class="hljs-number">41</span>	this : LogEvent 	Log4jLogEvent<span class="hljs-selector-class">.java</span>:<span class="hljs-number">534</span>:<span class="hljs-number">16</span><br><span class="hljs-number">42</span>	<span class="hljs-built_in">toImmutable</span>(...) : LogEvent 	AbstractDatabaseManager<span class="hljs-selector-class">.java</span>:<span class="hljs-number">123</span>:<span class="hljs-number">25</span><br><span class="hljs-number">43</span>	this<span class="hljs-selector-class">.buffer</span> <span class="hljs-selector-attr">[post update]</span> <span class="hljs-selector-attr">[&lt;element&gt;]</span> : LogEvent 	AbstractDatabaseManager<span class="hljs-selector-class">.java</span>:<span class="hljs-number">123</span>:<span class="hljs-number">9</span><br><span class="hljs-number">44</span>	this <span class="hljs-selector-attr">[post update]</span> <span class="hljs-selector-attr">[buffer, &lt;element&gt;]</span> : LogEvent 	AbstractDatabaseManager<span class="hljs-selector-class">.java</span>:<span class="hljs-number">123</span>:<span class="hljs-number">9</span><br><span class="hljs-number">45</span>	this &lt;.method&gt; <span class="hljs-selector-attr">[post update]</span> <span class="hljs-selector-attr">[buffer, &lt;element&gt;]</span> : LogEvent 	AbstractDatabaseManager<span class="hljs-selector-class">.java</span>:<span class="hljs-number">262</span>:<span class="hljs-number">13</span><br><span class="hljs-number">46</span>	<span class="hljs-built_in">getManager</span>(...) <span class="hljs-selector-attr">[post update]</span> <span class="hljs-selector-attr">[buffer, &lt;element&gt;]</span> : LogEvent 	AbstractDatabaseAppender<span class="hljs-selector-class">.java</span>:<span class="hljs-number">110</span>:<span class="hljs-number">13</span><br><span class="hljs-number">47</span>	this <span class="hljs-selector-attr">[post update]</span> <span class="hljs-selector-attr">[manager, buffer, &lt;element&gt;]</span> : LogEvent 	AbstractDatabaseAppender<span class="hljs-selector-class">.java</span>:<span class="hljs-number">110</span>:<span class="hljs-number">13</span><br><span class="hljs-number">48</span>	appender <span class="hljs-selector-attr">[post update]</span> <span class="hljs-selector-attr">[manager, buffer, &lt;element&gt;]</span> : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">156</span>:<span class="hljs-number">13</span><br><span class="hljs-number">49</span>	this &lt;.field&gt; <span class="hljs-selector-attr">[post update]</span> <span class="hljs-selector-attr">[appender, manager, buffer, &lt;element&gt;]</span> : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">156</span>:<span class="hljs-number">13</span><br><span class="hljs-number">50</span>	this &lt;.method&gt; <span class="hljs-selector-attr">[post update]</span> <span class="hljs-selector-attr">[appender, manager, buffer, &lt;element&gt;]</span> : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">129</span>:<span class="hljs-number">13</span><br><span class="hljs-number">51</span>	this &lt;.method&gt; <span class="hljs-selector-attr">[post update]</span> <span class="hljs-selector-attr">[appender, manager, buffer, &lt;element&gt;]</span> : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">120</span>:<span class="hljs-number">13</span><br><span class="hljs-number">52</span>	this &lt;.method&gt; <span class="hljs-selector-attr">[post update]</span> <span class="hljs-selector-attr">[appender, manager, buffer, &lt;element&gt;]</span> : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">84</span>:<span class="hljs-number">9</span><br><span class="hljs-number">53</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">80</span>:<span class="hljs-number">30</span><br><span class="hljs-number">54</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">84</span>:<span class="hljs-number">38</span><br><span class="hljs-number">55</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">117</span>:<span class="hljs-number">47</span><br><span class="hljs-number">56</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">120</span>:<span class="hljs-number">27</span><br><span class="hljs-number">57</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">126</span>:<span class="hljs-number">32</span><br><span class="hljs-number">58</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">129</span>:<span class="hljs-number">29</span><br><span class="hljs-number">59</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">154</span>:<span class="hljs-number">34</span><br><span class="hljs-number">60</span>	event : LogEvent 	AppenderControl<span class="hljs-selector-class">.java</span>:<span class="hljs-number">156</span>:<span class="hljs-number">29</span><br><span class="hljs-number">61</span>	event : LogEvent 	AbstractOutputStreamAppender<span class="hljs-selector-class">.java</span>:<span class="hljs-number">179</span>:<span class="hljs-number">24</span><br><span class="hljs-number">62</span>	event : LogEvent 	AbstractOutputStreamAppender<span class="hljs-selector-class">.java</span>:<span class="hljs-number">181</span>:<span class="hljs-number">23</span><br><span class="hljs-number">63</span>	event : LogEvent 	AbstractOutputStreamAppender<span class="hljs-selector-class">.java</span>:<span class="hljs-number">188</span>:<span class="hljs-number">28</span><br><span class="hljs-number">64</span>	event : LogEvent 	AbstractOutputStreamAppender<span class="hljs-selector-class">.java</span>:<span class="hljs-number">190</span>:<span class="hljs-number">31</span><br><span class="hljs-number">65</span>	event : LogEvent 	AbstractOutputStreamAppender<span class="hljs-selector-class">.java</span>:<span class="hljs-number">196</span>:<span class="hljs-number">38</span><br><span class="hljs-number">66</span>	event : LogEvent 	AbstractOutputStreamAppender<span class="hljs-selector-class">.java</span>:<span class="hljs-number">197</span>:<span class="hljs-number">28</span><br><span class="hljs-number">67</span>	event : LogEvent 	GelfLayout<span class="hljs-selector-class">.java</span>:<span class="hljs-number">433</span>:<span class="hljs-number">24</span><br><span class="hljs-number">68</span>	event : LogEvent 	GelfLayout<span class="hljs-selector-class">.java</span>:<span class="hljs-number">438</span>:<span class="hljs-number">43</span><br><span class="hljs-number">69</span>	event : LogEvent 	GelfLayout<span class="hljs-selector-class">.java</span>:<span class="hljs-number">471</span>:<span class="hljs-number">34</span><br><span class="hljs-number">70</span>	event : LogEvent 	GelfLayout<span class="hljs-selector-class">.java</span>:<span class="hljs-number">496</span>:<span class="hljs-number">46</span><br><span class="hljs-number">71</span>	event : LogEvent 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">462</span>:<span class="hljs-number">27</span><br><span class="hljs-number">72</span>	event : LogEvent 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">467</span>:<span class="hljs-number">25</span><br><span class="hljs-number">73</span>	event : LogEvent 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">911</span>:<span class="hljs-number">34</span><br><span class="hljs-number">74</span>	event : LogEvent 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">912</span>:<span class="hljs-number">27</span><br><span class="hljs-number">75</span>	event : LogEvent 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">928</span>:<span class="hljs-number">28</span><br><span class="hljs-number">76</span>	event : LogEvent 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">978</span>:<span class="hljs-number">44</span><br><span class="hljs-number">77</span>	event : LogEvent 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">911</span>:<span class="hljs-number">34</span><br><span class="hljs-number">78</span>	event : LogEvent 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">912</span>:<span class="hljs-number">27</span><br><span class="hljs-number">79</span>	event : LogEvent 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">928</span>:<span class="hljs-number">28</span><br><span class="hljs-number">80</span>	event : LogEvent 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1033</span>:<span class="hljs-number">63</span><br><span class="hljs-number">81</span>	event : LogEvent 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1104</span>:<span class="hljs-number">38</span><br><span class="hljs-number">82</span>	event : LogEvent 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1110</span>:<span class="hljs-number">32</span><br><span class="hljs-number">83</span>	event : LogEvent 	StructuredDataLookup<span class="hljs-selector-class">.java</span>:<span class="hljs-number">46</span>:<span class="hljs-number">26</span><br><span class="hljs-number">84</span>	event : LogEvent 	StructuredDataLookup<span class="hljs-selector-class">.java</span>:<span class="hljs-number">50</span>:<span class="hljs-number">67</span><br><span class="hljs-number">85</span>	parameter this : LogEvent 	RingBufferLogEvent<span class="hljs-selector-class">.java</span>:<span class="hljs-number">206</span>:<span class="hljs-number">20</span><br><span class="hljs-number">86</span>	message : Message 	RingBufferLogEvent<span class="hljs-selector-class">.java</span>:<span class="hljs-number">210</span>:<span class="hljs-number">16</span><br><span class="hljs-number">87</span>	<span class="hljs-built_in">getMessage</span>(...) : Message 	StructuredDataLookup<span class="hljs-selector-class">.java</span>:<span class="hljs-number">50</span>:<span class="hljs-number">67</span><br><span class="hljs-number">88</span>	(...)... : Message 	StructuredDataLookup<span class="hljs-selector-class">.java</span>:<span class="hljs-number">50</span>:<span class="hljs-number">43</span><br><span class="hljs-number">89</span>	msg : Message 	StructuredDataLookup<span class="hljs-selector-class">.java</span>:<span class="hljs-number">54</span>:<span class="hljs-number">20</span><br><span class="hljs-number">90</span>	parameter this : Message 	StructuredDataMessage<span class="hljs-selector-class">.java</span>:<span class="hljs-number">239</span>:<span class="hljs-number">19</span><br><span class="hljs-number">91</span>	type : String 	StructuredDataMessage<span class="hljs-selector-class">.java</span>:<span class="hljs-number">240</span>:<span class="hljs-number">16</span><br><span class="hljs-number">92</span>	<span class="hljs-built_in">getType</span>(...) : String 	StructuredDataLookup<span class="hljs-selector-class">.java</span>:<span class="hljs-number">54</span>:<span class="hljs-number">20</span><br><span class="hljs-number">93</span>	<span class="hljs-built_in">lookup</span>(...) : String 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1110</span>:<span class="hljs-number">16</span><br><span class="hljs-number">94</span>	<span class="hljs-built_in">resolveVariable</span>(...) : String 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1033</span>:<span class="hljs-number">47</span><br><span class="hljs-number">95</span>	varValue : String 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1040</span>:<span class="hljs-number">63</span><br><span class="hljs-number">96</span>	buf <span class="hljs-selector-attr">[post update]</span> : StringBuilder 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1040</span>:<span class="hljs-number">33</span><br><span class="hljs-number">97</span>	buf <span class="hljs-selector-attr">[post update]</span> : StringBuilder 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">912</span>:<span class="hljs-number">34</span><br><span class="hljs-number">98</span>	bufName <span class="hljs-selector-attr">[post update]</span> : StringBuilder 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">978</span>:<span class="hljs-number">51</span><br><span class="hljs-number">99</span>	bufName : StringBuilder 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">979</span>:<span class="hljs-number">47</span><br><span class="hljs-number">100</span>	<span class="hljs-built_in">toString</span>(...) : String 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">979</span>:<span class="hljs-number">47</span><br><span class="hljs-number">101</span>	varNameExpr : String 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1010</span>:<span class="hljs-number">55</span><br><span class="hljs-number">102</span>	<span class="hljs-built_in">substring</span>(...) : String 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1010</span>:<span class="hljs-number">55</span><br><span class="hljs-number">103</span>	varName : String 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1033</span>:<span class="hljs-number">70</span><br><span class="hljs-number">104</span>	variableName : String 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1104</span>:<span class="hljs-number">60</span><br><span class="hljs-number">105</span>	variableName : String 	StrSubstitutor<span class="hljs-selector-class">.java</span>:<span class="hljs-number">1110</span>:<span class="hljs-number">39</span><br><span class="hljs-number">106</span>	key : String 	JndiLookup<span class="hljs-selector-class">.java</span>:<span class="hljs-number">50</span>:<span class="hljs-number">48</span><br><span class="hljs-number">107</span>	key : String 	JndiLookup<span class="hljs-selector-class">.java</span>:<span class="hljs-number">54</span>:<span class="hljs-number">49</span><br><span class="hljs-number">108</span>	jndiName : String 	JndiLookup<span class="hljs-selector-class">.java</span>:<span class="hljs-number">70</span>:<span class="hljs-number">36</span><br><span class="hljs-number">109</span>	... + ... : String 	JndiLookup<span class="hljs-selector-class">.java</span>:<span class="hljs-number">72</span>:<span class="hljs-number">20</span><br><span class="hljs-number">110</span>	<span class="hljs-built_in">convertJndiName</span>(...) : String 	JndiLookup<span class="hljs-selector-class">.java</span>:<span class="hljs-number">54</span>:<span class="hljs-number">33</span><br><span class="hljs-number">111</span>	jndiName : String 	JndiLookup<span class="hljs-selector-class">.java</span>:<span class="hljs-number">56</span>:<span class="hljs-number">56</span><br><span class="hljs-number">112</span>	name : String 	JndiManager<span class="hljs-selector-class">.java</span>:<span class="hljs-number">171</span>:<span class="hljs-number">25</span><br><span class="hljs-number">113</span>	name 	JndiManager<span class="hljs-selector-class">.java</span>:<span class="hljs-number">172</span>:<span class="hljs-number">40</span><br></code></pre></td></tr></table></figure>
+
+<p>挖掘到了这里其实已经能够进行分析了，所有的链最终的出发点都是JndiManager，这个点目前的触发已经在新版本中修复了，新版本中就没有办法找到相应的漏洞了</p>
+<p>参考链接</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/JYco8DysQNszMohH6zJEGw">利用CodeQL分析并挖掘Log4j漏洞 (qq.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://m.freebuf.com/articles/web/318141.html">codeql分析log4j - FreeBuf网络安全行业门户</a></p>
+<p><a target="_blank" rel="noopener" href="https://sumsec.me/2022/Log4j2%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90.html">Log4j2 漏洞分析 | BlogPapers (sumsec.me)</a></p>
+<p><a target="_blank" rel="noopener" href="https://cangqingzhe.github.io/2021/12/22/%E5%88%A9%E7%94%A8CodeQL%E5%88%86%E6%9E%90Log4j%E6%BC%8F%E6%B4%9E/">利用CodeQL分析Log4j漏洞 | 藏青’s BLOG (cangqingzhe.github.io)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.gm7.org/%E4%B8%AA%E4%BA%BA%E7%9F%A5%E8%AF%86%E5%BA%93/02.%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/01.java%E5%AE%89%E5%85%A8/03.%E5%BA%94%E7%94%A8%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/01.log4j%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90">01.log4j反序列化漏洞分析 · d4m1ts 知识库 (gm7.org)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.ctfiot.com/37450.html">CodeQL能找到log4shell(CVE-2021-44228)漏洞吗？ | CTF导航 (ctfiot.com)</a></p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CodeQL log4j实战</div>
+      <div>https://decemberus.github.io/Decemberus.github-io/2024/01/01/CodeQL log4j实战/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Decemberus</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月1日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2023/12/17/OpenRASP%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/" title="OpenRASP源码阅读">
+                        <span class="hidden-mobile">OpenRASP源码阅读</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/Decemberus.github-io/js/events.js" ></script>
+<script  src="/Decemberus.github-io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/Decemberus.github-io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/Decemberus.github-io/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/Decemberus.github-io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

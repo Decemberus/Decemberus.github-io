@@ -1,0 +1,757 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Decemberus.github-io/img/fluid.png">
+  <link rel="icon" href="/Decemberus.github-io/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Decemberus">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="OpenRASP源码阅读启动工作主要的启动类位于这里  整个过程的调用栈基本如下 12345678EngineBoot#start	EngineBoot#initTransformer		CustomClassTransformer#		CustomClassTransformer#addAnnotationHook		CustomClassTransformer#retransform		Cus">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenRASP源码阅读">
+<meta property="og:url" content="https://decemberus.github.io/Decemberus.github-io/2023/12/17/OpenRASP%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/index.html">
+<meta property="og:site_name" content="欢迎回来">
+<meta property="og:description" content="OpenRASP源码阅读启动工作主要的启动类位于这里  整个过程的调用栈基本如下 12345678EngineBoot#start	EngineBoot#initTransformer		CustomClassTransformer#		CustomClassTransformer#addAnnotationHook		CustomClassTransformer#retransform		Cus">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302132620164.png">
+<meta property="article:published_time" content="2023-12-17T11:09:23.000Z">
+<meta property="article:modified_time" content="2024-03-02T05:26:34.423Z">
+<meta property="article:author" content="Decemberus">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302132620164.png">
+  
+  
+  <title>OpenRASP源码阅读 - 欢迎回来</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/Decemberus.github-io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/Decemberus.github-io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/Decemberus.github-io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"decemberus.github.io","root":"/Decemberus.github-io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Decemberus.github-io/local-search.xml"};
+  </script>
+  <script  src="/Decemberus.github-io/js/utils.js" ></script>
+  <script  src="/Decemberus.github-io/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/Decemberus.github-io/">
+      <strong>enjoy的blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Decemberus.github-io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Decemberus.github-io/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OpenRASP源码阅读"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-12-17 19:09" pubdate>
+          2023年12月17日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          17k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          145 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">OpenRASP源码阅读</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="OpenRASP源码阅读"><a href="#OpenRASP源码阅读" class="headerlink" title="OpenRASP源码阅读"></a>OpenRASP源码阅读</h1><h2 id="启动工作"><a href="#启动工作" class="headerlink" title="启动工作"></a>启动工作</h2><p>主要的启动类位于这里</p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20240302132620164.png" srcset="/Decemberus.github-io/img/loading.gif" lazyload alt="image-20240302132620164"></p>
+<p>整个过程的调用栈基本如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java">EngineBoot#start<br>	EngineBoot#initTransformer<br>		CustomClassTransformer#<br>		CustomClassTransformer#addAnnotationHook<br>		CustomClassTransformer#retransform<br>		CustomClassTransformer#transform<br>			AbstractClassHook#transformClass<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="一些基本的加载"><a href="#一些基本的加载" class="headerlink" title="一些基本的加载"></a>一些基本的加载</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">loadConfig</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>    LogConfig.ConfigFileAppender();<br>    <span class="hljs-comment">//单机模式下动态添加获取删除syslog</span><br>    <span class="hljs-keyword">if</span> (!CloudUtils.checkCloudControlEnter()) &#123;<br>        LogConfig.syslogManager();<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;[OpenRASP] RASP ID: &quot;</span> + CloudCacheModel.getInstance().getRaspId());<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>LogConfig.ConfigFileAppender()：初始化log4j<br>CloudUtils.checkCloudControlEnter()：检查云控配置信息<br>LogConfig.syslogManager()：读取配置信息，初始化syslog服务连接</p>
+<h3 id="initialize"><a href="#initialize" class="headerlink" title="initialize"></a>initialize</h3><p>往上面看能够看到一个js.Initialize,它用来为V8配置java的logger以及栈堆信息Getter（用于在js中获取当前栈堆信息）</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-comment">// 初始化插件系统</span><br><span class="hljs-keyword">if</span> (!JS.Initialize()) &#123;<br>    <span class="hljs-keyword">return</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>那些关系不大的类就不去了解了，主要来看一个重要的地方，在主函数中有下面这个语句初始化所有的checker，从枚举类<code>com.baidu.openrasp.plugin.checker.CheckParameter.Type</code>中读取所有的checker，</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">CheckerManager.init()<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>而他创建了一个枚举map</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-built_in">public</span> <span class="hljs-keyword">class</span> CheckerManager &#123;<br><br>    private static EnumMap&lt;<span class="hljs-keyword">Type</span>, Checker&gt; checkers = <span class="hljs-built_in">new</span> EnumMap&lt;<span class="hljs-keyword">Type</span>, Checker&gt;(<span class="hljs-keyword">Type</span>.<span class="hljs-keyword">class</span>);<br><br>    <span class="hljs-built_in">public</span> synchronized static <span class="hljs-type">void</span> init() throws <span class="hljs-keyword">Exception</span> &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">Type</span> <span class="hljs-keyword">type</span> : <span class="hljs-keyword">Type</span>.<span class="hljs-keyword">values</span>()) &#123;<br>            checkers.put(<span class="hljs-keyword">type</span>, <span class="hljs-keyword">type</span>.checker);<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>这个map里面存在有各种类型的注入</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">enum</span> <span class="hljs-title class_">Type</span> &#123;<br>    <span class="hljs-comment">// js插件检测</span><br>    SQL(<span class="hljs-string">&quot;sql&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span>),<br>    COMMAND(<span class="hljs-string">&quot;command&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">1</span>),<br>    DIRECTORY(<span class="hljs-string">&quot;directory&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">2</span>),<br>    REQUEST(<span class="hljs-string">&quot;request&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">3</span>),<br>    READFILE(<span class="hljs-string">&quot;readFile&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">5</span>),<br>    WRITEFILE(<span class="hljs-string">&quot;writeFile&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">6</span>),<br>    FILEUPLOAD(<span class="hljs-string">&quot;fileUpload&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">7</span>),<br>    RENAME(<span class="hljs-string">&quot;rename&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">8</span>),<br>    XXE(<span class="hljs-string">&quot;xxe&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">9</span>),<br>    OGNL(<span class="hljs-string">&quot;ognl&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">10</span>),<br>    DESERIALIZATION(<span class="hljs-string">&quot;deserialization&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">11</span>),<br>    WEBDAV(<span class="hljs-string">&quot;webdav&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">12</span>),<br>    INCLUDE(<span class="hljs-string">&quot;include&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">13</span>),<br>    SSRF(<span class="hljs-string">&quot;ssrf&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">14</span>),<br>    SQL_EXCEPTION(<span class="hljs-string">&quot;sql_exception&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">15</span>),<br>    REQUESTEND(<span class="hljs-string">&quot;requestEnd&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">17</span>),<br>    DELETEFILE(<span class="hljs-string">&quot;deleteFile&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">18</span>),<br>    MONGO(<span class="hljs-string">&quot;mongodb&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">19</span>),<br>    LOADLIBRARY(<span class="hljs-string">&quot;loadLibrary&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">20</span>),<br>    SSRF_REDIRECT(<span class="hljs-string">&quot;ssrfRedirect&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">21</span>),<br>    RESPONSE(<span class="hljs-string">&quot;response&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">23</span>),<br>    LINK(<span class="hljs-string">&quot;link&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">24</span>),<br>    JNDI(<span class="hljs-string">&quot;jndi&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">25</span>),<br>    DNS(<span class="hljs-string">&quot;dns&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">V8AttackChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">26</span>),<br><br><br>    <span class="hljs-comment">// java本地检测</span><br>    XSS_USERINPUT(<span class="hljs-string">&quot;xss_userinput&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">XssChecker</span>(), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">16</span>),<br>    SQL_SLOW_QUERY(<span class="hljs-string">&quot;sqlSlowQuery&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">SqlResultChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">0</span>),<br><br>    <span class="hljs-comment">// 安全基线检测</span><br>    POLICY_LOG(<span class="hljs-string">&quot;log&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">LogChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">22</span>),<br>    POLICY_MONGO_CONNECTION(<span class="hljs-string">&quot;mongoConnection&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">MongoConnectionChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">0</span>),<br>    POLICY_SQL_CONNECTION(<span class="hljs-string">&quot;sqlConnection&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">SqlConnectionChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">0</span>),<br>    POLICY_SERVER_TOMCAT(<span class="hljs-string">&quot;tomcatServer&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">TomcatSecurityChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">0</span>),<br>    POLICY_SERVER_JBOSS(<span class="hljs-string">&quot;jbossServer&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">JBossSecurityChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">0</span>),<br>    POLICY_SERVER_JBOSSEAP(<span class="hljs-string">&quot;jbossEAPServer&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">JBossEAPSecurityChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">0</span>),<br>    POLICY_SERVER_JETTY(<span class="hljs-string">&quot;jettyServer&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">JettySecurityChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">0</span>),<br>    POLICY_SERVER_RESIN(<span class="hljs-string">&quot;resinServer&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">ResinSecurityChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">0</span>),<br>    POLICY_SERVER_WEBSPHERE(<span class="hljs-string">&quot;websphereServer&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">WebsphereSecurityChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">0</span>),<br>    POLICY_SERVER_WEBLOGIC(<span class="hljs-string">&quot;weblogicServer&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeblogicSecurityChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">0</span>),<br>    POLICY_SERVER_WILDFLY(<span class="hljs-string">&quot;wildflyServer&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">WildflySecurityChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">0</span>),<br>    POLICY_SERVER_TONGWEB(<span class="hljs-string">&quot;tongwebServer&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">TongwebSecurityChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">0</span>),<br>    POLICY_SERVER_BES(<span class="hljs-string">&quot;bes&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">BESSecurityChecker</span>(<span class="hljs-literal">false</span>), <span class="hljs-number">0</span>);<br></code></pre></td></tr></table></figure>
+
+<p>包含三种类型的checker，一是js插件检测，意味着这个checker会调用js plugin进行攻击检测，二是java本地检测，意味着是调用本地java代码进行攻击检测，三是安全基线检测，是用于检测一些高风险类的安全性基线检测，检测其配置是否有安全隐患。</p>
+<p>而这些位移就是位掩码来在一个整数中独立开启或关闭多个标志位</p>
+<p>比如这样</p>
+<blockquote>
+<p>如果配置值是 <code>3</code>（二进制 <code>11</code>），那么表示启用了 <code>SQL</code> 和 <code>COMMAND</code> 两种检测。</p>
+<p>具体到这段代码，位数代表了每种检测类型的唯一标识符。例如：</p>
+<ul>
+<li><code>SQL</code> 的位掩码是 <code>1</code>（二进制 <code>0001</code>）。</li>
+<li><code>COMMAND</code> 的位掩码是 <code>1 &lt;&lt; 1</code> 或 <code>2</code>（二进制 <code>0010</code>）。</li>
+<li><code>DIRECTORY</code> 的位掩码是 <code>1 &lt;&lt; 2</code> 或 <code>4</code>（二进制 <code>0100</code>）。</li>
+</ul>
+</blockquote>
+<h3 id="initTransformer"><a href="#initTransformer" class="headerlink" title="initTransformer"></a>initTransformer</h3><p>主要的方法为这个</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">initTransformer(inst);<br></code></pre></td></tr></table></figure>
+
+<p>进入了这个方法以后，会进入我们CustomClassTransformer</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">initTransformer</span><span class="hljs-params">(Instrumentation inst)</span> <span class="hljs-keyword">throws</span> UnmodifiableClassException &#123;<br>    transformer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CustomClassTransformer</span>(inst);<br>    transformer.retransform();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这个类中，能够进行字节码的修改，并且添加hook注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-title function_">CustomClassTransformer</span><span class="hljs-params">(Instrumentation inst)</span> &#123;<br>    <span class="hljs-built_in">this</span>.inst = inst;<br>    inst.addTransformer(<span class="hljs-built_in">this</span>, <span class="hljs-literal">true</span>);<br>    addAnnotationHook();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addAnnotationHook</span><span class="hljs-params">()</span> &#123;<br>    Set&lt;Class&gt; classesSet = AnnotationScanner.getClassWithAnnotation(SCAN_ANNOTATION_PACKAGE, HookAnnotation.class);<span class="hljs-comment">//扫描特定包名下的含有特定的注解的类，这里就是扫描带有hookannotation的类</span><br>    <br>    <span class="hljs-keyword">for</span> (Class clazz : classesSet) &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-type">Object</span> <span class="hljs-variable">object</span> <span class="hljs-operator">=</span> clazz.newInstance();<br>            <span class="hljs-keyword">if</span> (object <span class="hljs-keyword">instanceof</span> AbstractClassHook) &#123;<br>                addHook((AbstractClassHook) object, clazz.getName());<br>            &#125;<br>        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>            LogTool.error(ErrorType.HOOK_ERROR, <span class="hljs-string">&quot;add hook failed: &quot;</span> + e.getMessage(), e);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>addAnnotationHook()读取了com.baidu.openrasp.hook包中所有被@HookAnnotation注解的class，然后缓存到集合hooks中，判断该对象是否是AbstractClassHook的子类，如果是，就调用addHook方法，传入该对象和该类的名称两个参数，将该对象作为一个hook添加到HookHandler中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">retransform</span><span class="hljs-params">()</span> &#123;<br>    LinkedList&lt;Class&gt; retransformClasses = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LinkedList</span>&lt;Class&gt;();<br>    Class[] loadedClasses = inst.getAllLoadedClasses();<br>    <span class="hljs-keyword">for</span> (Class clazz : loadedClasses) &#123;<br>        <span class="hljs-keyword">if</span> (isClassMatched(clazz.getName().replace(<span class="hljs-string">&quot;.&quot;</span>, <span class="hljs-string">&quot;/&quot;</span>))) &#123;<br>            <span class="hljs-keyword">if</span> (inst.isModifiableClass(clazz) &amp;&amp; !clazz.getName().startsWith(<span class="hljs-string">&quot;java.lang.invoke.LambdaForm&quot;</span>)) &#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    <span class="hljs-comment">// hook已经加载的类，或者是回滚已经加载的类</span><br>                    inst.retransformClasses(clazz);<br>                &#125; <span class="hljs-keyword">catch</span> (Throwable t) &#123;<br>                    LogTool.error(ErrorType.HOOK_ERROR,<br>                            <span class="hljs-string">&quot;failed to retransform class &quot;</span> + clazz.getName() + <span class="hljs-string">&quot;: &quot;</span> + t.getMessage(), t);<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>接下来会从所有在CustomClassTransformer中加载的类里面找到匹配的hook类，然后判断类是否可以修改，并且排除lambda表达式生成的类，最后就可以进行hook已经加载的类了</p>
+<p>如此一来，后续类加载通过com.baidu.openrasp.transformer.CustomClassTransformer#transform的时候，对其进行匹配，判断是否需要hook</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> <span class="hljs-type">byte</span>[] transform(ClassLoader loader, String className, Class&lt;?&gt; classBeingRedefined,<br>                        ProtectionDomain domain, <span class="hljs-type">byte</span>[] classfileBuffer) <span class="hljs-keyword">throws</span> IllegalClassFormatException &#123;<br>    <span class="hljs-keyword">if</span> (loader != <span class="hljs-literal">null</span>) &#123;<br>        DependencyFinder.addJarPath(domain);<br>    &#125;<br>    <span class="hljs-keyword">if</span> (loader != <span class="hljs-literal">null</span> &amp;&amp; jspClassLoaderNames.contains(loader.getClass().getName())) &#123;<br>        jspClassLoaderCache.put(className.replace(<span class="hljs-string">&quot;/&quot;</span>, <span class="hljs-string">&quot;.&quot;</span>), <span class="hljs-keyword">new</span> <span class="hljs-title class_">SoftReference</span>&lt;ClassLoader&gt;(loader));<br>    &#125;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">final</span> AbstractClassHook hook : hooks) &#123;<br>        <span class="hljs-keyword">if</span> (hook.isClassMatched(className)) &#123;<span class="hljs-comment">//这里的hook就是从前面的hook中得到的</span><br>            <span class="hljs-type">CtClass</span> <span class="hljs-variable">ctClass</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>            <span class="hljs-keyword">try</span> &#123;<br>                <span class="hljs-type">ClassPool</span> <span class="hljs-variable">classPool</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ClassPool</span>();<br>                addLoader(classPool, loader);<span class="hljs-comment">//加上loader对应的路径</span><br>                ctClass = classPool.makeClass(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ByteArrayInputStream</span>(classfileBuffer));<br>                <span class="hljs-keyword">if</span> (loader == <span class="hljs-literal">null</span>) &#123;<br>                    hook.setLoadedByBootstrapLoader(<span class="hljs-literal">true</span>);<br>                &#125;<br>                classfileBuffer = hook.transformClass(ctClass);<span class="hljs-comment">//对ctclass进行转换，修改类的字节码，agent的内容加到hook的前面</span><br>                <span class="hljs-keyword">if</span> (classfileBuffer != <span class="hljs-literal">null</span>) &#123;<br>                    checkNecessaryHookType(hook.getType());<span class="hljs-comment">//检查是否是hook类型</span><br>                &#125;<br>            &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                e.printStackTrace();<br>            &#125; <span class="hljs-keyword">finally</span> &#123;<br>                <span class="hljs-keyword">if</span> (ctClass != <span class="hljs-literal">null</span>) &#123;<br>                    ctClass.detach();<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>    serverDetector.detectServer(className, loader, domain);<br>    <span class="hljs-keyword">return</span> classfileBuffer;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="主要hook类分析"><a href="#主要hook类分析" class="headerlink" title="主要hook类分析"></a>主要hook类分析</h2><p>所有的hook类都实现了AbstractClassHook这一个类，这个类主要用来检测hook类的各种参数的</p>
+<h3 id="XXEHook"><a href="#XXEHook" class="headerlink" title="XXEHook"></a>XXEHook</h3><p>我们直接来分析engine中的XXEHook，主要的代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">checkXXE</span><span class="hljs-params">(String expandedSystemId)</span> &#123;<br>    <span class="hljs-keyword">if</span> (expandedSystemId != <span class="hljs-literal">null</span> &amp;&amp; !XXEHook.getLocalExpandedSystemIds().contains(expandedSystemId)) &#123;<br>        XXEHook.getLocalExpandedSystemIds().add(expandedSystemId);<br>        HashMap&lt;String, Object&gt; params = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;String, Object&gt;();<br>        params.put(<span class="hljs-string">&quot;entity&quot;</span>, expandedSystemId);<br>        HookHandler.doCheck(CheckParameter.Type.XXE, params);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里的expandedSystemId是代表了XML文档中外部实体的系统标识符（System Identifier），如果文档包含了对外部资源的引用，解析器会尝试通过这个系统标识符来获取外部资源。</p>
+<p>第一行就是为了先检测有没有被记录在本地的<code>localExpandedSystemIds</code>，可以往上面看这个方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span> 当前线程已触发检测的expandedSystemIds</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> HashSet&lt;String&gt; <span class="hljs-title function_">getLocalExpandedSystemIds</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> localExpandedSystemIds.get();<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 重置当前线程已触发检测的expandedSystemIds</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">resetLocalExpandedSystemIds</span><span class="hljs-params">()</span> &#123;<br>    localExpandedSystemIds.get().clear();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>它会检查每个<code>expandedSystemId</code> 是否已经被记录在一个hashset中。如果没有，它会将这个新的<code>expandedSystemId</code> 添加到hashset中，并通过 <code>HookHandler.doCheck</code> 方法来进行安全检查，以确保这个外部实体的引用不会导致安全问题</p>
+<p>我们接着往上看hookMethod</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">hookMethod</span><span class="hljs-params">(CtClass ctClass)</span> <span class="hljs-keyword">throws</span> IOException, CannotCompileException, NotFoundException &#123;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">src</span> <span class="hljs-operator">=</span> getInvokeStaticSrc(XXEHook.class, <span class="hljs-string">&quot;checkXXE&quot;</span>, <span class="hljs-string">&quot;$1&quot;</span>, String.class);<br>    <span class="hljs-type">String</span> <span class="hljs-variable">src1</span> <span class="hljs-operator">=</span> getInvokeStaticSrc(XXEHook.class, <span class="hljs-string">&quot;checkXXE&quot;</span>, <span class="hljs-string">&quot;$5&quot;</span>, String.class);<br>    insertBefore(ctClass, <span class="hljs-string">&quot;expandSystemId&quot;</span>, <span class="hljs-string">&quot;(Ljava/lang/String;Ljava/lang/String;Z)Ljava/lang/String;&quot;</span>, src);<br>    insertBefore(ctClass, <span class="hljs-string">&quot;setDescription&quot;</span>, <span class="hljs-string">&quot;(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;&quot;</span> +<br>            <span class="hljs-string">&quot;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V&quot;</span>, src1);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>变量名ctClass当然就是我们要被修改的方法了</p>
+<p>而<code>getInvokeStaticSrc</code> 则用来获取调用静态方法的代码字符串</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 获取调用静态方法的代码字符串</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> invokeClass 静态方法所属的类</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> methodName  静态方法名称</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> paramString 调用传入的参数字符串,按照javassist格式</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span> 整合之后的代码</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> String <span class="hljs-title function_">getInvokeStaticSrc</span><span class="hljs-params">(Class invokeClass, String methodName, String paramString, Class... parameterTypes)</span> &#123;<br></code></pre></td></tr></table></figure>
+
+<p>我们拿src举例子</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">src</span> <span class="hljs-operator">=</span> getInvokeStaticSrc(XXEHook.class, <span class="hljs-string">&quot;checkXXE&quot;</span>, <span class="hljs-string">&quot;$1&quot;</span>, String.class);<br></code></pre></td></tr></table></figure>
+
+<p>这里我们使用了<code>getInvokeStaticSrc</code> 方法的作用是生成一段代码，他会在运行时动态调用 <code>XXEHook</code> 类中的 <code>checkXXE</code> 静态方法。</p>
+<p>而当我们接着调用这个代码时</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">insertBefore(ctClass, <span class="hljs-string">&quot;expandSystemId&quot;</span>, <span class="hljs-string">&quot;(Ljava/lang/String;Ljava/lang/String;Z)Ljava/lang/String;&quot;</span>, src);<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 在目标类的目标方法的入口插入相应的源代码</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> ctClass    目标类</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> methodName 目标方法名称</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> desc       目标方法的描述符号</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> src        待插入的源代码</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">insertBefore</span><span class="hljs-params">(CtClass ctClass, String methodName, String desc, String src)</span><br></code></pre></td></tr></table></figure>
+
+<p>这里src中的$1就会被替换为<code>expandSystemId</code>这个方法的第一个参数，也就是把<code>expandSystemId</code>这个方法的第一个参数作为参数传递给checkXXE，也就是说会在目标代码前面插入一段</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">com.baidu.openrasp.hook.system.ProcessBuilderHook.checkXXE($<span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+
+<p>下面的src1代码也就是类似了</p>
+<h3 id="HttpClientHook"><a href="#HttpClientHook" class="headerlink" title="HttpClientHook"></a>HttpClientHook</h3><p>HttpClient中发起请求前，都会先创建类似于下图代码的类的实例，然后才能发起请求，该实例中包含着URI信息，而对于SSRF的攻击检测，就是在请求发起前，对URI进行检测，检测是否是SSRF，因此需要hook到这些类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isClassMatched</span><span class="hljs-params">(String className)</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;org/apache/http/impl/client/CloseableHttpClient&quot;</span>.equals(className)<br>            || <span class="hljs-string">&quot;org/apache/http/impl/client/AutoRetryHttpClient&quot;</span>.equals(className)<br>            || <span class="hljs-string">&quot;org/apache/http/impl/client/DecompressingHttpClient&quot;</span>.equals(className)<br>            <span class="hljs-comment">// 兼容 4.0 版本, 4.0 版本没有 CloseableHttpClient</span><br>            || <span class="hljs-string">&quot;org/apache/http/impl/client/AbstractHttpClient&quot;</span>.equals(className);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们重点分析的是他的hookMethod</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">hookMethod</span><span class="hljs-params">(CtClass ctClass)</span> <span class="hljs-keyword">throws</span> IOException, CannotCompileException, NotFoundException &#123;<br>    CtClass[] interfaces = ctClass.getInterfaces();<br>    <span class="hljs-keyword">if</span> (interfaces != <span class="hljs-literal">null</span>) &#123;<br>        <span class="hljs-keyword">for</span> (CtClass inter : interfaces) &#123;<br>            <span class="hljs-comment">// 兼容 http client 4.0 版本的 AbstractHttpClient</span><br>            <span class="hljs-keyword">if</span> (inter.getName().equals(<span class="hljs-string">&quot;org.apache.http.client.HttpClient&quot;</span>)) &#123;<br>                LinkedList&lt;CtBehavior&gt; methods =<br>                        getMethod(ctClass, <span class="hljs-string">&quot;execute&quot;</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>);<br>                <span class="hljs-comment">//获取org.apache.http.client.HttpClient类中所有名为execute的方法，会用于http请求</span><br>                <span class="hljs-type">String</span> <span class="hljs-variable">afterSrc</span> <span class="hljs-operator">=</span> getInvokeStaticSrc(HttpClientHook.class, <span class="hljs-string">&quot;exitCheck&quot;</span>,<br>                        <span class="hljs-string">&quot;$1,$_&quot;</span>, Object.class, Object.class);<br>                <span class="hljs-comment">//$1代表方法的第一个参数，而$_代表方法的返回值</span><br>                <span class="hljs-keyword">for</span> (CtBehavior method : methods) &#123;<br>                    <span class="hljs-keyword">if</span> (method.getSignature().startsWith(<span class="hljs-string">&quot;(Lorg/apache/http/client/methods/HttpUriRequest&quot;</span>)) &#123;<br>                        <span class="hljs-type">String</span> <span class="hljs-variable">src</span> <span class="hljs-operator">=</span> getInvokeStaticSrc(HttpClientHook.class,<br>                                <span class="hljs-string">&quot;checkHttpUri&quot;</span>, <span class="hljs-string">&quot;$1&quot;</span>, Object.class);<br>                        insertBefore(method, src);<br>                        insertAfter(method, afterSrc, <span class="hljs-literal">true</span>);<br>                    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (method.getSignature().startsWith(<span class="hljs-string">&quot;(Lorg/apache/http/HttpHost&quot;</span>)) &#123;<br>                        <span class="hljs-type">String</span> <span class="hljs-variable">src</span> <span class="hljs-operator">=</span> getInvokeStaticSrc(HttpClientHook.class,<br>                                <span class="hljs-string">&quot;checkHttpHost&quot;</span>, <span class="hljs-string">&quot;$1&quot;</span>, Object.class);<br>                        insertBefore(method, src);<br>                        insertAfter(method, afterSrc, <span class="hljs-literal">true</span>);<br>                    &#125;<br>                &#125;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>首先获取了所有<code>org.apache.http.client.HttpClient</code>的接口,然后在方法前面插入<code>checkHttpUri</code>方法，在方法后面插入<code>checkHttpHost</code>，我们接着详细的去看这一行代码的调用过程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">afterSrc</span> <span class="hljs-operator">=</span> getInvokeStaticSrc(HttpClientHook.class, <span class="hljs-string">&quot;exitCheck&quot;</span>,<span class="hljs-string">&quot;$1,$_&quot;</span>, Object.class, Object.class);<br></code></pre></td></tr></table></figure>
+
+<p>既然传入的参数是httpclient的第一个参数和最后一个参数，我们就去具体的代码中看看</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs java">HttpResponse <span class="hljs-title function_">execute</span><span class="hljs-params">(HttpUriRequest request)</span><br>    <span class="hljs-keyword">throws</span> IOException, ClientProtocolException;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Executes HTTP request using the given context.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> request   the request to execute</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> context   the context to use for the execution, or</span><br><span class="hljs-comment"> *                  &#123;<span class="hljs-doctag">@code</span> null&#125; to use the default context</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span>  the response to the request. This is always a final response,</span><br><span class="hljs-comment"> *          never an intermediate response with an 1xx status code.</span><br><span class="hljs-comment"> *          Whether redirects or authentication challenges will be returned</span><br><span class="hljs-comment"> *          or handled automatically depends on the implementation and</span><br><span class="hljs-comment"> *          configuration of this client.</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@throws</span> IOException in case of a problem or the connection was aborted</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@throws</span> ClientProtocolException in case of an http protocol error</span><br><span class="hljs-comment"> */</span><br>HttpResponse <span class="hljs-title function_">execute</span><span class="hljs-params">(HttpUriRequest request, HttpContext context)</span><br>    <span class="hljs-keyword">throws</span> IOException, ClientProtocolException;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Executes HTTP request using the default context.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> target    the target host for the request.</span><br><span class="hljs-comment"> *                  Implementations may accept &#123;<span class="hljs-doctag">@code</span> null&#125;</span><br><span class="hljs-comment"> *                  if they can still determine a route, for example</span><br><span class="hljs-comment"> *                  to a default target or by inspecting the request.</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> request   the request to execute</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span>  the response to the request. This is always a final response,</span><br><span class="hljs-comment"> *          never an intermediate response with an 1xx status code.</span><br><span class="hljs-comment"> *          Whether redirects or authentication challenges will be returned</span><br><span class="hljs-comment"> *          or handled automatically depends on the implementation and</span><br><span class="hljs-comment"> *          configuration of this client.</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@throws</span> IOException in case of a problem or the connection was aborted</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@throws</span> ClientProtocolException in case of an http protocol error</span><br><span class="hljs-comment"> */</span><br>HttpResponse <span class="hljs-title function_">execute</span><span class="hljs-params">(HttpHost target, HttpRequest request)</span><br>    <span class="hljs-keyword">throws</span> IOException, ClientProtocolException;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Executes HTTP request using the given context.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> target    the target host for the request.</span><br><span class="hljs-comment"> *                  Implementations may accept &#123;<span class="hljs-doctag">@code</span> null&#125;</span><br><span class="hljs-comment"> *                  if they can still determine a route, for example</span><br><span class="hljs-comment"> *                  to a default target or by inspecting the request.</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> request   the request to execute</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> context   the context to use for the execution, or</span><br><span class="hljs-comment"> *                  &#123;<span class="hljs-doctag">@code</span> null&#125; to use the default context</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span>  the response to the request. This is always a final response,</span><br><span class="hljs-comment"> *          never an intermediate response with an 1xx status code.</span><br><span class="hljs-comment"> *          Whether redirects or authentication challenges will be returned</span><br><span class="hljs-comment"> *          or handled automatically depends on the implementation and</span><br><span class="hljs-comment"> *          configuration of this client.</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@throws</span> IOException in case of a problem or the connection was aborted</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@throws</span> ClientProtocolException in case of an http protocol error</span><br><span class="hljs-comment"> */</span><br>HttpResponse <span class="hljs-title function_">execute</span><span class="hljs-params">(HttpHost target, HttpRequest request,</span><br><span class="hljs-params">                     HttpContext context)</span><br>    <span class="hljs-keyword">throws</span> IOException, ClientProtocolException;<br></code></pre></td></tr></table></figure>
+
+<p>我们能够看到httpClientHook对不同的方法使用了不同的方法来进行检测</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (method.getSignature().startsWith(<span class="hljs-string">&quot;(Lorg/apache/http/client/methods/HttpUriRequest&quot;</span>)) &#123;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">src</span> <span class="hljs-operator">=</span> getInvokeStaticSrc(HttpClientHook.class,<br>            <span class="hljs-string">&quot;checkHttpUri&quot;</span>, <span class="hljs-string">&quot;$1&quot;</span>, Object.class);<br>    insertBefore(method, src);<br>    insertAfter(method, afterSrc, <span class="hljs-literal">true</span>);<br>&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (method.getSignature().startsWith(<span class="hljs-string">&quot;(Lorg/apache/http/HttpHost&quot;</span>)) &#123;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">src</span> <span class="hljs-operator">=</span> getInvokeStaticSrc(HttpClientHook.class,<br>            <span class="hljs-string">&quot;checkHttpHost&quot;</span>, <span class="hljs-string">&quot;$1&quot;</span>, Object.class);<br>    insertBefore(method, src);<br>    insertAfter(method, afterSrc, <span class="hljs-literal">true</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>对于<code>HttpUriRequest</code>方法，将会使用checkhttpuri来检测</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">HttpUriRequest</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">HttpRequest</span> &#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Returns the HTTP method this request uses, such as &#123;<span class="hljs-doctag">@code</span> GET&#125;,</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@code</span> PUT&#125;, &#123;<span class="hljs-doctag">@code</span> POST&#125;, or other.</span><br><span class="hljs-comment">     */</span><br>    String <span class="hljs-title function_">getMethod</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Returns the URI this request uses, such as</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@code</span> http://example.org/path/to/file&#125;.</span><br><span class="hljs-comment">     * &lt;p&gt;</span><br><span class="hljs-comment">     * Note that the URI may be absolute URI (as above) or may be a relative URI.</span><br><span class="hljs-comment">     * &lt;/p&gt;</span><br><span class="hljs-comment">     * &lt;p&gt;</span><br><span class="hljs-comment">     * Implementations are encouraged to return</span><br><span class="hljs-comment">     * the URI that was initially requested.</span><br><span class="hljs-comment">     * &lt;/p&gt;</span><br><span class="hljs-comment">     * &lt;p&gt;</span><br><span class="hljs-comment">     * To find the final URI after any redirects have been processed,</span><br><span class="hljs-comment">     * please see the section entitled</span><br><span class="hljs-comment">     * &lt;a href=&quot;http://hc.apache.org/httpcomponents-client-ga/tutorial/html/fundamentals.html#d4e205&quot;&gt;HTTP execution context&lt;/a&gt;</span><br><span class="hljs-comment">     * in the</span><br><span class="hljs-comment">     * &lt;a href=&quot;http://hc.apache.org/httpcomponents-client-ga/tutorial/html&quot;&gt;HttpClient Tutorial&lt;/a&gt;</span><br><span class="hljs-comment">     * &lt;/p&gt;</span><br><span class="hljs-comment">     */</span><br>    URI <span class="hljs-title function_">getURI</span><span class="hljs-params">()</span>;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">abort</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> UnsupportedOperationException;<br><br>    <span class="hljs-type">boolean</span> <span class="hljs-title function_">isAborted</span><span class="hljs-params">()</span>;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们随便找一个他的实现类来看一下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HttpDelete</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">HttpRequestBase</span> &#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-variable">METHOD_NAME</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;DELETE&quot;</span>;<br><br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">HttpDelete</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-built_in">super</span>();<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">HttpDelete</span><span class="hljs-params">(<span class="hljs-keyword">final</span> URI uri)</span> &#123;<br>        <span class="hljs-built_in">super</span>();<br>        setURI(uri);<br>    &#125;<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@throws</span> IllegalArgumentException if the uri is invalid.</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">HttpDelete</span><span class="hljs-params">(<span class="hljs-keyword">final</span> String uri)</span> &#123;<br>        <span class="hljs-built_in">super</span>();<br>        setURI(URI.create(uri));<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getMethod</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> METHOD_NAME;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>原本的checkHttpUri方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">checkHttpUri</span><span class="hljs-params">(Object uriValue)</span> &#123;<br>    <span class="hljs-keyword">if</span> (!isChecking.get() &amp;&amp; uriValue != <span class="hljs-literal">null</span>) &#123;<br>        isChecking.set(<span class="hljs-literal">true</span>);<br>        <span class="hljs-type">URI</span> <span class="hljs-variable">uri</span> <span class="hljs-operator">=</span> (URI) Reflection.invokeMethod(uriValue, <span class="hljs-string">&quot;getURI&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Class</span>[]&#123;&#125;);<br>        checkHttpUrl(getSsrfParamFromURI(uri));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>变量src中插入的方法，此时uriValue变量就会变成httpDelete的构造方法的参数，也就是uri</p>
+<p>最终会在这段代码前面插入这样一段代码</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf"><span class="hljs-attribute">src</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;com.example.HttpClientHook.checkHttpHost($1)&quot;</span><span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>com.example是HttpClientHook类的包名</p>
+<p>在rasp的简单尝试中我们写到了命令执行的获取与拦截方法，现在来看看rasp官方的拦截方法与我们自己的有什么异同</p>
+<p>(未完待续)</p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OpenRASP源码阅读</div>
+      <div>https://decemberus.github.io/Decemberus.github-io/2023/12/17/OpenRASP源码阅读/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Decemberus</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年12月17日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2024/01/01/CodeQL%20log4j%E5%AE%9E%E6%88%98/" title="CodeQL log4j实战">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CodeQL log4j实战</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Decemberus.github-io/2023/11/16/Github%20ctf4%20training/" title="Github CodeQL training 思路">
+                        <span class="hidden-mobile">Github CodeQL training 思路</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/Decemberus.github-io/js/events.js" ></script>
+<script  src="/Decemberus.github-io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/Decemberus.github-io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/Decemberus.github-io/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/Decemberus.github-io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
