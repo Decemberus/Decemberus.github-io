@@ -23,16 +23,16 @@
 <meta property="og:site_name" content="欢迎回来">
 <meta property="og:description" content="CodeQl常见漏洞梳理很多漏洞都有通用的解决方式，但是对如一个初学者来说可能理不清他们之间的关系，于是我通过阅读源码，查阅相关资料，就有了这么一篇文章 SQL Inject我们使用的是Spring Boot框架，那么source就是http参数入口的代码参数，在下面的代码中，source就是username： 1234@RequestMapping(value &#x3D; &quot;&#x2F;one&amp;quot">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231111155317381.png">
-<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231111155327944.png">
-<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394471_610f53e70361d448d1bbe.jpg!small">
-<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394505_610f5409ded2fb0984439.jpg!small">
-<meta property="og:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394606_610f546eaa54d9e27ddaa.png">
+<meta property="og:image" content="d:/mdimage/image-20231111155317381.png">
+<meta property="og:image" content="d:/mdimage/image-20231111155327944.png">
+<meta property="og:image" content="d:/mdimage/1628394471_610f53e70361d448d1bbe.jpg!small">
+<meta property="og:image" content="d:/mdimage/1628394505_610f5409ded2fb0984439.jpg!small">
+<meta property="og:image" content="d:/mdimage/1628394606_610f546eaa54d9e27ddaa.png">
 <meta property="article:published_time" content="2023-12-23T10:19:37.000Z">
-<meta property="article:modified_time" content="2024-03-02T12:05:46.936Z">
+<meta property="article:modified_time" content="2024-03-02T12:04:30.870Z">
 <meta property="article:author" content="Decemberus">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231111155317381.png">
+<meta name="twitter:image" content="d:/mdimage/image-20231111155317381.png">
   
   
   <title>CodeQl常见漏洞梳理 - 欢迎回来</title>
@@ -335,14 +335,14 @@
 
 <p>注：上面的注释和其它语言是不一样的，不能够删除，它是程序的一部分，因为在我们生成测试报告的时候，上面注释当中的name，description等信息会写入到审计报告中。</p>
 <p>这样我们最终拿到注入漏洞。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231111155317381.png" srcset="/img/loading.gif" lazyload alt="image-20231111155317381"> </p>
+<p><img src="D:\mdimage\image-20231111155317381.png" srcset="/img/loading.gif" lazyload alt="image-20231111155317381"> </p>
 <h3 id="误报解决"><a href="#误报解决" class="headerlink" title="误报解决"></a>误报解决</h3><p>我们在上面自动审计出来的SQL注入漏洞当中，发现了一个误报问题。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20231111155327944.png" srcset="/img/loading.gif" lazyload alt="image-20231111155327944"> </p>
+<p><img src="D:\mdimage\image-20231111155327944.png" srcset="/img/loading.gif" lazyload alt="image-20231111155327944"> </p>
 <p>这个方法的参数类型是<code>List&lt;Long&gt;</code>，不可能存在注入漏洞。</p>
 <p>这说明我们的规则里，对于<code>List&lt;Long&gt;</code>，甚至<code>List&lt;Integer&gt;</code>类型都会产生误报，<code>source</code>误把这种类型的参数涵盖了。</p>
 <p>我们需要采取手段消除这种误报。</p>
 <p>这个手段就是<code>isSanitizer</code>。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394471_610f53e70361d448d1bbe.jpg!small" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p><img src="D:\mdimage\1628394471_610f53e70361d448d1bbe.jpg!small" srcset="/img/loading.gif" lazyload alt="image"></p>
 <blockquote>
 <p>isSanitizer是CodeQL的类<code>TaintTracking::Configuration</code>提供的净化方法。它的函数原型是：</p>
 <p>override predicate isSanitizer(DataFlow::Node node) {}</p>
@@ -362,7 +362,7 @@
 <p>那我们如果通过CodeQL来解决漏报问题呢？答案就是通过<code>isAdditionalTaintStep</code>方法。</p>
 <p>实现原理就一句话：</p>
 <p><strong>断了就强制给它接上。</strong></p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394505_610f5409ded2fb0984439.jpg!small" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p><img src="D:\mdimage\1628394505_610f5409ded2fb0984439.jpg!small" srcset="/img/loading.gif" lazyload alt="image"></p>
 <blockquote>
 <p>isAdditionalTaintStep方法是CodeQL的类<code>TaintTracking::Configuration</code>提供的的方法，它的原型是：</p>
 <p>override predicate isAdditionalTaintStep(DataFlow::Node node1, DataFlow::Node node2) {}</p>
@@ -405,7 +405,7 @@
 <p>学过java的人可能会很费解，我们继承了一个abstract抽象类，连个实现方法都没有，怎么就能够达到获取各种source的目的呢？</p>
 <p>CodeQL和Java不太一样，只要我们的子类继承了这个<code>RemoteFlowSource</code>类，那么所有子类就会被调用，它所代表的source也会被加载。</p>
 <p>我们在 <code>RemoteFlowSource</code>定义下面会看到非常多子类，就是这个道理，它们的结果都会被用and串联加载。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1628394606_610f546eaa54d9e27ddaa.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
+<p><img src="D:\mdimage\1628394606_610f546eaa54d9e27ddaa.png" srcset="/img/loading.gif" lazyload alt="img"> </p>
 </blockquote>
 <p>于是我们能找到这个实现类</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DefaultXxeSink</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">XxeSink</span> &#123;<br>  DefaultXxeSink() &#123;<br>    not SafeSaxSourceFlow::flowTo(<span class="hljs-built_in">this</span>) and<br>    <span class="hljs-title function_">exists</span><span class="hljs-params">(XmlParserCall parse |</span><br><span class="hljs-params">      parse.getSink()</span> = <span class="hljs-built_in">this</span>.asExpr() and<br>      not parse.isSafe()<br>    )<br>  &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
