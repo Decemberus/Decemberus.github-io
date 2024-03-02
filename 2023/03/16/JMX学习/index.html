@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/blog.decemberus.com/img/fluid.png">
-  <link rel="icon" href="/blog.decemberus.com/img/fluid.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/decemberus.com/img/fluid.png">
+  <link rel="icon" href="/decemberus.com/img/fluid.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="JMX学习JMX的定义　　JMX(Java Management Extensions)是一个为应用程序植入管理功能的框架。JMX是一套标准的代理和服务，实际上，用户可以在任何Java应用程序中使用这些代理和服务实现管理。这是官方文档上的定义，我看过很多次也无法很好的理解。我个人的理解是JMX让程序有被管理的功能，例如你开发一个WEB网站，它是在24小时不间断运行，那么你肯定会对网站进行监控，如每">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Github CodeQL training 思路">
-<meta property="og:url" content="https://blog.decemberus.com/2023/03/16/JMX%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:url" content="https://decemberus.com/2023/03/16/JMX%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="欢迎回来">
 <meta property="og:description" content="JMX学习JMX的定义　　JMX(Java Management Extensions)是一个为应用程序植入管理功能的框架。JMX是一套标准的代理和服务，实际上，用户可以在任何Java应用程序中使用这些代理和服务实现管理。这是官方文档上的定义，我看过很多次也无法很好的理解。我个人的理解是JMX让程序有被管理的功能，例如你开发一个WEB网站，它是在24小时不间断运行，那么你肯定会对网站进行监控，如每">
 <meta property="og:locale" content="zh_CN">
@@ -59,12 +59,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/blog.decemberus.com/css/main.css" />
+<link  rel="stylesheet" href="/decemberus.com/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/blog.decemberus.com/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/decemberus.com/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/blog.decemberus.com/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/decemberus.com/css/highlight-dark.css" />
   
 
 
@@ -72,10 +72,10 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"blog.decemberus.com","root":"/blog.decemberus.com/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog.decemberus.com/local-search.xml"};
+    var CONFIG = {"hostname":"decemberus.com","root":"/decemberus.com/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/decemberus.com/local-search.xml"};
   </script>
-  <script  src="/blog.decemberus.com/js/utils.js" ></script>
-  <script  src="/blog.decemberus.com/js/color-schema.js" ></script>
+  <script  src="/decemberus.com/js/utils.js" ></script>
+  <script  src="/decemberus.com/js/color-schema.js" ></script>
 
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -90,7 +90,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/blog.decemberus.com/">
+    <a class="navbar-brand" href="/decemberus.com/">
       <strong>enjoy的blog</strong>
     </a>
 
@@ -109,7 +109,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/">
+              <a class="nav-link" href="/decemberus.com/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -121,7 +121,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/archives/">
+              <a class="nav-link" href="/decemberus.com/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -133,7 +133,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/categories/">
+              <a class="nav-link" href="/decemberus.com/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -145,7 +145,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/tags/">
+              <a class="nav-link" href="/decemberus.com/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -157,7 +157,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/about/">
+              <a class="nav-link" href="/decemberus.com/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -186,7 +186,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/blog.decemberus.com/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/decemberus.com/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -275,7 +275,7 @@
 <p>2、程序熟手则配置在文件中（JAVA一般都是properties文件），到要改变的时候只要修改配置文件，但还是必须重启系统，以便读取配置文件里最新的值。</p>
 <p>3、程序好手则会写一段代码，把配置值缓存起来，系统在获取的时候，先看看配置文件有没有改动，如有改动则重新从配置里读取，否则从缓存里读取。</p>
 <p>4、程序高手则懂得物为我所用，用JMX把需要配置的属性集中在一个类中，然后写一个MBean，再进行相关配置。另外JMX还提供了一个工具页，以方便我们对参数值进行修改。</p>
-<h2 id="JMX架构图"><a href="#JMX架构图" class="headerlink" title="JMX架构图"></a>JMX架构图</h2><p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/831179-20160924113748309-1785034710.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="img"> </p>
+<h2 id="JMX架构图"><a href="#JMX架构图" class="headerlink" title="JMX架构图"></a>JMX架构图</h2><p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/831179-20160924113748309-1785034710.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="img"> </p>
 <p>从图中我们可以看到，JMX的结构一共分为三层：</p>
 <p>1、基础层：主要是MBean，被管理的资源。</p>
 <p>MBean分为如下四种，我接下来主要介绍standard MBean</p>
@@ -318,18 +318,18 @@
 <p>1、其中第13行是通过工厂类获取MBeanServer，用来做MBean的容器 。</p>
 <p><strong>2、第14行中的ObjectName中的取名是有一定规范的，格式为：“域名：name&#x3D;MBean名称”，其中域名和MBean的名称可以任意取。这样定义后，就可以唯一标识我们定义的这个MBean的实现类了。</strong></p>
 <p>3、第16行是将Hello这个类注入到MBeanServer中，注入需要创建一个ObjectName类 ，这样创建完毕以后最终会对应我们的JMX里面的东西</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230505192106336.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230505192106336"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230505192106336.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230505192106336"> </p>
 <p>这样，一个简单的JMX的DEMO已经写完了，现在我们通过JDK提供的Jconsole来进行操作。</p>
 </blockquote>
 <p>打出上面的代码，记住线程那一行非常重要</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230505191746027.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230505191746027"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230505191746027.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230505191746027"> </p>
 <p>在这个界面上，我们可以给程序中HelloMBean的属性赋值，也可以调用其中的方法：</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230505191841255.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230505191841255"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230505191841255.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230505191841255"> </p>
 <h2 id="通过客户端远程访问"><a href="#通过客户端远程访问" class="headerlink" title="通过客户端远程访问"></a>通过客户端远程访问</h2><p>对agent进行修改，增加ip和port的绑定</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> jmxTest;<br><br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.lang.management.ManagementFactory;<br><span class="hljs-keyword">import</span> java.rmi.RemoteException;<br><span class="hljs-keyword">import</span> java.rmi.registry.LocateRegistry;<br><br><span class="hljs-keyword">import</span> javax.management.JMException;<br><span class="hljs-keyword">import</span> javax.management.MBeanServer;<br><span class="hljs-keyword">import</span> javax.management.ObjectName;<br><span class="hljs-keyword">import</span> javax.management.remote.JMXConnectorServer;<br><span class="hljs-keyword">import</span> javax.management.remote.JMXConnectorServerFactory;<br><span class="hljs-keyword">import</span> javax.management.remote.JMXServiceURL;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloAgent</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> JMException, NullPointerException<br>    &#123;<br>        <span class="hljs-type">MBeanServer</span> <span class="hljs-variable">server</span> <span class="hljs-operator">=</span> ManagementFactory.getPlatformMBeanServer();<br>        <span class="hljs-type">ObjectName</span> <span class="hljs-variable">helloName</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectName</span>(<span class="hljs-string">&quot;jmxBean:name=hello&quot;</span>);<br>        <span class="hljs-comment">//create mbean and register mbean</span><br>        server.registerMBean(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Hello</span>(), helloName);<br>        <span class="hljs-keyword">try</span><br>        &#123;<br>            <span class="hljs-comment">//这个步骤很重要，注册一个端口，绑定url后用于客户端通过rmi方式连接JMXConnectorServer</span><br>            LocateRegistry.createRegistry(<span class="hljs-number">9999</span>);<br>            <span class="hljs-comment">//URL路径的结尾可以随意指定，但如果需要用Jconsole来进行连接，则必须使用jmxrmi</span><br>            <span class="hljs-type">JMXServiceURL</span> <span class="hljs-variable">url</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JMXServiceURL</span><br>                  (<span class="hljs-string">&quot;service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi&quot;</span>);<br>            <span class="hljs-type">JMXConnectorServer</span> <span class="hljs-variable">jcs</span> <span class="hljs-operator">=</span> JMXConnectorServerFactory.newJMXConnectorServer(url, <span class="hljs-literal">null</span>, server);<br>            System.out.println(<span class="hljs-string">&quot;begin rmi start&quot;</span>);<br>            jcs.start();<br>            System.out.println(<span class="hljs-string">&quot;rmi start&quot;</span>);<br>        &#125;<br>        <span class="hljs-keyword">catch</span> (RemoteException e)<br>        &#123;<br>            e.printStackTrace();<br>        &#125;<br>        <span class="hljs-keyword">catch</span> (IOException e)<br>        &#123;<br>            e.printStackTrace();<br>        &#125;<br>      <br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>用JConsole连接的时候选择远程连接，url写localhost:9999</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230505194027896.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230505194027896"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230505194027896.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230505194027896"> </p>
 <p>同样可以进行方法的调用</p>
 <p>如果不使用Jconsole的画，我们需要使用客户端与agent进行交互，添加客户端client用于与agent进行连接</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> jmx;<br><br><span class="hljs-keyword">import</span> java.io.IOException;<br><br><span class="hljs-keyword">import</span> javax.management.Attribute;<br><span class="hljs-keyword">import</span> javax.management.MBeanServerConnection;<br><span class="hljs-keyword">import</span> javax.management.MBeanServerInvocationHandler;<br><span class="hljs-keyword">import</span> javax.management.ObjectName;<br><span class="hljs-keyword">import</span> javax.management.remote.JMXConnector;<br><span class="hljs-keyword">import</span> javax.management.remote.JMXConnectorFactory;<br><span class="hljs-keyword">import</span> javax.management.remote.JMXServiceURL;<br><br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Client</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException, Exception, NullPointerException<br>    &#123;<br>        <span class="hljs-type">JMXServiceURL</span> <span class="hljs-variable">url</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JMXServiceURL</span><br>                (<span class="hljs-string">&quot;service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi&quot;</span>);<br>        <span class="hljs-type">JMXConnector</span> <span class="hljs-variable">jmxc</span> <span class="hljs-operator">=</span> JMXConnectorFactory.connect(url,<span class="hljs-literal">null</span>);<br><br>        <span class="hljs-type">MBeanServerConnection</span> <span class="hljs-variable">mbsc</span> <span class="hljs-operator">=</span> jmxc.getMBeanServerConnection();<br>        <span class="hljs-comment">//ObjectName的名称与前面注册时候的保持一致</span><br>        <span class="hljs-type">ObjectName</span> <span class="hljs-variable">mbeanName</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectName</span>(<span class="hljs-string">&quot;jmxBean:name=hello&quot;</span>);<br><br>        System.out.println(<span class="hljs-string">&quot;Domains ......&quot;</span>);<br>        String[] domains = mbsc.getDomains();<br><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;domains.length;i++)<br>        &#123;<br>            System.out.println(<span class="hljs-string">&quot;doumain[&quot;</span> + i + <span class="hljs-string">&quot;]=&quot;</span> + domains[i] );<br>        &#125;<br><br>        System.out.println(<span class="hljs-string">&quot;MBean count = &quot;</span> + mbsc.getMBeanCount());<br>        <span class="hljs-comment">//设置指定Mbean的特定属性值</span><br>        <span class="hljs-comment">//这里的setAttribute、getAttribute操作只能针对bean的属性</span><br>        <span class="hljs-comment">//例如对getName或者setName进行操作，只能使用Name，需要去除方法的前缀</span><br>        mbsc.setAttribute(mbeanName, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Attribute</span>(<span class="hljs-string">&quot;Name&quot;</span>,<span class="hljs-string">&quot;杭州&quot;</span>));<br>        mbsc.setAttribute(mbeanName, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Attribute</span>(<span class="hljs-string">&quot;Age&quot;</span>,<span class="hljs-string">&quot;1990&quot;</span>));<br>        <span class="hljs-type">String</span> <span class="hljs-variable">age</span> <span class="hljs-operator">=</span> (String)mbsc.getAttribute(mbeanName, <span class="hljs-string">&quot;Age&quot;</span>);<br>        <span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> (String)mbsc.getAttribute(mbeanName, <span class="hljs-string">&quot;Name&quot;</span>);<br>        System.out.println(<span class="hljs-string">&quot;age=&quot;</span> + age + <span class="hljs-string">&quot;;name=&quot;</span> + name);<br>		<span class="hljs-comment">//通过代理调用方法</span><br>        <span class="hljs-type">HelloMBean</span> <span class="hljs-variable">proxy</span> <span class="hljs-operator">=</span> MBeanServerInvocationHandler.<br>                newProxyInstance(mbsc, mbeanName, HelloMBean.class, <span class="hljs-literal">false</span>);<br>        proxy.helloWorld();<br>        proxy.helloWorld(<span class="hljs-string">&quot;migu&quot;</span>);<br>        proxy.getTelephone();<br>        <span class="hljs-comment">//invoke调用bean的方法，只针对非设置属性的方法</span><br>        <span class="hljs-comment">//例如invoke不能对getName方法进行调用</span><br>        <span class="hljs-comment">//通过反射掉哦那个方法</span><br>        mbsc.invoke(mbeanName, <span class="hljs-string">&quot;getTelephone&quot;</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>);<br>        mbsc.invoke(mbeanName, <span class="hljs-string">&quot;helloWorld&quot;</span>,<br>                <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>[]&#123;<span class="hljs-string">&quot;I&#x27;ll connect to JMX Server via client2&quot;</span>&#125;, <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>[]&#123;<span class="hljs-string">&quot;java.lang.String&quot;</span>&#125;);<br>        mbsc.invoke(mbeanName, <span class="hljs-string">&quot;helloWorld&quot;</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -351,7 +351,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Github CodeQL training 思路</div>
-      <div>https://blog.decemberus.com/2023/03/16/JMX学习/</div>
+      <div>https://decemberus.com/2023/03/16/JMX学习/</div>
     </div>
     <div class="license-meta">
       
@@ -393,7 +393,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog.decemberus.com/2023/04/02/Javasist/" title="Javasist">
+                      <a href="/decemberus.com/2023/04/02/Javasist/" title="Javasist">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Javasist</span>
                         <span class="visible-mobile">上一篇</span>
@@ -403,7 +403,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog.decemberus.com/2023/03/12/%E5%8E%9F%E7%94%9FJDK7u21%E4%B8%8E8u20/" title="7U21与8U20">
+                      <a href="/decemberus.com/2023/03/12/%E5%8E%9F%E7%94%9FJDK7u21%E4%B8%8E8u20/" title="7U21与8U20">
                         <span class="hidden-mobile">7U21与8U20</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -529,8 +529,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/blog.decemberus.com/js/events.js" ></script>
-<script  src="/blog.decemberus.com/js/plugins.js" ></script>
+<script  src="/decemberus.com/js/events.js" ></script>
+<script  src="/decemberus.com/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -554,7 +554,7 @@
 
 
   
-    <script  src="/blog.decemberus.com/js/img-lazyload.js" ></script>
+    <script  src="/decemberus.com/js/img-lazyload.js" ></script>
   
 
 
@@ -691,7 +691,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/blog.decemberus.com/js/local-search.js" ></script>
+  <script  src="/decemberus.com/js/local-search.js" ></script>
 
 
 
@@ -699,7 +699,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/blog.decemberus.com/js/boot.js" ></script>
+<script  src="/decemberus.com/js/boot.js" ></script>
 
 
   

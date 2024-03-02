@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/blog.decemberus.com/img/fluid.png">
-  <link rel="icon" href="/blog.decemberus.com/img/fluid.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/decemberus.com/img/fluid.png">
+  <link rel="icon" href="/decemberus.com/img/fluid.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="Java内存马分析内存马是什么什么是内存马什么是内存马呢？ 内存马又名无文件马，在文件马越来越不好生存的今天，各种基于机器学习的下webshell检测让得文件马更加雪上加霜，于此同时，新的一种技术内存马愈演愈烈，但是简简单单的内存马构造技术似乎也不能够逃脱被检测查杀的风险，我们更加需要迫切的学习内存马底层的相关知识，去掉webshell特征，达到花样绕过检测机制的目的。 回归正题，来到Filter">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java内存马分析">
-<meta property="og:url" content="https://blog.decemberus.com/2023/01/18/Servlet%E5%86%85%E5%AD%98%E9%A9%AC/index.html">
+<meta property="og:url" content="https://decemberus.com/2023/01/18/Servlet%E5%86%85%E5%AD%98%E9%A9%AC/index.html">
 <meta property="og:site_name" content="欢迎回来">
 <meta property="og:description" content="Java内存马分析内存马是什么什么是内存马什么是内存马呢？ 内存马又名无文件马，在文件马越来越不好生存的今天，各种基于机器学习的下webshell检测让得文件马更加雪上加霜，于此同时，新的一种技术内存马愈演愈烈，但是简简单单的内存马构造技术似乎也不能够逃脱被检测查杀的风险，我们更加需要迫切的学习内存马底层的相关知识，去掉webshell特征，达到花样绕过检测机制的目的。 回归正题，来到Filter">
 <meta property="og:locale" content="zh_CN">
@@ -65,12 +65,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/blog.decemberus.com/css/main.css" />
+<link  rel="stylesheet" href="/decemberus.com/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/blog.decemberus.com/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/decemberus.com/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/blog.decemberus.com/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/decemberus.com/css/highlight-dark.css" />
   
 
 
@@ -78,10 +78,10 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"blog.decemberus.com","root":"/blog.decemberus.com/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog.decemberus.com/local-search.xml"};
+    var CONFIG = {"hostname":"decemberus.com","root":"/decemberus.com/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/decemberus.com/local-search.xml"};
   </script>
-  <script  src="/blog.decemberus.com/js/utils.js" ></script>
-  <script  src="/blog.decemberus.com/js/color-schema.js" ></script>
+  <script  src="/decemberus.com/js/utils.js" ></script>
+  <script  src="/decemberus.com/js/color-schema.js" ></script>
 
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -96,7 +96,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/blog.decemberus.com/">
+    <a class="navbar-brand" href="/decemberus.com/">
       <strong>enjoy的blog</strong>
     </a>
 
@@ -115,7 +115,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/">
+              <a class="nav-link" href="/decemberus.com/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -127,7 +127,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/archives/">
+              <a class="nav-link" href="/decemberus.com/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -139,7 +139,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/categories/">
+              <a class="nav-link" href="/decemberus.com/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -151,7 +151,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/tags/">
+              <a class="nav-link" href="/decemberus.com/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -163,7 +163,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/about/">
+              <a class="nav-link" href="/decemberus.com/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -192,7 +192,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/blog.decemberus.com/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/decemberus.com/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -286,7 +286,7 @@
 <li>在 Web 资源被访问后，检查 response 对象，修改响应头和响应正文。</li>
 </ul>
 <p>而他的工作流程可以通过一张图进行展示。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1662828570_631cc01aeb9c48b6cbc9c.jpeg" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220910214207699.png"></p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/1662828570_631cc01aeb9c48b6cbc9c.jpeg" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220910214207699.png"></p>
 <p>自然而然的，如果我们能够实现写入一个自定义的Filter在在访问特定资源的同时，拦截请求，对请求进行自定义Filter中的逻辑进行调用，就能够造成我们的恶意用途，达到了内存马的目的。</p>
 <p>也可以来看看Filter的生命周期。</p>
 <ol>
@@ -307,26 +307,26 @@
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">filter</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">filter-name</span>&gt;</span>myFilter<span class="hljs-tag">&lt;/<span class="hljs-name">filter-name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">filter-class</span>&gt;</span>pers.webshell.Tomcat.Demo<span class="hljs-tag">&lt;/<span class="hljs-name">filter-class</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">filter</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">filter-mapping</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">filter-name</span>&gt;</span>myFilter<span class="hljs-tag">&lt;/<span class="hljs-name">filter-name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">url-pattern</span>&gt;</span>/filter<span class="hljs-tag">&lt;/<span class="hljs-name">url-pattern</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">filter-mapping</span>&gt;</span><br></code></pre></td></tr></table></figure>
 
 <p>这样就搭建了一个<code>/filter</code>路由的拦截器，在访问该路由的时候将会被拦截，运行tomcat容器。</p>
-<h2 id="filter内存马"><a href="#filter内存马" class="headerlink" title="filter内存马"></a>filter内存马</h2><p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230419201719476.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230419201719476"> </p>
+<h2 id="filter内存马"><a href="#filter内存马" class="headerlink" title="filter内存马"></a>filter内存马</h2><p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230419201719476.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230419201719476"> </p>
 <p>关键的就是在<code>StandardWrapperValve#invoke</code>中调用了<code>filterChain.doFilter</code>。</p>
-<p><img src="D:\mdimage\image-20230419202332237.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230419202332237"> </p>
+<p><img src="D:\mdimage\image-20230419202332237.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230419202332237"> </p>
 <p>深入看看</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230419202359115.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230419202359115"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230419202359115.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230419202359115"> </p>
 <p>由上图可以知道他是一个对象，一个<code>ApplicationFilterChain</code>类对象，是通过调用<code>ApplicationFilterFactory.createFilterChain</code>方法，传入了在web.xml中通过扫描得到的配置。</p>
 <p>当然存在我们编写类的调用，回到<code>StandardWrapperValve#invoke</code>在调用了doFilter之后，在其中通过调用<code>internalDoFilter</code>方法，进行拦截器的doFilter的调用。</p>
 <h3 id="分析注入手法"><a href="#分析注入手法" class="headerlink" title="分析注入手法"></a>分析注入手法</h3><p>通常在配置Filter都是通过web.xml配置或者注解的方式进行配置，但是我们需要注入内存马?</p>
 <p>那怎么在代码层面上面进行配置操作，答案在就是使用<code>ServletContext</code>的<code>addFilter/createFilter</code>方法注册。</p>
 <p>首先跟进<code>createFilter</code>方法看看。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230419203436995.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230419203436995"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230419203436995.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230419203436995"> </p>
 <blockquote>
 <p>The returned Filter instance may be further customized before it is registered with this ServletContext via a call to addFilter(String, Filter).<br>Throws:<br>ServletException – if the given clazz fails to be instantiated<br>UnsupportedOperationException – if this ServletContext was passed to the ServletContextListener.contextInitialized method of a ServletContextListener that was neither declared in web.xml or web-fragment.xml, nor annotated with javax.servlet.annotation.WebListener</p>
 </blockquote>
 <p>返回的Filter实例可以在通过调用addFilter(String, Filter)向ServletContext注册之前进一步定制。</p>
 <p>我们查看tomcat的实现方法</p>
 <p>这里有一个小坑，idea默认不查找实现方法，需要右键点一下才会去查找</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230419204558356.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230419204558356"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230419204558356.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230419204558356"> </p>
 <p>再去看一下addfilter</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230419205025784.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230419205025784"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230419205025784.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230419205025784"> </p>
 <p>用上面提到的方法去看一下</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> FilterRegistration.Dynamic <span class="hljs-title function_">addFilter</span><span class="hljs-params">(String filterName, String filterClass, Filter filter)</span> <span class="hljs-keyword">throws</span> IllegalStateException &#123;<br>    <span class="hljs-keyword">if</span> (filterName != <span class="hljs-literal">null</span> &amp;&amp; !filterName.equals(<span class="hljs-string">&quot;&quot;</span>)) &#123;<br>        <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">this</span>.context.getState().equals(LifecycleState.STARTING_PREP)) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalStateException</span>(sm.getString(<span class="hljs-string">&quot;applicationContext.addFilter.ise&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>[]&#123;<span class="hljs-built_in">this</span>.getContextPath()&#125;));<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-type">FilterDef</span> <span class="hljs-variable">filterDef</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.context.findFilterDef(filterName);<br>            <span class="hljs-keyword">if</span> (filterDef == <span class="hljs-literal">null</span>) &#123;<br>                filterDef = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FilterDef</span>();<br>                filterDef.setFilterName(filterName);<span class="hljs-comment">//往FilterDef中写入filterName</span><br>                <span class="hljs-built_in">this</span>.context.addFilterDef(filterDef);<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (filterDef.getFilterName() != <span class="hljs-literal">null</span> &amp;&amp; filterDef.getFilterClass() != <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>            &#125;<br><br>            <span class="hljs-keyword">if</span> (filter == <span class="hljs-literal">null</span>) &#123;<br>                filterDef.setFilterClass(filterClass);<span class="hljs-comment">//写入filterClass</span><br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                filterDef.setFilterClass(filter.getClass().getName());<br>                filterDef.setFilter(filter);<span class="hljs-comment">//写入filter</span><br>            &#125;<br><br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ApplicationFilterRegistration</span>(filterDef, <span class="hljs-built_in">this</span>.context);<br>        &#125;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalArgumentException</span>(sm.getString(<span class="hljs-string">&quot;applicationContext.invalidFilterName&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>[]&#123;filterName&#125;));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -369,18 +369,18 @@
 <ul>
 <li>调用 ApplicationContext 的 addFilter 方法创建 filterDefs 对象，需要反射修改应用程序的运行状态，加完之后再改回来；</li>
 </ul>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230420190313701.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230420190313701"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230420190313701.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230420190313701"> </p>
 <p> 成功加入到了context中</p>
 <ul>
 <li>接下来我们再filterConfigs中添加findFilterConfig，点击findFilterConfig，查看用法</li>
 </ul>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230420191104760.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230420191104760"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230420191104760.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230420191104760"> </p>
 <p>因为return了filterConfigs，查看用法</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230420191145595.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230420191145595"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230420191145595.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230420191145595"> </p>
 <p>从而能够将我们的filterConfigs放入</p>
 <ul>
 <li><p>我们现在还缺少一个filterMap，调用 ApplicationFilterRegistration 的 addMappingForUrlPatterns 生成 filterMaps；</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230420192549961.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230420192549961"></p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230420192549961.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230420192549961"></p>
 </li>
 </ul>
 <p>​		<strong>到底是怎么找到的这个类呀</strong></p>
@@ -431,7 +431,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Java内存马分析</div>
-      <div>https://blog.decemberus.com/2023/01/18/Servlet内存马/</div>
+      <div>https://decemberus.com/2023/01/18/Servlet内存马/</div>
     </div>
     <div class="license-meta">
       
@@ -473,7 +473,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog.decemberus.com/2023/02/01/JackSon%E4%BD%BF%E7%94%A8%E5%8F%8A%E5%85%B6%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="JackSon使用及其反序列化">
+                      <a href="/decemberus.com/2023/02/01/JackSon%E4%BD%BF%E7%94%A8%E5%8F%8A%E5%85%B6%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="JackSon使用及其反序列化">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">JackSon使用及其反序列化</span>
                         <span class="visible-mobile">上一篇</span>
@@ -483,7 +483,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog.decemberus.com/2023/01/03/FastJson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="FastJson反序列化">
+                      <a href="/decemberus.com/2023/01/03/FastJson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="FastJson反序列化">
                         <span class="hidden-mobile">FastJson反序列化</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -609,8 +609,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/blog.decemberus.com/js/events.js" ></script>
-<script  src="/blog.decemberus.com/js/plugins.js" ></script>
+<script  src="/decemberus.com/js/events.js" ></script>
+<script  src="/decemberus.com/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -634,7 +634,7 @@
 
 
   
-    <script  src="/blog.decemberus.com/js/img-lazyload.js" ></script>
+    <script  src="/decemberus.com/js/img-lazyload.js" ></script>
   
 
 
@@ -771,7 +771,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/blog.decemberus.com/js/local-search.js" ></script>
+  <script  src="/decemberus.com/js/local-search.js" ></script>
 
 
 
@@ -779,7 +779,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/blog.decemberus.com/js/boot.js" ></script>
+<script  src="/decemberus.com/js/boot.js" ></script>
 
 
   

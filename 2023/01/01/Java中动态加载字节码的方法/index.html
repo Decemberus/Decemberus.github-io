@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/blog.decemberus.com/img/fluid.png">
-  <link rel="icon" href="/blog.decemberus.com/img/fluid.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/decemberus.com/img/fluid.png">
+  <link rel="icon" href="/decemberus.com/img/fluid.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="Java中动态加载字节码的方法在yso的源码中，Gadgets.createTemplatesImpl(command)出现过很多次，下面来了解动态加载字节码的方法 字节码含义严格来说，Java字节码（ByteCode）其实仅仅指的是Java虚拟机执行使用的一类指令，通常被存储在.class文件中。 众所周知，不同平台、不同CPU的计算机指令有差异，但因为Java是一门跨平台的编译型语言，所以这些">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java中动态加载字节码的方法">
-<meta property="og:url" content="https://blog.decemberus.com/2023/01/01/Java%E4%B8%AD%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD%E5%AD%97%E8%8A%82%E7%A0%81%E7%9A%84%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:url" content="https://decemberus.com/2023/01/01/Java%E4%B8%AD%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD%E5%AD%97%E8%8A%82%E7%A0%81%E7%9A%84%E6%96%B9%E6%B3%95/index.html">
 <meta property="og:site_name" content="欢迎回来">
 <meta property="og:description" content="Java中动态加载字节码的方法在yso的源码中，Gadgets.createTemplatesImpl(command)出现过很多次，下面来了解动态加载字节码的方法 字节码含义严格来说，Java字节码（ByteCode）其实仅仅指的是Java虚拟机执行使用的一类指令，通常被存储在.class文件中。 众所周知，不同平台、不同CPU的计算机指令有差异，但因为Java是一门跨平台的编译型语言，所以这些">
 <meta property="og:locale" content="zh_CN">
@@ -67,12 +67,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/blog.decemberus.com/css/main.css" />
+<link  rel="stylesheet" href="/decemberus.com/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/blog.decemberus.com/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/decemberus.com/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/blog.decemberus.com/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/decemberus.com/css/highlight-dark.css" />
   
 
 
@@ -80,10 +80,10 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"blog.decemberus.com","root":"/blog.decemberus.com/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog.decemberus.com/local-search.xml"};
+    var CONFIG = {"hostname":"decemberus.com","root":"/decemberus.com/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/decemberus.com/local-search.xml"};
   </script>
-  <script  src="/blog.decemberus.com/js/utils.js" ></script>
-  <script  src="/blog.decemberus.com/js/color-schema.js" ></script>
+  <script  src="/decemberus.com/js/utils.js" ></script>
+  <script  src="/decemberus.com/js/color-schema.js" ></script>
 
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -98,7 +98,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/blog.decemberus.com/">
+    <a class="navbar-brand" href="/decemberus.com/">
       <strong>enjoy的blog</strong>
     </a>
 
@@ -117,7 +117,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/">
+              <a class="nav-link" href="/decemberus.com/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -129,7 +129,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/archives/">
+              <a class="nav-link" href="/decemberus.com/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -141,7 +141,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/categories/">
+              <a class="nav-link" href="/decemberus.com/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -153,7 +153,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/tags/">
+              <a class="nav-link" href="/decemberus.com/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -165,7 +165,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/about/">
+              <a class="nav-link" href="/decemberus.com/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -194,7 +194,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/blog.decemberus.com/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/decemberus.com/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -280,7 +280,7 @@
 <h2 id="字节码含义"><a href="#字节码含义" class="headerlink" title="字节码含义"></a>字节码含义</h2><p>严格来说，Java字节码（ByteCode）其实仅仅指的是Java虚拟机执行使用的一类指令，通常被存储在.class文件中。</p>
 <p>众所周知，不同平台、不同CPU的计算机指令有差异，但因为Java是一门跨平台的编译型语言，所以这些差异对于上层开发者来说是透明的，上层开发者只需要将自己的代码编译一次，即可运行在不同平台的JVM虚拟机中。</p>
 <p>甚至，开发者可以用类似Scala、Kotlin这样的语言编写代码，只要你的编译器能够将代码编译成.class文件，都可以在JVM虚拟机中运行：</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230215191228159.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230215191228159"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230215191228159.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230215191228159"> </p>
 <p>但是，本文中所说的“字节码”，可以理解的更广义一些——所有能够恢复成一个类并在JVM虚拟机里加载的字节序列，都在我们的探讨范围内</p>
 <h2 id="用URLClassLoader加载远程class文件"><a href="#用URLClassLoader加载远程class文件" class="headerlink" title="用URLClassLoader加载远程class文件"></a>用URLClassLoader加载远程class文件</h2><p>Java的ClassLoader来用来加载字节码文件最基础的方法</p>
 <blockquote>
@@ -299,10 +299,10 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.net.MalformedURLException;<br><span class="hljs-keyword">import</span> java.net.URL;<br><span class="hljs-keyword">import</span> java.net.URLClassLoader;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">classloader</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException &#123;<br>        URL[] urls = &#123;<span class="hljs-keyword">new</span> <span class="hljs-title class_">URL</span>(<span class="hljs-string">&quot;http://localhost:8080/&quot;</span>)&#125;;<br>        <span class="hljs-type">URLClassLoader</span> <span class="hljs-variable">Loader</span> <span class="hljs-operator">=</span> URLClassLoader.newInstance(urls);<br>        Class c=Loader.loadClass(<span class="hljs-string">&quot;hello&quot;</span>);<br>        c.newInstance();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>我们编译一个简单的HelloWorld程序，放在 <code>http://localhost:8000/Hello.class</code> ：</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230328223257756.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230328223257756"> </p>
-<p><img src="D:/mdimage/image-20230328224348499.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230328224348499"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230328223257756.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230328223257756"> </p>
+<p><img src="D:/mdimage/image-20230328224348499.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230328224348499"> </p>
 <p>我们发现他成功请求到了，但是java运行时的版本过低，我们换成jdk11（上面用的是jdk8）</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230328224637829.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230328224637829"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230328224637829.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230328224637829"> </p>
 <p>成功访问</p>
 <blockquote>
 <p>这里要注意，python启服务器的命令是在当前的目录下而不是默认的user目录</p>
@@ -329,7 +329,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.nio.file.Files;<br><span class="hljs-keyword">import</span> java.nio.file.Paths;<br><span class="hljs-keyword">import</span> java.util.Base64;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ReadClass</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>        <span class="hljs-type">byte</span>[] code = Files.readAllBytes(Paths.get(<span class="hljs-string">&quot;D:\\Code_Project\\Java\\CLassLoaderText\\src\\main\\java\\TouchFile.class&quot;</span>));<br>        <span class="hljs-type">String</span> <span class="hljs-variable">base64</span> <span class="hljs-operator">=</span> Base64.getEncoder().encodeToString(code);<br>        System.out.println(base64);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
 
 <p>注意，Path.get一定要绝对路径，相对路径并不可用</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230402125149611.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230402125149611"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230402125149611.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230402125149611"> </p>
 <p>得到了我们想要的结果</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-keyword">import</span> java.lang.reflect.Method;<br><span class="hljs-keyword">import</span> java.util.Base64;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloDefineClass</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-type">Method</span> <span class="hljs-variable">defineClass</span> <span class="hljs-operator">=</span> ClassLoader.class.getDeclaredMethod(<span class="hljs-string">&quot;defineClass&quot;</span>, String.class, <span class="hljs-type">byte</span>[].class, <span class="hljs-type">int</span>.class, <span class="hljs-type">int</span>.class);<br>        defineClass.setAccessible(<span class="hljs-literal">true</span>);<br>        <span class="hljs-type">byte</span>[] code = Base64.getDecoder().decode(<span class="hljs-string">&quot;yv66vgAAADQAGwoABgANCQAOAA8IABAKABEAEgcAEwcAFAEABjxpbml0PgEAAygpVgEABENvZGUBAA9MaW5lTnVtYmVyVGFibGUBAApTb3VyY2VGaWxlAQAKSGVsbG8uamF2YQwABwAIBwAVDAAWABcBAAtIZWxsbyBXb3JsZAcAGAwAGQAaAQAFSGVsbG8BABBqYXZhL2xhbmcvT2JqZWN0AQAQamF2YS9sYW5nL1N5c3RlbQEAA291dAEAFUxqYXZhL2lvL1ByaW50U3RyZWFtOwEAE2phdmEvaW8vUHJpbnRTdHJlYW0BAAdwcmludGxuAQAVKExqYXZhL2xhbmcvU3RyaW5nOylWACEABQAGAAAAAAABAAEABwAIAAEACQAAAC0AAgABAAAADSq3AAGyAAISA7YABLEAAAABAAoAAAAOAAMAAAACAAQABAAMAAUAAQALAAAAAgAM&quot;</span>);<br>        Class hello=(Class)defineClass.invoke(ClassLoader.getSystemClassLoader(),<span class="hljs-string">&quot;Hello&quot;</span>,code,<span class="hljs-number">0</span>,code.length);<br>        hello.newInstance();<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
 
@@ -347,7 +347,7 @@
 </blockquote>
 <p>注意一点，在 defineClass 被调用的时候，类对象是不会被初始化的，只有这个对象显式地调用其构造函数，初始化代码才能被执行。而且，即使我们将初始化代码放在类的static块中（在本系列文章第一篇中进行过说明），在 defineClass 时也无法被直接调用到。所以，如果我们要使用 defineClass 在目标机器上执行任意代码，需要想办法调用构造函数。</p>
 <p>执行，输出Hello World:</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230215204004203.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230215204004203"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230215204004203.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230215204004203"> </p>
 <p>这里有个注意点，decode里面是不能够加base64编码的东西的，乱加的话会出问题，这里实际上是字节码</p>
 <p>这里，因为系统的 ClassLoader#defineClass 是一个保护属性，所以我们无法直接在外部访问，不得不使用反射的形式来调用。</p>
 <p>在实际场景中，因为defineClass方法作用域是不开放的，所以攻击者很少能直接利用到它，但它却是我们常用的一个攻击链 TemplatesImpl 的基石。</p>
@@ -355,11 +355,11 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TransletClassLoader</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">ClassLoader</span> &#123;<br>        <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Map&lt;String,Class&gt; _loadedExternalExtensionFunctions;<br><br>         TransletClassLoader(ClassLoader parent) &#123;<br>             <span class="hljs-built_in">super</span>(parent);<br>            _loadedExternalExtensionFunctions = <span class="hljs-literal">null</span>;<br>        &#125;<br><br>        TransletClassLoader(ClassLoader parent,Map&lt;String, Class&gt; mapEF) &#123;<br>            <span class="hljs-built_in">super</span>(parent);<br>            _loadedExternalExtensionFunctions = mapEF;<br>        &#125;<br><br>        <span class="hljs-keyword">public</span> Class&lt;?&gt; loadClass(String name) <span class="hljs-keyword">throws</span> ClassNotFoundException &#123;<br>            Class&lt;?&gt; ret = <span class="hljs-literal">null</span>;<br>            <span class="hljs-comment">// The _loadedExternalExtensionFunctions will be empty when the</span><br>            <span class="hljs-comment">// SecurityManager is not set and the FSP is turned off</span><br>            <span class="hljs-keyword">if</span> (_loadedExternalExtensionFunctions != <span class="hljs-literal">null</span>) &#123;<br>                ret = _loadedExternalExtensionFunctions.get(name);<br>            &#125;<br>            <span class="hljs-keyword">if</span> (ret == <span class="hljs-literal">null</span>) &#123;<br>                ret = <span class="hljs-built_in">super</span>.loadClass(name);<br>            &#125;<br>            <span class="hljs-keyword">return</span> ret;<br>         &#125;<br><br>        <span class="hljs-comment">/**</span><br><span class="hljs-comment">         * Access to final protected superclass member from outer class.</span><br><span class="hljs-comment">         */</span><br>        Class <span class="hljs-title function_">defineClass</span><span class="hljs-params">(<span class="hljs-keyword">final</span> <span class="hljs-type">byte</span>[] b)</span> &#123;<br>            <span class="hljs-keyword">return</span> defineClass(<span class="hljs-literal">null</span>, b, <span class="hljs-number">0</span>, b.length);<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
 
 <p>这里重写了defineClass，我们的目的就是调用这个defineClass。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230215205636815.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230215205636815"> </p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230215205822925.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230215205822925"> </p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230215205842600.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230215205842600"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230215205636815.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230215205636815"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230215205822925.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230215205822925"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230215205842600.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230215205842600"> </p>
 <p>实际上这里已经是public了，外部可以调用了，不需要再次往上跟了</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230215205904534.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230215205904534"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230215205904534.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230215205904534"> </p>
 <p>所以我们最终找到了getOutputProperties这个类</p>
 <p>因此得到了一条完整的利用链</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">TemplatesImpl#newTransformer() -&gt;<br>TemplatesImpl#getTransletInstance() -&gt;<br>TemplatesImpl#defineTransletClasses() -&gt;<br>TransletClassLoader#defineClass()<br></code></pre></td></tr></table></figure>
@@ -370,15 +370,15 @@
 <p>这里的setFieldValue是利用反射给私有属性赋值，这里设置了三个属性。</p>
 <p><code>_bytecodes</code> 是由字节码组成的数组；<code>_name</code>可以是任意字符串，只要不为null即可； <code>_tfactory</code> 需要是一个 <code>TransformerFactoryImpl </code>对象，因为<code>TemplatesImpl#defineTransletClasses()</code> 方法里有调用到<code>_tfactory.getExternalExtensionsMap()</code> ，如果是null会出错。</p>
 <p>另外，值得注意的是， TemplatesImpl 中对加载的字节码是有一定要求的：这个字节码对应的类必须 是<code>com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet</code>的子类。</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230216160237592.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230216160237592"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230216160237592.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230216160237592"> </p>
 <p>所以需要构造特殊类</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.DOM;<br><span class="hljs-keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.TransletException;<br><span class="hljs-keyword">import</span> com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet;<br><span class="hljs-keyword">import</span> com.sun.org.apache.xml.internal.dtm.DTMAxisIterator;<br><span class="hljs-keyword">import</span> com.sun.org.apache.xml.internal.serializer.SerializationHandler;<br><br><span class="hljs-keyword">import</span> java.io.IOException;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloTemplatesImpl</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractTranslet</span> &#123;<span class="hljs-comment">//通过</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">transform</span><span class="hljs-params">(DOM document, SerializationHandler[] handlers)</span> <span class="hljs-keyword">throws</span> TransletException &#123;&#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">transform</span><span class="hljs-params">(DOM document, DTMAxisIterator iterator,</span><br><span class="hljs-params">SerializationHandler handler)</span> <span class="hljs-keyword">throws</span> TransletException &#123;&#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">HelloTemplatesImpl</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-built_in">super</span>();<br>        System.out.println(<span class="hljs-string">&quot;Hello TemplatesImpl&quot;</span>);<br>        <span class="hljs-keyword">try</span> &#123;<br>            Runtime.getRuntime().exec(<span class="hljs-string">&quot;calc&quot;</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>最后就是将这个特殊类转化为字节码再base64一下，即可弹出想要的东西</p>
 <p>但是加载字节码过程中会遇到java版本与javac版本不一致的问题，导致编译过程中报错</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230225150724309.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230225150724309"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230225150724309.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230225150724309"> </p>
 <p>修复办法是把javac版本换成低版本</p>
-<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230225150814497.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230225150814497"> </p>
+<p><img src="https://enjoyy-1322917755.cos.ap-nanjing.myqcloud.com/image-20230225150814497.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230225150814497"> </p>
 <p>从这个图里面可以看出javac版本和java版本不一致，这时候需要去改系统环境变量，但是改了以后会导致很多破解软件失效，所以就需要直接指定javac版本了</p>
 <figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript">D:<span class="hljs-string">\jdk8u65\bin\javac.exe</span> .<span class="hljs-string">\Calc.java</span> <br></code></pre></td></tr></table></figure>
 
@@ -399,7 +399,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Java中动态加载字节码的方法</div>
-      <div>https://blog.decemberus.com/2023/01/01/Java中动态加载字节码的方法/</div>
+      <div>https://decemberus.com/2023/01/01/Java中动态加载字节码的方法/</div>
     </div>
     <div class="license-meta">
       
@@ -441,7 +441,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog.decemberus.com/2023/01/03/FastJson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="FastJson反序列化">
+                      <a href="/decemberus.com/2023/01/03/FastJson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="FastJson反序列化">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">FastJson反序列化</span>
                         <span class="visible-mobile">上一篇</span>
@@ -451,7 +451,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog.decemberus.com/2022/12/19/JNDI%E6%B3%A8%E5%85%A5%E5%88%86%E6%9E%90/" title="JNDI注入分析">
+                      <a href="/decemberus.com/2022/12/19/JNDI%E6%B3%A8%E5%85%A5%E5%88%86%E6%9E%90/" title="JNDI注入分析">
                         <span class="hidden-mobile">JNDI注入分析</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -577,8 +577,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/blog.decemberus.com/js/events.js" ></script>
-<script  src="/blog.decemberus.com/js/plugins.js" ></script>
+<script  src="/decemberus.com/js/events.js" ></script>
+<script  src="/decemberus.com/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -602,7 +602,7 @@
 
 
   
-    <script  src="/blog.decemberus.com/js/img-lazyload.js" ></script>
+    <script  src="/decemberus.com/js/img-lazyload.js" ></script>
   
 
 
@@ -739,7 +739,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/blog.decemberus.com/js/local-search.js" ></script>
+  <script  src="/decemberus.com/js/local-search.js" ></script>
 
 
 
@@ -747,7 +747,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/blog.decemberus.com/js/boot.js" ></script>
+<script  src="/decemberus.com/js/boot.js" ></script>
 
 
   

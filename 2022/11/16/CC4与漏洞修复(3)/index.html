@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/blog.decemberus.com/img/fluid.png">
-  <link rel="icon" href="/blog.decemberus.com/img/fluid.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/decemberus.com/img/fluid.png">
+  <link rel="icon" href="/decemberus.com/img/fluid.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="CC4与漏洞修复Apache Commons Collections有以下两个分⽀版本：  commons-collections:commons-collections  org.apache.commons:commons-collections4   前面讲的CC系列的利用链都是用的第一个CC版本，那么第二个4.0版本能否存在呢 CC4的改动pom.xml中可以看到CC的版本号   然后，因">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CC4与漏洞修复">
-<meta property="og:url" content="https://blog.decemberus.com/2022/11/16/CC4%E4%B8%8E%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D(3)/index.html">
+<meta property="og:url" content="https://decemberus.com/2022/11/16/CC4%E4%B8%8E%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D(3)/index.html">
 <meta property="og:site_name" content="欢迎回来">
 <meta property="og:description" content="CC4与漏洞修复Apache Commons Collections有以下两个分⽀版本：  commons-collections:commons-collections  org.apache.commons:commons-collections4   前面讲的CC系列的利用链都是用的第一个CC版本，那么第二个4.0版本能否存在呢 CC4的改动pom.xml中可以看到CC的版本号   然后，因">
 <meta property="og:locale" content="zh_CN">
@@ -61,12 +61,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/blog.decemberus.com/css/main.css" />
+<link  rel="stylesheet" href="/decemberus.com/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/blog.decemberus.com/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/decemberus.com/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/blog.decemberus.com/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/decemberus.com/css/highlight-dark.css" />
   
 
 
@@ -74,10 +74,10 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"blog.decemberus.com","root":"/blog.decemberus.com/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog.decemberus.com/local-search.xml"};
+    var CONFIG = {"hostname":"decemberus.com","root":"/decemberus.com/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/decemberus.com/local-search.xml"};
   </script>
-  <script  src="/blog.decemberus.com/js/utils.js" ></script>
-  <script  src="/blog.decemberus.com/js/color-schema.js" ></script>
+  <script  src="/decemberus.com/js/utils.js" ></script>
+  <script  src="/decemberus.com/js/color-schema.js" ></script>
 
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -92,7 +92,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/blog.decemberus.com/">
+    <a class="navbar-brand" href="/decemberus.com/">
       <strong>enjoy的blog</strong>
     </a>
 
@@ -111,7 +111,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/">
+              <a class="nav-link" href="/decemberus.com/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -123,7 +123,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/archives/">
+              <a class="nav-link" href="/decemberus.com/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -135,7 +135,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/categories/">
+              <a class="nav-link" href="/decemberus.com/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -147,7 +147,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/tags/">
+              <a class="nav-link" href="/decemberus.com/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -159,7 +159,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog.decemberus.com/about/">
+              <a class="nav-link" href="/decemberus.com/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -188,7 +188,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/blog.decemberus.com/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/decemberus.com/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -279,10 +279,10 @@
 </ul>
 <p>前面讲的CC系列的利用链都是用的第一个CC版本，那么第二个4.0版本能否存在呢</p>
 <h2 id="CC4的改动"><a href="#CC4的改动" class="headerlink" title="CC4的改动"></a>CC4的改动</h2><p>pom.xml中可以看到CC的版本号</p>
-<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191232275.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230218145946665"> </p>
+<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191232275.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230218145946665"> </p>
 <p>然后，因为⽼的Gadget中依赖的包名都是 <code>org.apache.commons.collections</code> ，⽽新的包名已经变了，是 <code>org.apache.commons.collections4</code> 。</p>
 <p>我们⽤已经熟悉的<code>CommonsCollections6</code>利⽤链做个例⼦，我们直接把代码拷⻉⼀遍，然后将所有 <code>import org.apache.commons.collections.*</code> 改成 <code>import org.apache.commons.collections4.*</code> 。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191236764.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230218150226112"> </p>
+<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191236764.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230218150226112"> </p>
 <p>但是此时LazyMap.decorate这个方法没了</p>
 <p>3中decorate的定义是</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Map <span class="hljs-title function_">decorate</span><span class="hljs-params">(Map map, Transformer factory)</span> &#123;<br> <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LazyMap</span>(map, factory);<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -318,13 +318,13 @@
 
 <p>所以，CommonsCollections2实际就是⼀条从 <code>PriorityQueue</code> 到 <code>TransformingComparator</code> 的利⽤链。</p>
 <p>那我们先从<code>PriorityQueue</code>分析到<code>TransformingComparator</code></p>
-<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191236320.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230218203602466"> </p>
+<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191236320.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230218203602466"> </p>
 <p><code>PriorityQueue#readObject</code>调用了<code>heapify()</code>方法</p>
-<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191236785.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230218203724775"> </p>
+<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191236785.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230218203724775"> </p>
 <p>调用siftDown()方法</p>
-<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191236443.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230218203905654"> </p>
+<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191236443.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230218203905654"> </p>
 <p>调用了<code>siftDownUsingComparator()</code>方法</p>
-<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191236181.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230218204141295"> </p>
+<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191236181.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230218204141295"> </p>
 <p>调用<code>compare()</code>方法</p>
 <p>而这里调用的compare方法恰好是<code>TransformingComparator</code>所调用的</p>
 <p>利用链如下</p>
@@ -373,7 +373,7 @@
 <p>第二个问题在CC3版本下增加了一个方法<code>FunctorUtils#checkUnsafeSerialization</code> ，⽤于检测反序列化是否安全。如果开发者没有设置全局配置 <code>org.apache.commons.collections.enableUnsafeSerialization=true</code> ，即默认情况下会抛出异常。</p>
 <p>这个检查在常⻅的危险Transformer类</p>
 <p>（ InstantiateTransformer 、 InvokerTransformer 、 PrototypeFactory 、 CloneTransformer 等）的 readObject ⾥进⾏调⽤，所以，当我们反序列化包含这些对象时就会抛出⼀个异常：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191237655.png" srcset="/blog.decemberus.com/img/loading.gif" lazyload alt="image-20230220195203458"> </p>
+<p><img src="https://cdn.jsdelivr.net/gh/Decemberus/image/202303191237655.png" srcset="/decemberus.com/img/loading.gif" lazyload alt="image-20230220195203458"> </p>
 <p>而在CC4版本中，上面的危险Transformer类不实现Serializable接口，也就是说他们完全无法序列化和反序列化了</p>
 
               
@@ -392,7 +392,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>CC4与漏洞修复</div>
-      <div>https://blog.decemberus.com/2022/11/16/CC4与漏洞修复(3)/</div>
+      <div>https://decemberus.com/2022/11/16/CC4与漏洞修复(3)/</div>
     </div>
     <div class="license-meta">
       
@@ -434,7 +434,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog.decemberus.com/2022/12/03/CommonsBeanutils%E4%B8%8E%E6%97%A0%E4%BE%9D%E8%B5%96shiro%E5%88%A9%E7%94%A8%E9%93%BE/" title="CB与无依赖shiro利用链">
+                      <a href="/decemberus.com/2022/12/03/CommonsBeanutils%E4%B8%8E%E6%97%A0%E4%BE%9D%E8%B5%96shiro%E5%88%A9%E7%94%A8%E9%93%BE/" title="CB与无依赖shiro利用链">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">CB与无依赖shiro利用链</span>
                         <span class="visible-mobile">上一篇</span>
@@ -444,7 +444,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog.decemberus.com/2022/11/10/CC3(2)/" title="CC3">
+                      <a href="/decemberus.com/2022/11/10/CC3(2)/" title="CC3">
                         <span class="hidden-mobile">CC3</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -570,8 +570,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/blog.decemberus.com/js/events.js" ></script>
-<script  src="/blog.decemberus.com/js/plugins.js" ></script>
+<script  src="/decemberus.com/js/events.js" ></script>
+<script  src="/decemberus.com/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -595,7 +595,7 @@
 
 
   
-    <script  src="/blog.decemberus.com/js/img-lazyload.js" ></script>
+    <script  src="/decemberus.com/js/img-lazyload.js" ></script>
   
 
 
@@ -732,7 +732,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/blog.decemberus.com/js/local-search.js" ></script>
+  <script  src="/decemberus.com/js/local-search.js" ></script>
 
 
 
@@ -740,7 +740,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/blog.decemberus.com/js/boot.js" ></script>
+<script  src="/decemberus.com/js/boot.js" ></script>
 
 
   
